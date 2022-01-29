@@ -1,5 +1,4 @@
-﻿using CardOrgAPI.Contexts;
-using CardOrgAPI.Model;
+﻿using CardOrgAPI.Models.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;

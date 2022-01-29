@@ -1,6 +1,5 @@
 using CardOrgAPI.Contexts;
 using CardOrgAPI.Interfaces.Repositories;
-using CardOrgAPI.Model;
 using CardOrgAPI.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;

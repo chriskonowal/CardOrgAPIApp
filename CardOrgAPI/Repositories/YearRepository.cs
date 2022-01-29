@@ -1,6 +1,6 @@
 ﻿using CardOrgAPI.Contexts;
 using CardOrgAPI.Interfaces.Repositories;
-using CardOrgAPI.Model;
+using CardOrgAPI.Models.Model;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;

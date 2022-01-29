@@ -1,6 +1,6 @@
 ﻿using System;
 using CardOrgAPI.Interfaces.Repositories;
-using CardOrgAPI.Model;
+using CardOrgAPI.Models.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.Configuration;
