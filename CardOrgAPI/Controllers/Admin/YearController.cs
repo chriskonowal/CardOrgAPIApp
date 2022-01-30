@@ -1,6 +1,7 @@
 ﻿using CardOrgAPI.Contexts;
 using CardOrgAPI.Interfaces.Repositories;
 using CardOrgAPI.Models.Model;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -10,11 +11,11 @@ using System.Threading.Tasks;
 
 namespace CardOrgAPI.Controllers.Admin
 {
+    [Authorize(AuthenticationSchemes = Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerDefaults.AuthenticationScheme)]
     [ApiController]
     [Route("api/admin")]
     public class YearController : Controller
     {
-
         private readonly IYearRepository _yearRepository;
 
         public YearController(IYearRepository yearRepository)

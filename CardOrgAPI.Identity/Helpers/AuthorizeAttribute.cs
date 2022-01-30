@@ -15,11 +15,11 @@ namespace CardOrgAPI.Identity.Helpers
     {
         public void OnAuthorization(AuthorizationFilterContext context)
         {
-            var user = (User)context.HttpContext.Items["User"];
-            if (user == null)
+            var account = (User)context.HttpContext.Items["User"];
+            if (account == null)
             {
-                context.Result = new JsonResult(new { message = "Unauthorized" })
-                { StatusCode = StatusCodes.Status401Unauthorized };
+                // not logged in
+                context.Result = new JsonResult(new { message = "Unauthorized" }) { StatusCode = StatusCodes.Status401Unauthorized };
             }
         }
     }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CardOrgAPI.Authentication
+namespace CardOrgAPI.Application.Authentication
 {
     public class AuthenticateResponse
     {
@@ -19,7 +19,7 @@ namespace CardOrgAPI.Authentication
             Id = user.Id;
             FirstName = user.FirstName;
             LastName = user.LastName;
-            Username = user.Username;
+            Username = user.UserName;
             Token = token;
         }
     }

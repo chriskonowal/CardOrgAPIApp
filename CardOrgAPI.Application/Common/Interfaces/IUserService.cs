@@ -1,15 +1,16 @@
-﻿using CardOrgAPI.Authentication;
+﻿using CardOrgAPI.Application.Authentication;
 using CardOrgAPI.Models.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CardOrgAPI.Common.Interfaces
+namespace CardOrgAPI.Application.Interfaces
 {
     public interface IUserService
     {
-        AuthenticateResponse Authenticate(AuthenticateRequest model);
-        User GetById(int id);
+        bool IsValidUserInformation(User model);
+
+        User GetUserDetails();
     }
 }

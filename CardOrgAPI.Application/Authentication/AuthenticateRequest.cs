@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace CardOrgAPI.Authentication
+namespace CardOrgAPI.Application.Authentication
 {
     public class AuthenticateRequest
     {

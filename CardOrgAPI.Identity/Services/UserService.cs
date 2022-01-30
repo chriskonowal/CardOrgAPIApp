@@ -1,5 +1,5 @@
-﻿using CardOrgAPI.Authentication;
-using CardOrgAPI.Common.Interfaces;
+﻿using CardOrgAPI.Application.Authentication;
+using CardOrgAPI.Application.Interfaces;
 using CardOrgAPI.Identity.Helpers;
 using CardOrgAPI.Models.Entities;
 using Microsoft.Extensions.Options;
@@ -16,50 +16,16 @@ namespace CardOrgAPI.Identity.Services
 {
     public class UserService : IUserService
     {
-        private readonly List<User> _users = new List<User>
+        public bool IsValidUserInformation(User model)
         {
-            new User
-            {
-                Id = 1,
-                FirstName = "Yourname",
-                LastName = "Yoursurname",
-                Username = "yoursuperhero",
-                Password = "Pass123!"
-            }
-        };
-
-        private readonly AuthSettings _authSettings;
-        public UserService(IOptions<AuthSettings> appSettings) => _authSettings = appSettings.Value;
-
-        public AuthenticateResponse Authenticate(AuthenticateRequest model)
-        {
-            var user = _users.SingleOrDefault(u => u.Username == model.Username && u.Password == model.Password);
-
-            if (user == null)
-                return null;
-
-            var token = GenerateJwtToken(user);
-
-            return new AuthenticateResponse(user, token);
+            if (model.UserName.Equals("test") && model.Password.Equals("test")) return true;
+            else return false;
         }
 
-
-        public User GetById(int id) => _users.FirstOrDefault(u => u.Id == id);
-
-        private string GenerateJwtToken(User user)
+        public User GetUserDetails()
         {
-            byte[] key = Encoding.ASCII.GetBytes(_authSettings.Secret);
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(new[] { new Claim("id", user.Id.ToString()) }),
-                Expires = DateTime.UtcNow.AddDays(1),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-            };
-
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-
-            return tokenHandler.WriteToken(token);
+            return new User { UserName = "Jay", Password = "123456" };
         }
+
     }
 }

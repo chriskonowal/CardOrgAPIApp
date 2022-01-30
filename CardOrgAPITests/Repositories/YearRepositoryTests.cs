@@ -1,5 +1,5 @@
 ﻿using CardOrgAPI.Interfaces.Repositories;
-using CardOrgAPI.Model;
+using CardOrgAPI.Models.Model;
 using CardOrgAPI.Repositories;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
