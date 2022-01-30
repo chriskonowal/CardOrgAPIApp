@@ -1,5 +1,5 @@
 ﻿using CardOrgAPI.Interfaces.Repositories;
-using CardOrgAPI.Models.Model;
+using CardOrgAPI.Model;
 using CardOrgAPI.Repositories;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -23,10 +23,10 @@ namespace CardOrgAPITests.Repositories
             var years = CreateYears();
 
             var yearRepository = new Mock<IYearRepository>();
-            yearRepository.Setup(x => x.GetYearsAsync(CancellationToken.None)).Returns(Task.FromResult(years));
+            yearRepository.Setup(x => x.GetYearsAsync(1, CancellationToken.None)).Returns(Task.FromResult(years));
 
             //Act
-            var getYearsResults =  yearRepository.Object.GetYearsAsync(CancellationToken.None).ConfigureAwait(false).GetAwaiter().GetResult();
+            var getYearsResults =  yearRepository.Object.GetYearsAsync(1, CancellationToken.None).ConfigureAwait(false).GetAwaiter().GetResult();
 
             //Assert
             getYearsResults.Should().NotBeNull();

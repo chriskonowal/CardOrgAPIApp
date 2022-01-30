@@ -3,16 +3,16 @@ using System.Collections.Generic;
 
 #nullable disable
 
-namespace CardOrgAPI.Models.Model
+namespace CardOrgAPI.Model
 {
-    public partial class Sport
+    public partial class Set
     {
-        public Sport()
+        public Set()
         {
             Cards = new HashSet<Card>();
         }
 
-        public int SportId { get; set; }
+        public int SetId { get; set; }
         public string Name { get; set; }
 
         public virtual ICollection<Card> Cards { get; set; }

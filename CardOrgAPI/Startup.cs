@@ -1,12 +1,10 @@
-using CardOrgAPI.Application.Interfaces;
 using CardOrgAPI.Contexts;
 using CardOrgAPI.Extensions;
 using CardOrgAPI.Helpers;
-using CardOrgAPI.Identity;
-using CardOrgAPI.Identity.Helpers;
-using CardOrgAPI.Identity.Services;
 using CardOrgAPI.Interfaces.Repositories;
+using CardOrgAPI.Interfaces.Servics;
 using CardOrgAPI.Repositories;
+using CardOrgAPI.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;

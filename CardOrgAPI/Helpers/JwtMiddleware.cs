@@ -3,13 +3,13 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using CardOrgAPI.Application.Interfaces;
+using CardOrgAPI.Interfaces.Servics;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
-namespace CardOrgAPI.Identity.Helpers
+namespace CardOrgAPI.Helpers
 {
     public class JWTMiddleware
     {

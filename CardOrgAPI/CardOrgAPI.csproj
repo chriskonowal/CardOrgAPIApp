@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.2.7" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.13" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer" Version="5.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.13" />
@@ -19,13 +20,6 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\CardOrgAPI.Application\CardOrgAPI.Application.csproj" />
-    <ProjectReference Include="..\CardOrgAPI.Identity\CardOrgAPI.Identity.csproj" />
-    <ProjectReference Include="..\CardOrgAPI.Interfaces\CardOrgAPI.Interfaces.csproj" />
-    <ProjectReference Include="..\CardOrgAPI.Models\CardOrgAPI.Models.csproj" />
   </ItemGroup>
 
 </Project>

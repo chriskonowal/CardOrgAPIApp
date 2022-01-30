@@ -1,6 +1,8 @@
-﻿using CardOrgAPI.Contexts;
+﻿using CardOrgAPI.Constants;
+using CardOrgAPI.Contexts;
+using CardOrgAPI.Extensions;
 using CardOrgAPI.Interfaces.Repositories;
-using CardOrgAPI.Models.Model;
+using CardOrgAPI.Model;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -20,9 +22,21 @@ namespace CardOrgAPI.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<Year>> GetYearsAsync(CancellationToken cancellationToken)
+        public async Task<IEnumerable<Year>> GetYearsAsync(int page, CancellationToken cancellationToken)
         {
-           return await _context.Years.ToListAsync(cancellationToken).ConfigureAwait(false);
+           return await _context.Years
+                .Skip(page.PageSkip())
+                .Take(RepositoryConstants.PageSize)
+                .ToListAsync(cancellationToken).ConfigureAwait(false);
+        }
+
+        public async Task<IEnumerable<Year>> SearchYearsAsync(int year, int page, CancellationToken cancellationToken)
+        {
+            return await _context.Years
+                .Where(x => x.BeginningYear == year || x.EndingYear == year)
+                .Skip(page.PageSkip())
+                .Take(RepositoryConstants.PageSize)
+                .ToListAsync(cancellationToken).ConfigureAwait(false);
         }
 
 

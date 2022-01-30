@@ -1,6 +1,5 @@
-﻿using CardOrgAPI.Application.Authentication;
-using CardOrgAPI.Application.Interfaces;
-using CardOrgAPI.Models.Entities;
+﻿using CardOrgAPI.Entities;
+using CardOrgAPI.Interfaces.Servics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;

@@ -7,14 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CardOrgAPI", "CardOrgAPI.cs
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CardOrgAPI.Tests", "..\CardOrgAPITests\CardOrgAPI.Tests.csproj", "{2C3A77EB-0DDF-4833-93EC-51CB366263CD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CardOrgAPI.Identity", "..\CardOrgAPI.Identity\CardOrgAPI.Identity.csproj", "{F40087A5-4FE6-4222-8D43-D3C9BA098369}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CardOrgAPI.Interfaces", "..\CardOrgAPI.Interfaces\CardOrgAPI.Interfaces.csproj", "{F66626F0-6D1B-45F1-AA6B-31769A1B8357}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CardOrgAPI.Models", "..\CardOrgAPI.Models\CardOrgAPI.Models.csproj", "{5AFDD57A-36CD-4FD3-B80F-EE18F65C9A36}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CardOrgAPI.Application", "..\CardOrgAPI.Application\CardOrgAPI.Application.csproj", "{5B7791FD-A1E1-414A-91BD-4A63443E5216}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,22 +21,6 @@ Global
 		{2C3A77EB-0DDF-4833-93EC-51CB366263CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2C3A77EB-0DDF-4833-93EC-51CB366263CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2C3A77EB-0DDF-4833-93EC-51CB366263CD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F40087A5-4FE6-4222-8D43-D3C9BA098369}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F40087A5-4FE6-4222-8D43-D3C9BA098369}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F40087A5-4FE6-4222-8D43-D3C9BA098369}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F40087A5-4FE6-4222-8D43-D3C9BA098369}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F66626F0-6D1B-45F1-AA6B-31769A1B8357}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F66626F0-6D1B-45F1-AA6B-31769A1B8357}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F66626F0-6D1B-45F1-AA6B-31769A1B8357}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F66626F0-6D1B-45F1-AA6B-31769A1B8357}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5AFDD57A-36CD-4FD3-B80F-EE18F65C9A36}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5AFDD57A-36CD-4FD3-B80F-EE18F65C9A36}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5AFDD57A-36CD-4FD3-B80F-EE18F65C9A36}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5AFDD57A-36CD-4FD3-B80F-EE18F65C9A36}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5B7791FD-A1E1-414A-91BD-4A63443E5216}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5B7791FD-A1E1-414A-91BD-4A63443E5216}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5B7791FD-A1E1-414A-91BD-4A63443E5216}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5B7791FD-A1E1-414A-91BD-4A63443E5216}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

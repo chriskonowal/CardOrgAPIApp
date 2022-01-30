@@ -1,7 +1,5 @@
-﻿using CardOrgAPI.Application.Authentication;
-using CardOrgAPI.Application.Interfaces;
-using CardOrgAPI.Identity.Helpers;
-using CardOrgAPI.Models.Entities;
+﻿using CardOrgAPI.Entities;
+using CardOrgAPI.Interfaces.Servics;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -12,7 +10,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CardOrgAPI.Identity.Services
+namespace CardOrgAPI.Services
 {
     public class UserService : IUserService
     {

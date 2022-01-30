@@ -1,11 +1,10 @@
-﻿using CardOrgAPI.Application.Authentication;
-using CardOrgAPI.Models.Entities;
+﻿using CardOrgAPI.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CardOrgAPI.Application.Interfaces
+namespace CardOrgAPI.Interfaces.Servics
 {
     public interface IUserService
     {
