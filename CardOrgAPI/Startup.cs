@@ -91,6 +91,10 @@ namespace CardOrgAPI
             });
             #endregion
 
+            services.AddCors(c =>
+            {
+                c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin());
+            });
             services.AddTransient<IUserService, UserService>();
         }
 
@@ -112,6 +116,8 @@ namespace CardOrgAPI
 
             app.UseSwagger();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "JWTAuth_Validation"));
+
+            app.UseCors(options => options.AllowAnyOrigin());
 
             app.UseMiddleware<JWTMiddleware>();
 
