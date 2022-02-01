@@ -1,7 +1,6 @@
 <template>
     <v-app>
-        <router-link :to="{ name: 'Page2' }">Navigate to Page2</router-link>
-        <Home></Home>
+        <router-view></router-view>
          <div class="hello">
            Test
            </div>
@@ -11,13 +10,12 @@
 </template>
 
 <script>
-import Home from './views/Home.vue';
+//import Home from './views/Home.vue';
 //import axios from 'axios';
 
 export default {
   name: 'App',
   components: {
-    Home
   },
   data () {
     return {
