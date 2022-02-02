@@ -4,6 +4,7 @@ using CardOrgAPI.Interfaces.Repositories;
 using CardOrgAPI.Interfaces.Servics;
 using CardOrgAPI.Repositories;
 using CardOrgAPI.Services;
+using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -13,6 +14,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Reflection;
 using System.Text;
 
 namespace CardOrgAPI
@@ -30,6 +32,7 @@ namespace CardOrgAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<CardOrgContext>(options => options.UseSqlServer(Configuration.GetConnectionString("CardOrg")));
+            services.AddMediatR(Assembly.GetExecutingAssembly());
             services.AddScoped<IYearRepository, YearRepository>();
             services.AddControllers();
 

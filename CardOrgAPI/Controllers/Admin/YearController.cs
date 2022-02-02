@@ -1,7 +1,9 @@
-﻿using CardOrgAPI.Contexts;
+﻿using CardOrgAPI.Application.Years;
+using CardOrgAPI.Contexts;
 using CardOrgAPI.Interfaces.Repositories;
 using CardOrgAPI.Model;
 using CardOrgAPI.Requests;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -17,24 +19,24 @@ namespace CardOrgAPI.Controllers.Admin
     [Route("api/admin")]
     public class YearController : Controller
     {
-        private readonly IYearRepository _yearRepository;
+        private readonly IMediator _mediator;
 
-        public YearController(IYearRepository yearRepository)
+        public YearController(IMediator mediator)
         {
-            _yearRepository = yearRepository;
+            _mediator = mediator;
         }
 
-        [Route("years/{page:int}"), HttpGet]
-        public async Task<ActionResult<IEnumerable<Year>>> GetYearsAsync(int page, CancellationToken cancellationToken)
-        {
+        //[Route("years/{page:int}"), HttpGet]
+        //public async Task<ActionResult<IEnumerable<Year>>> GetYearsAsync(int page, CancellationToken cancellationToken)
+        //{
 
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+        //    if (!ModelState.IsValid)
+        //        return BadRequest(ModelState);
 
-            var Year = await _yearRepository.GetYearsAsync(page, cancellationToken).ConfigureAwait(false);
+        //    var Year = await _yearRepository.GetYearsAsync(page, cancellationToken).ConfigureAwait(false);
 
-            return Ok(Year);
-        }
+        //    return Ok(Year);
+        //}
 
         [Route("years/search/{page:int}"), HttpPost]
         public async Task<ActionResult<IEnumerable<Year>>> SearchYearsAsync(int page, [FromBody] YearSearchRequest yearSearchRequest, CancellationToken cancellationToken)
@@ -43,9 +45,14 @@ namespace CardOrgAPI.Controllers.Admin
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var Year = await _yearRepository.SearchYearsAsync(yearSearchRequest.Year, page, cancellationToken).ConfigureAwait(false);
+            var request = new SearchYearsRequest() {
+                Page = page,
+                SearchYear = yearSearchRequest.Year
+            };
 
-            return Ok(Year);
+            var years = await _mediator.Send(request, cancellationToken).ConfigureAwait(false);
+
+            return Ok(years);
         }
     }
 }
