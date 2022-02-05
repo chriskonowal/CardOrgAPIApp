@@ -38,17 +38,12 @@ namespace CardOrgAPI.Controllers.Admin
         //    return Ok(Year);
         //}
 
-        [Route("years/search/{page:int}"), HttpPost]
-        public async Task<ActionResult<IEnumerable<Year>>> SearchYearsAsync(int page, [FromBody] YearSearchRequest yearSearchRequest, CancellationToken cancellationToken)
+        [Route("years"), HttpPost]
+        public async Task<ActionResult<IEnumerable<Year>>> GetYearsAsync([FromBody] SearchYearsRequest request, CancellationToken cancellationToken)
         {
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-
-            var request = new SearchYearsRequest() {
-                Page = page,
-                SearchYear = yearSearchRequest.Year
-            };
 
             var years = await _mediator.Send(request, cancellationToken).ConfigureAwait(false);
 

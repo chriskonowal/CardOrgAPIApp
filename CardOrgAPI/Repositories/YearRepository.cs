@@ -3,6 +3,7 @@ using CardOrgAPI.Contexts;
 using CardOrgAPI.Extensions;
 using CardOrgAPI.Interfaces.Repositories;
 using CardOrgAPI.Model;
+using CardOrgAPI.QueryFilters;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -22,12 +23,57 @@ namespace CardOrgAPI.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<Year>> GetYearsAsync(int page, CancellationToken cancellationToken)
+        public async Task<IEnumerable<Year>> GetYearsAsync(GetYearsQueryFilter filter, CancellationToken cancellationToken)
         {
-           return await _context.Years
-                .Skip(page.PageSkip())
-                .Take(RepositoryConstants.PageSize)
-                .ToListAsync(cancellationToken).ConfigureAwait(false);
+            var years = _context.Years.AsQueryable();
+            if (filter.SearchYear > 0)
+            {
+                years = years.Where(x => x.BeginningYear == filter.SearchYear || x.EndingYear == filter.SearchYear);
+            }
+
+            if (!String.IsNullOrWhiteSpace(filter.SortByField))
+            {
+                if (filter.SortByField.ToLower().Equals("beginningyear"))
+                {
+                    if (filter.IsSortDesc)
+                    {
+                        years = years.OrderByDescending(x => x.BeginningYear);
+                    }
+                    else
+                    {
+                        years = years.OrderBy(x => x.BeginningYear);
+                    }
+                }
+                else if (filter.SortByField.ToLower().Equals("endingyear"))
+                {
+                    if (filter.IsSortDesc)
+                    {
+                        years = years.OrderByDescending(x => x.EndingYear);
+                    }
+                    else
+                    {
+                        years = years.OrderBy(x => x.EndingYear);
+                    }
+                }
+            }
+            else
+            {
+                years = years.OrderByDescending(x => x.EndingYear);
+            }
+
+            years = years.Skip((filter.PageNumber - 1) * filter.RowsPerPage).Take(filter.RowsPerPage);          
+            return await years.ToListAsync(cancellationToken).ConfigureAwait(false);
+        }
+
+        public int GetYearsTotal(int searchYear)
+        {
+            var years = _context.Years.AsQueryable();
+            if (searchYear > 0)
+            {
+                years = years.Where(x => x.BeginningYear == searchYear || x.EndingYear == searchYear);
+            }
+
+            return years.Count();
         }
 
         public async Task<IEnumerable<Year>> SearchYearsAsync(int year, int page, CancellationToken cancellationToken)

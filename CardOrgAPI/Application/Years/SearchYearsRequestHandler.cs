@@ -1,5 +1,6 @@
 ﻿using CardOrgAPI.Interfaces.Repositories;
 using CardOrgAPI.Model;
+using CardOrgAPI.QueryFilters;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace CardOrgAPI.Application.Years
 {
-    public class SearchYearsRequestHandler : IRequestHandler<SearchYearsRequest, IEnumerable<Year>>
+    public class SearchYearsRequestHandler : IRequestHandler<SearchYearsRequest, SearchYearsResponse>
     {
         private readonly IYearRepository _yearRepository;
 
@@ -18,13 +19,30 @@ namespace CardOrgAPI.Application.Years
             _yearRepository = yearRepository;
         }
 
-        public async Task<IEnumerable<Year>> Handle(SearchYearsRequest request, CancellationToken cancellationToken)
+        public async Task<SearchYearsResponse> Handle(SearchYearsRequest request, CancellationToken cancellationToken)
         {
-            return await _yearRepository.SearchYearsAsync(request.SearchYear, 
-                request.Page, 
+
+            var queryFilter = new GetYearsQueryFilter()
+            {
+                IsSortDesc = request.IsSortDesc,
+                PageNumber = request.PageNumber,
+                RowsPerPage = request.RowsPerPage,
+                SearchYear = request.SearchYear,
+                SortByField = request.SortByField
+            };
+
+            var years = await _yearRepository.GetYearsAsync(queryFilter,
                 cancellationToken).ConfigureAwait(false);
-            
-            throw new NotImplementedException();
+
+            var totalYears = _yearRepository.GetYearsTotal(request.SearchYear);
+
+            var response = new SearchYearsResponse()
+            {
+                Years = years,
+                TotalYears = totalYears
+            };
+
+            return response;
         }
     }
 }
