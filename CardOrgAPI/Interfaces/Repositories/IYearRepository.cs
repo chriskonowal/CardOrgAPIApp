@@ -11,9 +11,9 @@ namespace CardOrgAPI.Interfaces.Repositories
     public interface IYearRepository : IDisposable
     {
         Task<IEnumerable<Year>> GetYearsAsync(GetYearsQueryFilter filter, CancellationToken cancellationToken);
-
         int GetYearsTotal(int searchYear);
-
-        Task<int> InsertYearsAsync(Year model, CancellationToken cancellationToken);
+        bool YearExists(int beginningYear, int endingYear);
+        Task<bool> InsertYearsAsync(Year model, CancellationToken cancellationToken);
+        Task<Year> LoadYearAsync(int yearId, CancellationToken cancellation);
     }
 }

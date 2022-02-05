@@ -43,8 +43,8 @@ namespace CardOrgAPI
                 swagger.SwaggerDoc("v1", new OpenApiInfo
                 {
                     Version = "v1",
-                    Title = "JWT Token Authentication API",
-                    Description = "ASP.NET Core 5.0 Web API"
+                    Title = "CardOrgAPI v1",
+                    Description = ""
                 });
                 // To Enable authorization using Swagger (JWT)
                 swagger.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
@@ -96,7 +96,8 @@ namespace CardOrgAPI
 
             services.AddCors(c =>
             {
-                c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin());
+                c.AddPolicy("*", options => options.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+                c.AddPolicy("Access-Control-Allow-Origin", options => options.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
             });
             services.AddTransient<IUserService, UserService>();
         }
@@ -104,13 +105,6 @@ namespace CardOrgAPI
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "CardOrgAPI v1"));
-            }
-
             app.UseHttpsRedirection();
 
             app.UseRouting();
@@ -118,7 +112,7 @@ namespace CardOrgAPI
             app.UseAuthorization();
 
             app.UseSwagger();
-            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "JWTAuth_Validation"));
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "CardOrgAPI v1"));
 
             app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 

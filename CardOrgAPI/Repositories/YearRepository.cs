@@ -60,8 +60,11 @@ namespace CardOrgAPI.Repositories
             {
                 years = years.OrderByDescending(x => x.EndingYear);
             }
-
-            years = years.Skip((filter.PageNumber - 1) * filter.RowsPerPage).Take(filter.RowsPerPage);          
+            if (filter.RowsPerPage > -1)
+            {
+                years = years.Skip((filter.PageNumber - 1) * filter.RowsPerPage).Take(filter.RowsPerPage);
+            }
+            
             return await years.ToListAsync(cancellationToken).ConfigureAwait(false);
         }
 
@@ -85,11 +88,24 @@ namespace CardOrgAPI.Repositories
                 .ToListAsync(cancellationToken).ConfigureAwait(false);
         }
 
+        public bool YearExists(int beginningYear, int endingYear)
+        {
+            return _context.Years
+                .Any(x => x.BeginningYear == beginningYear && x.EndingYear == endingYear);
 
-        public async Task<int> InsertYearsAsync(Year model, CancellationToken cancellationToken)
+        }
+
+
+        public async Task<bool> InsertYearsAsync(Year model, CancellationToken cancellationToken)
         {
             await _context.Years.AddAsync(model, cancellationToken).ConfigureAwait(false);
-            return await _context.SaveChangesAsync().ConfigureAwait(false);
+            var result = await _context.SaveChangesAsync().ConfigureAwait(false);
+            return result == 1;
+        }
+
+        public async Task<Year> LoadYearAsync(int yearId, CancellationToken cancellation)
+        {
+            return _context.Years.FirstOrDefault(x => x.YearId == yearId);
         }
 
         private bool disposed = false;
