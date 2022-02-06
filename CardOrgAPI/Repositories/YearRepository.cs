@@ -95,17 +95,27 @@ namespace CardOrgAPI.Repositories
 
         }
 
-
-        public async Task<bool> InsertYearsAsync(Year model, CancellationToken cancellationToken)
+        public async Task<bool> InsertYearAsync(Year model, CancellationToken cancellationToken)
         {
             await _context.Years.AddAsync(model, cancellationToken).ConfigureAwait(false);
+            if (model.YearId > 0)
+            {
+                _context.Entry(model).State = EntityState.Modified;
+            }
             var result = await _context.SaveChangesAsync().ConfigureAwait(false);
             return result == 1;
         }
 
-        public async Task<Year> LoadYearAsync(int yearId, CancellationToken cancellation)
+        public async Task<bool> DeleteYearAsync(int yearId, CancellationToken cancellationToken)
         {
-            return _context.Years.FirstOrDefault(x => x.YearId == yearId);
+            if (yearId > 0)
+            {
+                var year = new Year { YearId = yearId };
+                _context.Entry(year).State = EntityState.Deleted;
+                var result = await _context.SaveChangesAsync();
+                return result == 1;
+            }
+            return true;
         }
 
         private bool disposed = false;

@@ -13,7 +13,8 @@ namespace CardOrgAPI.Interfaces.Repositories
         Task<IEnumerable<Year>> GetYearsAsync(GetYearsQueryFilter filter, CancellationToken cancellationToken);
         int GetYearsTotal(int searchYear);
         bool YearExists(int beginningYear, int endingYear);
-        Task<bool> InsertYearsAsync(Year model, CancellationToken cancellationToken);
-        Task<Year> LoadYearAsync(int yearId, CancellationToken cancellation);
+        Task<bool> InsertYearAsync(Year model, CancellationToken cancellationToken);
+
+        Task<bool> DeleteYearAsync(int yearId, CancellationToken cancellationToken);
     }
 }

@@ -1,5 +1,5 @@
-﻿using CardOrgAPI.Application.Years.Add;
-using CardOrgAPI.Application.Years.Load;
+﻿using CardOrgAPI.Application.Years.Delete;
+using CardOrgAPI.Application.Years.Save;
 using CardOrgAPI.Application.Years.Search;
 using CardOrgAPI.Contexts;
 using CardOrgAPI.Interfaces.Repositories;
@@ -42,8 +42,8 @@ namespace CardOrgAPI.Controllers.Admin
             return Ok(years);
         }
 
-        [Route("year/add"), HttpPost]
-        public async Task<ActionResult<ApiResponse>> AddYearsAsync([FromBody] AddYearRequest request, CancellationToken cancellationToken)
+        [Route("year/save"), HttpPost]
+        public async Task<ActionResult<ApiResponse>> SaveYearAsync([FromBody] SaveYearRequest request, CancellationToken cancellationToken)
         {
 
             if (!ModelState.IsValid)
@@ -54,9 +54,10 @@ namespace CardOrgAPI.Controllers.Admin
             return Ok(years);
         }
 
-        [Route("year/load"), HttpPost]
-        public async Task<ActionResult<ApiResponse<YearResponse>>> LoadYearAsync([FromBody] LoadYearRequest request, CancellationToken cancellationToken)
+        [Route("year/delete"), HttpPost]
+        public async Task<ActionResult<ApiResponse>> DeleteYearAsync([FromBody] DeleteYearRequest request, CancellationToken cancellationToken)
         {
+
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 

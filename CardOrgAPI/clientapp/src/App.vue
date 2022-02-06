@@ -1,26 +1,24 @@
 <template>
-    <v-app>
-        <router-view></router-view>
-         <div class="hello">
-           Test
-           </div>
-         
-    </v-app>
-   
+  <v-app>
+    <Navigation></Navigation>
+    <router-view></router-view>
+  </v-app>
 </template>
 
 <script>
+import Navigation from "./components/Navigation.vue";
 //import Home from './views/Home.vue';
 //import axios from 'axios';
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
+    Navigation,
   },
-  data () {
+  data() {
     return {
-      info: null
-    }
+      info: null,
+    };
   },
   // mounted () {
   //   axios
@@ -30,5 +28,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>

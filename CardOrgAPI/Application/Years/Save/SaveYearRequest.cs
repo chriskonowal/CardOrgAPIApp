@@ -5,12 +5,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CardOrgAPI.Application.Years.Add
+namespace CardOrgAPI.Application.Years.Save
 {
-    public class AddYearRequest : IRequest<ApiResponse>
+    public class SaveYearRequest : IRequest<ApiResponse>
     {
         public int BeginningYear { get; set; }
 
         public int EndingYear { get; set; }
+
+        public int YearId { get; set; }
     }
 }

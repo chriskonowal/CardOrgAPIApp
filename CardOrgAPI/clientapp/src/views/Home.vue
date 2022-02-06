@@ -1,19 +1,17 @@
 <template>
   <div class="wrapper">
-      <router-link to="/years-admin">Testing Link</router-link>
-      <h2>This is the Home View (probably add some slideshow):</h2>
-      
-    
+    <div>
+      <v-card>
+        <v-card-title> Home </v-card-title>
+      </v-card>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'Home'
+  name: "Home",
 };
 </script>
 
-
-<style>
-
-</style>
+<style></style>

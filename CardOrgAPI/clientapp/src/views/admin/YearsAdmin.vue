@@ -1,8 +1,5 @@
 <template>
   <div class="wrapper">
-    <router-link to="/home">Testing Link</router-link>
-    <h1>Years</h1>
-    <h2>This is from the api:</h2>
     <div>
       <v-card>
         <v-card-title>
@@ -27,59 +24,10 @@
             New Item
           </v-btn>
         </v-card-title>
-        <v-dialog v-model="dialog" max-width="500px">
-          <v-card>
-            <v-card-title>
-              <span class="text-h5">Add</span>
-            </v-card-title>
-
-            <v-card-text>
-              <v-container>
-                <v-form ref="form" v-model="valid" lazy-validation>
-                  <v-row>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field
-                        v-model="addItem.beginningYear"
-                        label="Beginning Year"
-                        type="number"
-                        name="addItem.beginningYear"
-                        :rules="[rules.required, rules.integer, rules.length]"
-                        @blur="clearAddMessage()"
-                        @keyup="clearAddMessage()"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field
-                        v-model="addItem.endingYear"
-                        label="Ending Year"
-                        type="number"
-                        name="addItem.endingYear"
-                        :rules="[rules.required, rules.integer, rules.length]"
-                        @blur="clearAddMessage()"
-                        @keyup="clearAddMessage()"
-                      ></v-text-field>
-                    </v-col>
-                    <span style="color: red" v-show="hasAddError">
-                      <v-icon color="red"> mdi-alert-rhombus-outline </v-icon>
-                      {{ addErrorMessage }}
-                    </span>
-                  </v-row>
-                </v-form>
-              </v-container>
-            </v-card-text>
-
-            <v-card-actions>
-              <v-spacer></v-spacer>
-
-              <v-btn color="blue darken-1" text @click="close"> Cancel </v-btn>
-              <v-btn color="blue darken-1" text @click="save"> Save </v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
         <v-dialog v-model="infoDialog" max-width="500px">
           <v-card>
             <v-card-title>
-              <span class="text-h5">Add</span>
+              <span class="text-h5">{{ infoDialogTitleMessage }}</span>
             </v-card-title>
             <v-card-text>
               <span style="color: green">
@@ -120,11 +68,11 @@
         <v-dialog v-model="editDialog" max-width="500px">
           <v-card>
             <v-card-title>
-              <span class="text-h5">Edit</span>
+              <span class="text-h5">{{ editTitle }}</span>
             </v-card-title>
             <v-card-text>
               <v-container>
-                <v-form ref="form" v-model="editValid" lazy-validation>
+                <v-form ref="editForm" v-model="editValid" lazy-validation>
                   <v-row>
                     <v-col cols="12" sm="6" md="4">
                       <v-text-field
@@ -167,6 +115,23 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
+        <v-dialog v-model="dialogDelete" max-width="500px">
+          <v-card>
+            <v-card-title class="text-h5"
+              >Are you sure you want to delete this item?</v-card-title
+            >
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="blue darken-1" text @click="closeDelete"
+                >Cancel</v-btn
+              >
+              <v-btn color="blue darken-1" text @click="deleteItemConfirm"
+                >OK</v-btn
+              >
+              <v-spacer></v-spacer>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
       </v-card>
     </div>
   </div>
@@ -201,11 +166,9 @@ export default {
       dialog: false,
       infoDialog: false,
       infoDialogMessage: "",
-      addItem: {
-        beginningYear: 0,
-        endingYear: 0,
-      },
+      infoDialogTitleMessage: "",
       editedItem: {
+        yearId: 0,
         beginningYear: 0,
         endingYear: 0,
       },
@@ -215,7 +178,8 @@ export default {
         required: (value) => !!value || "Required.",
         length: (value) => {
           return (
-            (value !== null && value.toString().length === 4) || "Invalid year."
+            (value !== undefined && value.toString().length === 4) ||
+            "Invalid year."
           );
         },
         integer: (value) => {
@@ -225,6 +189,9 @@ export default {
       valid: true,
       editDialog: false,
       editValid: true,
+      editTitle: "",
+      dialogDelete: false,
+      yearId: 0,
     };
   },
   watch: {
@@ -286,42 +253,111 @@ export default {
         endingYear: this.addItem.endingYear,
       };
       console.log(request);
-      axios
-        .post("http://localhost:54421/api/admin/year/add", request)
-        .then((response) => {
-          console.log(response.data);
-          if (!response.data.isSuccessful) {
-            this.hasAddError = true;
-            this.addErrorMessage = response.data.errorMessage;
-          } else {
-            this.readDataFromAPI();
-            this.dialog = false;
-            this.infoDialog = true;
-            this.infoDialogMessage = "Add successful!";
-          }
-        });
+      axios({
+        method: "post", //you can set what request you want to be
+        url: "http://localhost:54421/api/admin/year/save",
+        data: request,
+        headers: {
+          "Content-Type": "application/json; charset=utf-8;",
+          Accept: "*/*",
+        },
+      }).then((response) => {
+        console.log(response.data);
+        if (!response.data.isSuccessful) {
+          this.hasAddError = true;
+          this.addErrorMessage = response.data.errorMessage;
+        } else {
+          this.readDataFromAPI();
+          this.dialog = false;
+          this.infoDialog = true;
+          this.infoDialogMessage = "Add successful!";
+          this.infoDialogTitleMessage = "Add Year";
+        }
+      });
     },
     clearAddMessage() {
       this.hasAddError = false;
       this.addErrorMessage = "";
     },
     openNewItemDialog() {
-      this.dialog = true;
-    },
-    editItem() {
+      this.editTitle = "Add Year";
+      this.editedItem = {};
       this.editDialog = true;
+    },
+    editItem(item) {
+      console.log(item);
+      this.editTitle = "Edit Year";
+      this.editedItem = item;
+      this.editDialog = true;
+    },
+    editSave() {
+      this.clearAddMessage();
+      var isEdit = this.editedItem.yearId > 0;
+      var validEdit = this.$refs.editForm.validate();
+      if (!validEdit) {
+        return;
+      }
+      var request = {
+        beginningYear: this.editedItem.beginningYear,
+        endingYear: this.editedItem.endingYear,
+        yearId: this.editedItem.yearId,
+      };
+      console.log(request);
+      axios({
+        method: "post", //you can set what request you want to be
+        url: "http://localhost:54421/api/admin/year/save",
+        data: request,
+      }).then((response) => {
+        console.log(response.data);
+        if (!response.data.isSuccessful) {
+          this.hasAddError = true;
+          this.addErrorMessage = response.data.errorMessage;
+        } else {
+          this.readDataFromAPI();
+          this.editDialog = false;
+          this.infoDialog = true;
+          if (isEdit) {
+            this.infoDialogMessage = "Edit successful!";
+            this.infoDialogTitleMessage = "Edit Year";
+          } else {
+            this.infoDialogMessage = "Add successful!";
+            this.infoDialogTitleMessage = "Add Year";
+          }
+        }
+      });
     },
     editClose() {
       this.editDialog = false;
     },
     deleteItem(item) {
-      this.editedIndex = this.desserts.indexOf(item);
-      this.editedItem = Object.assign({}, item);
+      this.yearId = item.yearId;
       this.dialogDelete = true;
     },
-
+    closeDelete() {
+      this.dialogDelete = false;
+    },
     deleteItemConfirm() {
-      this.desserts.splice(this.editedIndex, 1);
+      var request = {
+        yearId: this.yearId,
+      };
+      console.log(request);
+      axios({
+        method: "post", //you can set what request you want to be
+        url: "http://localhost:54421/api/admin/year/delete",
+        data: request,
+      }).then((response) => {
+        console.log(response.data);
+        if (!response.data.isSuccessful) {
+          this.hasAddError = true;
+          this.addErrorMessage = response.data.errorMessage;
+        } else {
+          this.readDataFromAPI();
+          this.editDialog = false;
+          this.infoDialog = true;
+          this.infoDialogMessage = "Delete successful!";
+          this.infoDialogTitleMessage = "Delete Year";
+        }
+      });
       this.closeDelete();
     },
   },

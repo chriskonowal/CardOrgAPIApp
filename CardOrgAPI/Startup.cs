@@ -94,11 +94,10 @@ namespace CardOrgAPI
             });
             #endregion
 
-            services.AddCors(c =>
-            {
-                c.AddPolicy("*", options => options.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
-                c.AddPolicy("Access-Control-Allow-Origin", options => options.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
-            });
+            services.AddCors(options => options.AddPolicy("AllowAll", p => p.AllowAnyOrigin()
+                                                                     .AllowAnyMethod()
+                                                                      .AllowAnyHeader()));
+
             services.AddTransient<IUserService, UserService>();
         }
 
@@ -114,7 +113,7 @@ namespace CardOrgAPI
             app.UseSwagger();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "CardOrgAPI v1"));
 
-            app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+            app.UseCors("AllowAll");
 
             app.UseMiddleware<JWTMiddleware>();
 

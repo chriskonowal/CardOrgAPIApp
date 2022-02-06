@@ -3,8 +3,8 @@ module.exports = {
     'vuetify'
   ],
   devServer: {
-    port: 8080,
+    port: 8081,
     disableHostCheck: true,
-    public : 'card-org.ngrok.io',
+    //public : 'card-org.ngrok.io',
 }
 }

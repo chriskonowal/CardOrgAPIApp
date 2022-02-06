@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CardOrgAPI.Application.Years.Load
+namespace CardOrgAPI.Application.Years.Delete
 {
-    public class LoadYearRequest : IRequest<ApiResponse<YearResponse>>
+    public class DeleteYearRequest : IRequest<ApiResponse>
     {
         public int YearId { get; set; }
     }
