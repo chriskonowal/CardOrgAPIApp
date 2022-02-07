@@ -12,6 +12,11 @@ namespace CardOrgAPI.Converters
     {
         public static YearResponse Convert(Year source)
         {
+            if (source == null)
+            {
+                return null;
+            }
+
             return new YearResponse() { 
                 BeginningYear = source.BeginningYear,
                 EndingYear = source.EndingYear,

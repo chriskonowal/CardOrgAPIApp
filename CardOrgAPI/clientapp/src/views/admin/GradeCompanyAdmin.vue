@@ -3,7 +3,7 @@
     <div>
       <v-card>
         <v-card-title>
-          Years
+          Grade Company
 
           <v-spacer></v-spacer>
           <v-text-field
@@ -47,11 +47,11 @@
         <v-data-table
           :headers="headers"
           :page="page"
-          :items="years"
+          :items="items"
           :options.sync="options"
           :sort-by.sync="sortBy"
           :sort-desc.sync="sortDesc"
-          :server-items-length="totalYears"
+          :server-items-length="total"
           :loading="loading"
           :items-per-page="10"
           :search="search"
@@ -76,22 +76,11 @@
                   <v-row>
                     <v-col cols="12" sm="6" md="4">
                       <v-text-field
-                        v-model="editedItem.beginningYear"
-                        label="Beginning Year"
-                        type="number"
-                        name="editedItem.beginningYear"
-                        :rules="[rules.required, rules.integer, rules.length]"
-                        @blur="clearAddMessage()"
-                        @keyup="clearAddMessage()"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field
-                        v-model="editedItem.endingYear"
-                        label="Ending Year"
-                        type="number"
-                        name="editedItem.endingYear"
-                        :rules="[rules.required, rules.integer, rules.length]"
+                        v-model="editedItem.name"
+                        label="Name"
+                        type="text"
+                        name="editedItem.Name"
+                        :rules="[rules.required]"
                         @blur="clearAddMessage()"
                         @keyup="clearAddMessage()"
                       ></v-text-field>
@@ -141,12 +130,12 @@
 import axios from "axios";
 
 export default {
-  name: "YearsAdmin",
+  name: "GradeCompanyAdmin",
   data() {
     return {
-      totalYears: 0,
+      total: 0,
       page: 1,
-      years: [],
+      items: [],
       loading: true,
       options: {},
       numberOfPages: 0,
@@ -155,18 +144,11 @@ export default {
       search: "",
       headers: [
         {
-          text: "Year",
-          align: "start",
-          sortable: false,
-          value: "year",
-        },
-        {
-          text: "Beginning Year",
+          text: "Grade Company",
           align: "start",
           sortable: true,
-          value: "beginningYear",
+          value: "name",
         },
-        { text: "End Year", value: "endingYear" },
         { text: "Actions", value: "actions", sortable: false },
       ],
       dialog: false,
@@ -174,30 +156,20 @@ export default {
       infoDialogMessage: "",
       infoDialogTitleMessage: "",
       editedItem: {
-        yearId: 0,
-        beginningYear: 0,
-        endingYear: 0,
+        gradeCompanyId: 0,
+        name: 0,
       },
       hasAddError: false,
       addErrorMessage: "",
       rules: {
         required: (value) => !!value || "Required.",
-        length: (value) => {
-          return (
-            (value !== undefined && value.toString().length === 4) ||
-            "Invalid year."
-          );
-        },
-        integer: (value) => {
-          return value % 1 === 0 || "Invalid year.";
-        },
       },
       valid: true,
       editDialog: false,
       editValid: true,
       editTitle: "",
       dialogDelete: false,
-      yearId: 0,
+      id: 0,
     };
   },
   watch: {
@@ -214,13 +186,9 @@ export default {
     readDataFromAPI() {
       this.loading = true;
       const { sortBy, sortDesc, page, itemsPerPage } = this.options;
-      var searchYear = 0;
-      if (this.search.length == 4 && this.validInt(this.search)) {
-        searchYear = parseInt(this.search);
-      }
 
       const request = {
-        searchYear: searchYear,
+        searchTerm: this.search,
         rowsPerPage: itemsPerPage,
         pageNumber: page,
         sortByField: sortBy[0],
@@ -228,12 +196,12 @@ export default {
       };
       console.log(request);
       axios
-        .post("http://localhost:54421/api/admin/years", request)
+        .post("http://localhost:54421/api/admin/grade_companies", request)
         .then((response) => {
           console.log(response.data);
           if (response.data.isSuccessful) {
-            this.years = response.data.value.years;
-            this.totalYears = response.data.value.totalYears;
+            this.items = response.data.value.gradeCompanies;
+            this.total = response.data.value.total;
           }
 
           this.loading = false;
@@ -253,32 +221,31 @@ export default {
       this.addErrorMessage = "";
     },
     openNewItemDialog() {
-      this.editTitle = "Add Year";
+      this.editTitle = "Add Grade Company";
       this.editedItem = {};
       this.editDialog = true;
     },
     editItem(item) {
       console.log(item);
-      this.editTitle = "Edit Year";
+      this.editTitle = "Edit Grade Company";
       this.editedItem = item;
       this.editDialog = true;
     },
     editSave() {
       this.clearAddMessage();
-      var isEdit = this.editedItem.yearId > 0;
+      var isEdit = this.editedItem.id > 0;
       var validEdit = this.$refs.editForm.validate();
       if (!validEdit) {
         return;
       }
       var request = {
-        beginningYear: this.editedItem.beginningYear,
-        endingYear: this.editedItem.endingYear,
-        yearId: this.editedItem.yearId,
+        id: this.editedItem.gradeCompanyId,
+        name: this.editedItem.name,
       };
       console.log(request);
       axios({
         method: "post", //you can set what request you want to be
-        url: "http://localhost:54421/api/admin/year/save",
+        url: "http://localhost:54421/api/admin/grade_companies/save",
         data: request,
       }).then((response) => {
         console.log(response.data);
@@ -291,10 +258,10 @@ export default {
           this.infoDialog = true;
           if (isEdit) {
             this.infoDialogMessage = "Edit successful!";
-            this.infoDialogTitleMessage = "Edit Year";
+            this.infoDialogTitleMessage = "Edit Grade Company";
           } else {
             this.infoDialogMessage = "Add successful!";
-            this.infoDialogTitleMessage = "Add Year";
+            this.infoDialogTitleMessage = "Add Grade Company";
           }
         }
       });
@@ -303,7 +270,7 @@ export default {
       this.editDialog = false;
     },
     deleteItem(item) {
-      this.yearId = item.yearId;
+      this.id = item.gradeCompanyId;
       this.dialogDelete = true;
     },
     closeDelete() {
@@ -311,12 +278,12 @@ export default {
     },
     deleteItemConfirm() {
       var request = {
-        yearId: this.yearId,
+        id: this.id,
       };
       console.log(request);
       axios({
         method: "post", //you can set what request you want to be
-        url: "http://localhost:54421/api/admin/year/delete",
+        url: "http://localhost:54421/api/admin/grade_companies/delete",
         data: request,
       }).then((response) => {
         console.log(response.data);
@@ -328,7 +295,7 @@ export default {
           this.editDialog = false;
           this.infoDialog = true;
           this.infoDialogMessage = "Delete successful!";
-          this.infoDialogTitleMessage = "Delete Year";
+          this.infoDialogTitleMessage = "Delete Grade Company";
         }
       });
       this.closeDelete();

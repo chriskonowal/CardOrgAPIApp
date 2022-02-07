@@ -33,10 +33,10 @@ namespace CardOrgAPI.Application.Years.Search
                 SortByField = request.SortByField
             };
 
-            var years = await _yearRepository.GetYearsAsync(queryFilter,
+            var years = await _yearRepository.GetAsync(queryFilter,
                 cancellationToken).ConfigureAwait(false);
 
-            var totalYears = _yearRepository.GetYearsTotal(request.SearchYear);
+            var totalYears = _yearRepository.GetTotal(request.SearchYear);
 
             var response = new ApiResponse<SearchYearsResponse>()
             {

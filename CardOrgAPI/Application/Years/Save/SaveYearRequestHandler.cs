@@ -24,7 +24,7 @@ namespace CardOrgAPI.Application.Years.Save
             var response = new ApiResponse();
             if (request.YearId <= 0)
             {
-                var yearExists = _yearRepository.YearExists(request.BeginningYear, request.EndingYear);
+                var yearExists = _yearRepository.Exists(request.BeginningYear, request.EndingYear);
                 if (yearExists)
                 {
                     response.ErrorMessage = "Year entry already exists";
@@ -40,7 +40,7 @@ namespace CardOrgAPI.Application.Years.Save
                 YearId = request.YearId > 0 ? request.YearId : 0,
                 Cards = new Card[] { }
             };
-            var insertYear = await _yearRepository.InsertYearAsync(model, cancellationToken).ConfigureAwait(false);
+            var insertYear = await _yearRepository.InsertAsync(model, cancellationToken).ConfigureAwait(false);
             if (insertYear)
             {
                 response.IsSuccessful = true;

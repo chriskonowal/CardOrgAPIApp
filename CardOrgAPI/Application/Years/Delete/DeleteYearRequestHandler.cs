@@ -19,7 +19,7 @@ namespace CardOrgAPI.Application.Years.Delete
         }
         public async Task<ApiResponse> Handle(DeleteYearRequest request, CancellationToken cancellationToken)
         {
-            var result = await _yearRepository.DeleteYearAsync(request.YearId, cancellationToken).ConfigureAwait(false);
+            var result = await _yearRepository.DeleteAsync(request.YearId, cancellationToken).ConfigureAwait(false);
             var response = new ApiResponse();
             response.IsSuccessful = result;
             return response;

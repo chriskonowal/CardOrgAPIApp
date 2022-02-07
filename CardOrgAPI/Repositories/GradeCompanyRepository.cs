@@ -1,6 +1,4 @@
-﻿using CardOrgAPI.Constants;
-using CardOrgAPI.Contexts;
-using CardOrgAPI.Extensions;
+﻿using CardOrgAPI.Contexts;
 using CardOrgAPI.Helpers;
 using CardOrgAPI.Interfaces.Repositories;
 using CardOrgAPI.Model;
@@ -9,55 +7,47 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace CardOrgAPI.Repositories
 {
-    public class YearRepository : IYearRepository
+    public class GradeCompanyRepository : IGradeCompanyRepository
     {
         private readonly CardOrgContext _context;
         private bool disposed = false;
 
-        public YearRepository(CardOrgContext context)
+        public GradeCompanyRepository(CardOrgContext context)
         {
             _context = context;
         }
 
-        public async Task<IEnumerable<Year>> GetAsync(GetYearsQueryFilter filter, CancellationToken cancellationToken)
+        public async Task<IEnumerable<GradeCompany>> GetAsync(GenericSearchQueryFilter filter, CancellationToken cancellationToken)
         {
-            var query = _context.Years.AsQueryable();
-            query = Search(query, filter.SearchYear);
+            var query = _context.GradeCompanies.AsQueryable();
+            query = Search(query, filter.SearchTerm);
+            if (!String.IsNullOrWhiteSpace(filter.SearchTerm))
+            {
+                query = query.Where(x => x.Name.ToLower().Contains(filter.SearchTerm));
+            }
 
             if (!String.IsNullOrWhiteSpace(filter.SortByField))
             {
-                if (filter.SortByField.ToLower().Equals("beginningyear"))
+                if (filter.SortByField.ToLower().Equals("name"))
                 {
                     if (filter.IsSortDesc)
                     {
-                        query = query.OrderByDescending(x => x.BeginningYear);
+                        query = query.OrderByDescending(x => x.Name);
                     }
                     else
                     {
-                        query = query.OrderBy(x => x.BeginningYear);
-                    }
-                }
-                else if (filter.SortByField.ToLower().Equals("endingyear"))
-                {
-                    if (filter.IsSortDesc)
-                    {
-                        query = query.OrderByDescending(x => x.EndingYear);
-                    }
-                    else
-                    {
-                        query = query.OrderBy(x => x.EndingYear);
+                        query = query.OrderBy(x => x.Name);
                     }
                 }
             }
             else
             {
-                query = query.OrderByDescending(x => x.EndingYear);
+                query = query.OrderByDescending(x => x.Name);
             }
 
             query = RepositoryHelpers.Paging(query, filter.RowsPerPage, filter.PageNumber);
@@ -65,24 +55,24 @@ namespace CardOrgAPI.Repositories
             return await query.ToListAsync(cancellationToken).ConfigureAwait(false);
         }
 
-        public int GetTotal(int searchYear)
+        public int GetTotal(string searchTerm)
         {
-            var query = _context.Years.AsQueryable();
-            query = Search(query, searchYear);
+            var query = _context.GradeCompanies.AsQueryable();
+            query = Search(query, searchTerm);
             return query.Count();
         }
 
-        public bool Exists(int beginningYear, int endingYear)
+        public bool Exists(string searchTerm)
         {
-            return _context.Years
-                .Any(x => x.BeginningYear == beginningYear && x.EndingYear == endingYear);
+            return _context.GradeCompanies
+                .Any(x => x.Name.ToLower().Contains(searchTerm.ToLower()));
 
         }
 
-        public async Task<bool> InsertAsync(Year model, CancellationToken cancellationToken)
+        public async Task<bool> InsertAsync(GradeCompany model, CancellationToken cancellationToken)
         {
-            await _context.Years.AddAsync(model, cancellationToken).ConfigureAwait(false);
-            if (model.YearId > 0)
+            await _context.GradeCompanies.AddAsync(model, cancellationToken).ConfigureAwait(false);
+            if (model.GradeCompanyId > 0)
             {
                 _context.Entry(model).State = EntityState.Modified;
             }
@@ -94,7 +84,7 @@ namespace CardOrgAPI.Repositories
         {
             if (id > 0)
             {
-                var year = new Year { YearId = id };
+                var year = new GradeCompany { GradeCompanyId = id };
                 _context.Entry(year).State = EntityState.Deleted;
                 var result = await _context.SaveChangesAsync(cancellationToken);
                 return result == 1;
@@ -102,13 +92,13 @@ namespace CardOrgAPI.Repositories
             return true;
         }
 
-        private IQueryable<Year> Search(IQueryable<Year> years, int searchYear)
+        private IQueryable<GradeCompany> Search(IQueryable<GradeCompany> gradeCompanies, string searchTerm)
         {
-            if (searchYear > 0)
+            if (!String.IsNullOrWhiteSpace(searchTerm))
             {
-                years = years.Where(x => x.BeginningYear == searchYear || x.EndingYear == searchYear);
+                gradeCompanies = gradeCompanies.Where(x => x.Name.ToLower().Contains(searchTerm.ToLower()));
             }
-            return years;
+            return gradeCompanies;
         }
 
         protected virtual void Dispose(bool disposing)

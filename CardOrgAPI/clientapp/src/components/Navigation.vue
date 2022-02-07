@@ -15,7 +15,6 @@
             ><router-link to="/home">Home</router-link></v-list-item-title
           >
         </v-list-item>
-
         <v-list-item>
           <v-list-item-title>
             <router-link to="/years-admin"
@@ -23,13 +22,12 @@
             ></v-list-item-title
           >
         </v-list-item>
-
         <v-list-item>
-          <v-list-item-title>Fizz</v-list-item-title>
-        </v-list-item>
-
-        <v-list-item>
-          <v-list-item-title>Buzz</v-list-item-title>
+          <v-list-item-title>
+            <router-link to="/grade-company-admin"
+              >Grade Company Admin</router-link
+            ></v-list-item-title
+          >
         </v-list-item>
       </v-list>
     </v-menu>

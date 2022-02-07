@@ -476,4 +476,4 @@ pnpm-debug.log*
 *.sln
 *.sw?
 
-/CardOrgAPI/clientapp/src/Uploads
+/CardOrgAPI/clientapp/public/Uploads

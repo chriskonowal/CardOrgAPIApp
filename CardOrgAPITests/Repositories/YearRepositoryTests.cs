@@ -24,10 +24,10 @@ namespace CardOrgAPITests.Repositories
             var years = CreateYears();
 
             var yearRepository = new Mock<IYearRepository>();
-            yearRepository.Setup(x => x.GetYearsAsync(It.IsAny<GetYearsQueryFilter>(), CancellationToken.None)).Returns(Task.FromResult(years));
+            yearRepository.Setup(x => x.GetAsync(It.IsAny<GetYearsQueryFilter>(), CancellationToken.None)).Returns(Task.FromResult(years));
 
             //Act
-            var getYearsResults =  yearRepository.Object.GetYearsAsync(It.IsAny<GetYearsQueryFilter>(), CancellationToken.None).ConfigureAwait(false).GetAwaiter().GetResult();
+            var getYearsResults =  yearRepository.Object.GetAsync(It.IsAny<GetYearsQueryFilter>(), CancellationToken.None).ConfigureAwait(false).GetAwaiter().GetResult();
             //Assert
             getYearsResults.Should().BeNull();
             getYearsResults.Count().Should().Be(1);

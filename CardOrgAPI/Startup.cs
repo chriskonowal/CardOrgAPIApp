@@ -34,6 +34,8 @@ namespace CardOrgAPI
             services.AddDbContext<CardOrgContext>(options => options.UseSqlServer(Configuration.GetConnectionString("CardOrg")));
             services.AddMediatR(Assembly.GetExecutingAssembly());
             services.AddScoped<IYearRepository, YearRepository>();
+            services.AddScoped<IGradeCompanyRepository, GradeCompanyRepository>();
+            services.AddScoped<ICardRepository, CardRepository>();
             services.AddControllers();
 
             #region Swagger Configuration
