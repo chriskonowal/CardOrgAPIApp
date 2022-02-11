@@ -36,6 +36,8 @@ namespace CardOrgAPI
             services.AddScoped<IYearRepository, YearRepository>();
             services.AddScoped<IGradeCompanyRepository, GradeCompanyRepository>();
             services.AddScoped<ICardRepository, CardRepository>();
+            services.AddScoped<ILocationRepository, LocationRepository>();
+
             services.AddControllers();
 
             #region Swagger Configuration

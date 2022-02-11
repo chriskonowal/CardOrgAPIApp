@@ -29,6 +29,13 @@
             ></v-list-item-title
           >
         </v-list-item>
+        <v-list-item>
+          <v-list-item-title>
+            <router-link to="/location-admin"
+              >Location Admin</router-link
+            ></v-list-item-title
+          >
+        </v-list-item>
       </v-list>
     </v-menu>
     <v-toolbar-title style="margin-left: 15px">Card Org</v-toolbar-title>

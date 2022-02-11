@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Home from "@/views/Home.vue"
 import YearsAdmin from "@/views/admin/YearsAdmin.vue"
 import GradeCompany from "@/views/admin/GradeCompanyAdmin.vue"
+import LocationAdmin from "@/views/admin/LocationAdmin.vue"
 
 Vue.use(Router)
 
@@ -29,6 +30,12 @@ export default new Router({
             path: '/grade-company-admin',
             name: 'GradeCompany',
             component: GradeCompany
+        }
+        ,
+        {
+            path: '/location-admin',
+            name: 'LocationAdmin',
+            component: LocationAdmin
         }
     ]
 })

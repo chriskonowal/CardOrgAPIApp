@@ -17,6 +17,7 @@ namespace CardOrgAPI.Application.Years.Delete
         {
             _yearRepository = yearRepository;
         }
+
         public async Task<ApiResponse> Handle(DeleteYearRequest request, CancellationToken cancellationToken)
         {
             var result = await _yearRepository.DeleteAsync(request.YearId, cancellationToken).ConfigureAwait(false);
