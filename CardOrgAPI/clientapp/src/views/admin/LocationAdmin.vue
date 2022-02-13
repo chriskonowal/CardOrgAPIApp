@@ -121,6 +121,16 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
+        <v-dialog v-model="dialogErrorDelete" max-width="500px">
+          <v-card>
+            <v-card-title class="text-h5"
+              >There was a problem deleting item.</v-card-title
+            >
+            <p style="color: red; text-align: center">
+              {{ deleteErrorMessage }}
+            </p>
+          </v-card>
+        </v-dialog>
       </v-card>
     </div>
   </div>
@@ -170,6 +180,8 @@ export default {
       editTitle: "",
       dialogDelete: false,
       id: 0,
+      dialogErrorDelete: false,
+      deleteErrorMessage: "",
     };
   },
   watch: {
@@ -278,8 +290,7 @@ export default {
     },
     deleteItemConfirm() {
       var request = {
-        //id: this.id,
-        id: 100,
+        id: this.id,
       };
       console.log(request);
       axios({
@@ -289,17 +300,18 @@ export default {
       }).then((response) => {
         console.log(response.data);
         if (!response.data.isSuccessful) {
-          this.hasAddError = true;
-          this.addErrorMessage = response.data.errorMessage;
+          this.closeDelete();
+          this.dialogErrorDelete = true;
+          this.deleteErrorMessage = response.data.errorMessage;
         } else {
           this.readDataFromAPI();
           this.editDialog = false;
           this.infoDialog = true;
           this.infoDialogMessage = "Delete successful!";
           this.infoDialogTitleMessage = "Delete Location";
+          this.closeDelete();
         }
       });
-      this.closeDelete();
     },
   },
   mounted() {

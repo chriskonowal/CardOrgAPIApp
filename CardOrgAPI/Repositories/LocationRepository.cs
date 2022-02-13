@@ -85,7 +85,7 @@ namespace CardOrgAPI.Repositories
             if (id > 0)
             {
                 var year = new Location { LocationId = id };
-                if (_context.Entry(year) != null)
+                if (_context.Entry(year) == null)
                 {
                     return false;
                 }
