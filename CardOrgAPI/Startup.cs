@@ -1,6 +1,7 @@
 using CardOrgAPI.Contexts;
 using CardOrgAPI.Helpers;
 using CardOrgAPI.Interfaces.Repositories;
+using CardOrgAPI.Interfaces.Services;
 using CardOrgAPI.Interfaces.Servics;
 using CardOrgAPI.Repositories;
 using CardOrgAPI.Services;
@@ -37,6 +38,7 @@ namespace CardOrgAPI
             services.AddScoped<IGradeCompanyRepository, GradeCompanyRepository>();
             services.AddScoped<ICardRepository, CardRepository>();
             services.AddScoped<ILocationRepository, LocationRepository>();
+            services.AddScoped<IImageService, ImageService>();
 
             services.AddControllers();
 
