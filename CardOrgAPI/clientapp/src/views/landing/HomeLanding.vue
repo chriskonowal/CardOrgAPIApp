@@ -31,8 +31,10 @@
         <template v-slot:[`item.pictures`]="{ item }">
           <img
             v-bind:src="showImage(item.frontCardThumbnailImagePath)"
-            style="max-width: 150px; padding: 5px"
+            style="max-width: 100px; padding: 5px"
+            @click="onClickFrontImage(item)"
           />
+
           <img
             v-bind:src="showImage(item.backCardThumbnailImagePath)"
             style="max-width: 150px; padding: 5px"
@@ -66,14 +68,45 @@
         </template>
       </v-data-table>
     </v-card>
+    <!-- <v-dialog v-model="frontPictureDialog" width="85%" persistent>
+      <v-card>
+        <v-card-title class="text-h5 text-center block">Front</v-card-title>
+        <v-img v-bind="showFrontImage"> </v-img>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="blue darken-1" text @click="closefrontPicture"
+            >Close</v-btn
+          >
+          <v-spacer></v-spacer>
+        </v-card-actions>
+      </v-card>
+    </v-dialog> -->
+    <viewer
+      @inited="inited"
+      class="viewer"
+      ref="viewer"
+      :images="images"
+      rebuild
+    >
+      <img
+        v-bind="showFrontImage"
+        v-for="src in images"
+        :key="src"
+        :src="src"
+      />
+    </viewer>
   </div>
 </template>
 
 <script>
 import axios from "axios";
+import { component as Viewer } from "v-viewer";
 
 export default {
   name: "HomeLanding",
+  components: {
+    Viewer,
+  },
   data() {
     return {
       totalCards: 0,
@@ -99,6 +132,10 @@ export default {
           value: "details",
         },
       ],
+      frontPictureDialog: false,
+      showFrontImage: {},
+      frontImage: {},
+      images: [],
     };
   },
   watch: {
@@ -111,10 +148,14 @@ export default {
       deep: true,
     },
   },
+
   mounted() {
     //this.$set(this.hideDelimiters, "hide-delimiters", this.isMobile());
   },
   methods: {
+    inited(viewer) {
+      this.$viewer = viewer;
+    },
     showFullNames: function (playerList) {
       var names = "";
       for (var i = 0; i < playerList.length; i++) {
@@ -216,6 +257,21 @@ export default {
           }
         });
     },
+    onClickFrontImage(item) {
+      this.images[0] = "/Uploads/Mid/" + item.frontCardMainImagePath;
+      console.log(this.images);
+      // this.$set(
+      //   this.showFrontImage,
+      //   "src",
+      //   "/Uploads/Mid/" + item.frontCardMainImagePath
+      // );
+      this.$viewer.show();
+
+      //this.frontPictureDialog = true;
+    },
+    closefrontPicture() {
+      this.frontPictureDialog = false;
+    },
     isMobile() {
       if (screen.width <= 760) {
         return true;
@@ -239,5 +295,8 @@ export default {
 }
 .v-data-table__mobile-row__cell {
   width: 100%;
+}
+.block {
+  display: block !important;
 }
 </style>
