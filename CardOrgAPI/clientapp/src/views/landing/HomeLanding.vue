@@ -71,11 +71,7 @@
     <v-dialog v-model="frontPictureDialog" width="85%" persistent>
       <v-card>
         <v-card-title class="text-h5 text-center block">Front</v-card-title>
-        <image-zoom
-          v-bind:regular="showFrontImage"
-          v-bind:zoom="showFrontImageZoom"
-        >
-        </image-zoom>
+        <v-img v-bind:src="showFrontImage"> </v-img>
 
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -91,13 +87,9 @@
 
 <script>
 import axios from "axios";
-import imageZoom from "vue-image-zoomer";
 
 export default {
   name: "HomeLanding",
-  components: {
-    imageZoom,
-  },
   data() {
     return {
       totalCards: 0,
@@ -125,7 +117,6 @@ export default {
       ],
       frontPictureDialog: false,
       showFrontImage: "",
-      showFrontImageZoom: "",
       frontImage: {},
       images: [],
     };
