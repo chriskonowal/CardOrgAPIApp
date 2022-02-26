@@ -68,10 +68,15 @@
         </template>
       </v-data-table>
     </v-card>
-    <!-- <v-dialog v-model="frontPictureDialog" width="85%" persistent>
+    <v-dialog v-model="frontPictureDialog" width="85%" persistent>
       <v-card>
         <v-card-title class="text-h5 text-center block">Front</v-card-title>
-        <v-img v-bind="showFrontImage"> </v-img>
+        <image-zoom
+          v-bind:regular="showFrontImage"
+          v-bind:zoom="showFrontImageZoom"
+        >
+        </image-zoom>
+
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="blue darken-1" text @click="closefrontPicture"
@@ -80,32 +85,18 @@
           <v-spacer></v-spacer>
         </v-card-actions>
       </v-card>
-    </v-dialog> -->
-    <viewer
-      @inited="inited"
-      class="viewer"
-      ref="viewer"
-      :images="images"
-      rebuild
-    >
-      <img
-        v-bind="showFrontImage"
-        v-for="src in images"
-        :key="src"
-        :src="src"
-      />
-    </viewer>
+    </v-dialog>
   </div>
 </template>
 
 <script>
 import axios from "axios";
-import { component as Viewer } from "v-viewer";
+import imageZoom from "vue-image-zoomer";
 
 export default {
   name: "HomeLanding",
   components: {
-    Viewer,
+    imageZoom,
   },
   data() {
     return {
@@ -133,7 +124,8 @@ export default {
         },
       ],
       frontPictureDialog: false,
-      showFrontImage: {},
+      showFrontImage: "",
+      showFrontImageZoom: "",
       frontImage: {},
       images: [],
     };
@@ -258,16 +250,9 @@ export default {
         });
     },
     onClickFrontImage(item) {
-      this.images[0] = "/Uploads/Mid/" + item.frontCardMainImagePath;
-      console.log(this.images);
-      // this.$set(
-      //   this.showFrontImage,
-      //   "src",
-      //   "/Uploads/Mid/" + item.frontCardMainImagePath
-      // );
-      this.$viewer.show();
-
-      //this.frontPictureDialog = true;
+      this.showFrontImage = "/Uploads/Mid/" + item.frontCardMainImagePath;
+      this.showFrontImageZoom = "/Uploads/Large/" + item.frontCardMainImagePath;
+      this.frontPictureDialog = true;
     },
     closefrontPicture() {
       this.frontPictureDialog = false;
