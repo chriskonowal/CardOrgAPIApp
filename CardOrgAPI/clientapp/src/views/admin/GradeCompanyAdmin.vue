@@ -208,7 +208,7 @@ export default {
       };
       console.log(request);
       axios
-        .post("http://localhost:54421/api/admin/grade_companies", request)
+        .post(process.env.VUE_APP_ROOT_API + "admin/grade_companies", request)
         .then((response) => {
           console.log(response.data);
           if (response.data.isSuccessful) {
@@ -257,7 +257,7 @@ export default {
       console.log(request);
       axios({
         method: "post", //you can set what request you want to be
-        url: "http://localhost:54421/api/admin/grade_companies/save",
+        url: process.env.VUE_APP_ROOT_API + "admin/grade_companies/save",
         data: request,
       }).then((response) => {
         console.log(response.data);
@@ -295,7 +295,7 @@ export default {
       console.log(request);
       axios({
         method: "post", //you can set what request you want to be
-        url: "http://localhost:54421/api/admin/grade_companies/delete",
+        url: process.env.VUE_APP_ROOT_API + "admin/grade_companies/delete",
         data: request,
       }).then((response) => {
         console.log(response.data);

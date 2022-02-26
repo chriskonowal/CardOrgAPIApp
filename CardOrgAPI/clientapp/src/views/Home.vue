@@ -62,7 +62,7 @@ export default {
       return names;
     },
     showImage: function (path) {
-      return "/Uploads/" + path;
+      return "/Uploads/Mid/" + path;
     },
     readDataFromAPI() {
       const request = {
@@ -70,7 +70,7 @@ export default {
       };
       console.log(request);
       axios
-        .post("http://localhost:54421/api/public/card_carousel", request)
+        .post(process.env.VUE_APP_ROOT_API + "public/card_carousel", request)
         .then((response) => {
           console.log(response.data);
           if (response.data.isSuccessful) {

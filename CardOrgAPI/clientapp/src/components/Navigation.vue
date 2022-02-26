@@ -23,6 +23,18 @@
             ></v-list-item-title
           >
         </v-list-item>
+        <v-list-item>
+          <v-list-item-icon>
+            <v-icon>mdi-basketball</v-icon>
+          </v-list-item-icon>
+          <v-list-item-title
+            ><router-link
+              to="/landing"
+              style="text-decoration: none; color: inherit"
+              >Landing Page</router-link
+            ></v-list-item-title
+          >
+        </v-list-item>
         <v-list-group :value="true" no-action sub-group>
           <template v-slot:activator>
             <v-list-item-content>

@@ -240,7 +240,7 @@ export default {
       };
       console.log(request);
       axios
-        .post("http://localhost:54421/api/admin/years", request)
+        .post(process.env.VUE_APP_ROOT_API + "admin/years", request)
         .then((response) => {
           console.log(response.data);
           if (response.data.isSuccessful) {
@@ -290,7 +290,7 @@ export default {
       console.log(request);
       axios({
         method: "post", //you can set what request you want to be
-        url: "http://localhost:54421/api/admin/year/save",
+        url: process.env.VUE_APP_ROOT_API + "admin/year/save",
         data: request,
       }).then((response) => {
         console.log(response.data);
@@ -328,7 +328,7 @@ export default {
       console.log(request);
       axios({
         method: "post", //you can set what request you want to be
-        url: "http://localhost:54421/api/admin/year/delete",
+        url: process.env.VUE_APP_ROOT_API + "admin/year/delete",
         data: request,
       }).then((response) => {
         console.log(response.data);

@@ -1,4 +1,5 @@
 ﻿using CardOrgAPI.Application.Cards.Carousel;
+using CardOrgAPI.Application.Cards.LandingPage;
 using CardOrgAPI.Application.GradeCompanies.Delete;
 using CardOrgAPI.Application.GradeCompanies.Save;
 using CardOrgAPI.Application.GradeCompanies.Search;
@@ -35,15 +36,27 @@ namespace CardOrgAPI.Controllers.Public
         }
 
         [Route("card_carousel"), HttpPost]
-        public async Task<ActionResult<ApiResponse<IEnumerable<CardResponse>>>> GetAsync([FromBody] CardCarouselRequest request, CancellationToken cancellationToken)
+        public async Task<ActionResult<ApiResponse<IEnumerable<CardResponse>>>> GetCarouselAsync([FromBody] CardCarouselRequest request, CancellationToken cancellationToken)
         {
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var years = await _mediator.Send(request, cancellationToken).ConfigureAwait(false);
+            var cards = await _mediator.Send(request, cancellationToken).ConfigureAwait(false);
 
-            return Ok(years);
+            return Ok(cards);
+        }
+
+        [Route("cards"), HttpPost]
+        public async Task<ActionResult<ApiResponse<LandingPageResponse>>> GetAsync([FromBody] LandingPageRequest request, CancellationToken cancellationToken)
+        {
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var cards = await _mediator.Send(request, cancellationToken).ConfigureAwait(false);
+
+            return Ok(cards);
         }
     }
 }

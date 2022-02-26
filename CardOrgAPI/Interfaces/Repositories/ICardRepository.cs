@@ -1,4 +1,5 @@
 ﻿using CardOrgAPI.Model;
+using CardOrgAPI.QueryFilters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,5 +11,9 @@ namespace CardOrgAPI.Interfaces.Repositories
     public interface ICardRepository :IDisposable
     {
         Task<IEnumerable<Card>> GetCardsByAmountAsync(int count, CancellationToken cancellationToken);
+
+        Task<IEnumerable<Card>> GetAsync(CardSearchQueryFilter filter, CancellationToken cancellationToken);
+
+        int GetTotal(string searchTerm);
     }
 }
