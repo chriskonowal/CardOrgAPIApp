@@ -1,4 +1,5 @@
-﻿using CardOrgAPI.Responses;
+﻿using CardOrgAPI.Requests;
+using CardOrgAPI.Responses;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -12,5 +13,7 @@ namespace CardOrgAPI.Application.Cards.LandingPage
         public string QuickSearch { get; set; }
         public int RowsPerPage { get; set; }
         public int PageNumber { get; set; }
+
+        public SearchSortRequest SearchSortRequest { get; set; }
     }
 }

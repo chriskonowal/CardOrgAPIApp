@@ -26,13 +26,14 @@ namespace CardOrgAPI.Application.Cards.LandingPage
                 PageNumber = request.PageNumber,
                 RowsPerPage = request.RowsPerPage,
                 QuickSearchTerm = request.QuickSearch,
+                SearchSortQueryFilter = SearchSortQueryFilterConverter.Convert(request.SearchSortRequest)
             };
 
 
             var cards = await _cardRepository.GetAsync(queryFilter,
                 cancellationToken).ConfigureAwait(false);
 
-            var totalCards = _cardRepository.GetTotal(request.QuickSearch);
+            var totalCards = _cardRepository.GetTotal(queryFilter);
 
             var response = new ApiResponse<LandingPageResponse>()
             {

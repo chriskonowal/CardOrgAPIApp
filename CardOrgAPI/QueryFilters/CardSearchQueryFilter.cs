@@ -10,5 +10,7 @@ namespace CardOrgAPI.QueryFilters
         public string QuickSearchTerm { get; set; }
         public int RowsPerPage { get; set; }
         public int PageNumber { get; set; }
+
+        public SearchSortQueryFilter SearchSortQueryFilter { get; set; }
     }
 }

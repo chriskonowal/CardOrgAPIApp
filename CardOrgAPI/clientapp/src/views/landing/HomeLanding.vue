@@ -3,7 +3,97 @@
     <v-card>
       <v-card-title>
         Cards
-
+        <v-expansion-panels>
+          <v-expansion-panel>
+            <v-expansion-panel-header> Search </v-expansion-panel-header>
+            <v-expansion-panel-content>
+              <v-form>
+                <v-container>
+                  <v-row>
+                    <v-text-field
+                      label="Card Description"
+                      outlined
+                      v-model="txtCardDescription"
+                    ></v-text-field>
+                  </v-row>
+                  <v-divider></v-divider>
+                  <v-row>
+                    <v-switch
+                      v-model="isGraded"
+                      :label="'Is Graded'"
+                    ></v-switch>
+                  </v-row>
+                  <v-divider></v-divider>
+                  <v-row>
+                    <v-data-table
+                      v-model="yearsSelected"
+                      :headers="yearsHeaders"
+                      :page="page"
+                      :items="years"
+                      :options.sync="yearsOptions"
+                      :sort-by.sync="sortBy"
+                      :sort-desc.sync="sortDesc"
+                      :server-items-length="totalYears"
+                      :loading="yearsLoading"
+                      :items-per-page="5"
+                      :search="yearsSearch"
+                      class="elevation-1 tblYears"
+                      show-select
+                      :single-select="false"
+                      item-key="yearId"
+                    >
+                    </v-data-table>
+                  </v-row>
+                  <v-divider></v-divider>
+                  <v-row style="margin-top: 30px">
+                    <v-col cols="12" sm="6" md="3">
+                      <v-btn depressed elevation="2" @click="readDataFromAPI()"
+                        >Search</v-btn
+                      >
+                    </v-col>
+                  </v-row>
+                </v-container>
+              </v-form>
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+          <v-expansion-panel>
+            <v-expansion-panel-header> Sort </v-expansion-panel-header>
+            <v-expansion-panel-content>
+              <v-form>
+                <v-container>
+                  <v-row>
+                    <h5>Player Name Sort</h5>
+                    <v-radio-group
+                      v-model="playerNameSort"
+                      row
+                      style="width: 100%"
+                    >
+                      <v-radio label="None" value="0"></v-radio>
+                      <v-radio label="Asc" value="1"></v-radio>
+                      <v-radio label="Desc" value="2"></v-radio>
+                    </v-radio-group>
+                  </v-row>
+                  <v-row>
+                    <h5>Team Sort</h5>
+                    <v-radio-group v-model="teamSort" row style="width: 100%">
+                      <v-radio label="None" value="0"></v-radio>
+                      <v-radio label="Asc" value="1"></v-radio>
+                      <v-radio label="Desc" value="2"></v-radio>
+                    </v-radio-group>
+                  </v-row>
+                  <v-divider></v-divider>
+                  <v-row style="margin-top: 30px">
+                    <v-col cols="12" sm="6" md="3">
+                      <v-btn depressed elevation="2" @click="readDataFromAPI()"
+                        >Sort</v-btn
+                      >
+                    </v-col>
+                  </v-row>
+                </v-container>
+              </v-form>
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+        </v-expansion-panels>
         <v-spacer></v-spacer>
         <v-text-field
           v-model="search"
@@ -119,6 +209,32 @@ export default {
       showFrontImage: "",
       frontImage: {},
       images: [],
+      txtCardDescription: "",
+      yearsLoading: true,
+      yearsOptions: {},
+      yearsNumberOfPages: 0,
+      yearsSearch: "",
+      years: [],
+      totalYears: 0,
+      yearsHeaders: [
+        {
+          text: "Year",
+          align: "start",
+          sortable: false,
+          value: "year",
+        },
+        {
+          text: "Beginning Year",
+          align: "start",
+          sortable: true,
+          value: "beginningYear",
+        },
+        { text: "End Year", value: "endingYear" },
+      ],
+      yearsSelected: [],
+      isGraded: false,
+      playerNameSort: "0",
+      teamSort: "0",
     };
   },
   watch: {
@@ -126,6 +242,14 @@ export default {
       handler(newVal, oldVal) {
         if (newVal != oldVal) {
           this.readDataFromAPI();
+        }
+      },
+      deep: true,
+    },
+    yearsOptions: {
+      handler(newVal, oldVal) {
+        if (newVal != oldVal) {
+          this.readDataForYearsFromAPI();
         }
       },
       deep: true,
@@ -220,12 +344,22 @@ export default {
       });
     },
     readDataFromAPI() {
+      this.readDataForYearsFromAPI();
+      console.log(this.txtCardDescription);
+      console.log(this.yearsSelected);
       this.loading = true;
       const { page, itemsPerPage } = this.options;
       const request = {
         quickSearch: this.search,
         rowsPerPage: itemsPerPage,
         pageNumber: page,
+        searchSortRequest: {
+          cardDescription: this.txtCardDescription,
+          yearIds: this.getYearIds(this.yearsSelected),
+          isGraded: this.isGraded,
+          playerNameSort: parseInt(this.playerNameSort),
+          teamSort: parseInt(this.teamSort),
+        },
       };
 
       console.log(request);
@@ -255,6 +389,45 @@ export default {
         return false;
       }
     },
+    readDataForYearsFromAPI() {
+      this.yearsLoading = true;
+      console.log(this.yearsOptions);
+      const { sortBy, sortDesc, page, itemsPerPage } = this.yearsOptions;
+      var searchYear = 0;
+      if (this.yearsSearch.length == 4 && this.validInt(this.yearsSearch)) {
+        searchYear = parseInt(this.yearsSearch);
+      }
+
+      const request = {
+        searchYear: searchYear,
+        rowsPerPage: itemsPerPage,
+        pageNumber: page,
+        sortByField: sortBy != null ? sortBy[0] : "",
+        isSortDesc: sortDesc != null ? sortDesc[0] : false,
+      };
+      console.log(request);
+      axios
+        .post(process.env.VUE_APP_ROOT_API + "admin/years", request)
+        .then((response) => {
+          console.log(response.data);
+          if (response.data.isSuccessful) {
+            this.years = response.data.value.years;
+            this.totalYears = response.data.value.totalYears;
+          }
+
+          this.yearsLoading = false;
+        });
+    },
+    getYearIds(yearArray) {
+      var ids = "";
+      for (var i = 0; i < yearArray.length; i++) {
+        if (ids.length > 0) {
+          ids += ",";
+        }
+        ids += yearArray[i].yearId.toString();
+      }
+      return ids;
+    },
   },
 };
 </script>
@@ -274,5 +447,14 @@ export default {
 }
 .block {
   display: block !important;
+}
+.tblYears .v-data-table__mobile-row__header {
+  min-width: 100px;
+}
+.v-input--radio-group--row {
+  margin-top: 0px;
+}
+.elevation-1 {
+  margin-top: 30px;
 }
 </style>

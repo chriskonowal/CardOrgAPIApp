@@ -14,6 +14,6 @@ namespace CardOrgAPI.Interfaces.Repositories
 
         Task<IEnumerable<Card>> GetAsync(CardSearchQueryFilter filter, CancellationToken cancellationToken);
 
-        int GetTotal(string searchTerm);
+        int GetTotal(CardSearchQueryFilter filter);
     }
 }

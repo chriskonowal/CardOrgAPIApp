@@ -8,7 +8,9 @@ using CardOrgAPI.Services;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -41,6 +43,7 @@ namespace CardOrgAPI
             services.AddScoped<IImageService, ImageService>();
 
             services.AddControllers();
+
 
             #region Swagger Configuration
             services.AddSwaggerGen(swagger =>
@@ -127,6 +130,8 @@ namespace CardOrgAPI
             {
                 endpoints.MapControllers();
             });
+
+            app.UseDeveloperExceptionPage();
 
             //app.UseSpa(spa =>
             //{

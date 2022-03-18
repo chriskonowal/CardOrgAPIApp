@@ -40,12 +40,11 @@ namespace CardOrgAPI.Repositories
             var query = _context.Cards.AsQueryable();
             query = IncludeAllModels(query);
             query = QuickSearch(query, filter.QuickSearchTerm);
-            query = query.OrderByDescending(x => x.TimeStamp);
+            query = FullSearchSort(query, filter.SearchSortQueryFilter);
             query = RepositoryHelpers.Paging(query, filter.RowsPerPage, filter.PageNumber);          
             try
             {
-                return await query.ToListAsync(cancellationToken)
-                   .ConfigureAwait(false);
+                return await Task.FromResult(query.ToList());
             }
             catch (Exception ex)
             {
@@ -54,11 +53,12 @@ namespace CardOrgAPI.Repositories
             
         }
 
-        public int GetTotal(string searchTerm)
+        public int GetTotal(CardSearchQueryFilter filter)
         {
             var query = _context.Cards.AsQueryable();
             query = IncludeAllModels(query);
-            query = QuickSearch(query, searchTerm);
+            query = QuickSearch(query, filter.QuickSearchTerm);
+            query = FullSearchSort(query, filter.SearchSortQueryFilter);
             return query.Count();
         }
 
@@ -76,6 +76,7 @@ namespace CardOrgAPI.Repositories
 
         private IQueryable<Card> QuickSearch(IQueryable<Card> cards, string quickSearch)
         {
+            quickSearch = quickSearch.ToLower();
             if (!String.IsNullOrWhiteSpace(quickSearch))
             {
                 cards = cards.Where(x => x.CardDescription.ToLower().Contains(quickSearch) || 
@@ -89,6 +90,59 @@ namespace CardOrgAPI.Repositories
                 x.TeamCards.Any(x => x.Team.City.ToLower().Contains(quickSearch) ||
                 x.Team.Name.ToLower().Contains(quickSearch)));
             }
+            return cards;
+        }
+
+        private IQueryable<Card> FullSearchSort(IQueryable<Card> cards, SearchSortQueryFilter filter )
+        {
+            bool hasCustomOrder = false;
+            if (!String.IsNullOrWhiteSpace(filter.CardDescription))
+            {
+                cards = cards.Where(x => x.CardDescription.ToLower().Contains(filter.CardDescription.ToLower()));
+            }
+
+            if (!String.IsNullOrWhiteSpace(filter.YearIds)) 
+            {
+                var years = filter.YearIds.Split(",").Select(x => int.Parse(x));
+                cards = cards.Where(x => years.Contains(x.Year.YearId));
+            }
+
+            if (filter.IsGraded)
+            {
+                cards = cards.Where(x => x.IsGraded);
+            }
+
+            if (filter.PlayerNameSort > 0)
+            {
+                hasCustomOrder = true;
+                if (filter.PlayerNameSort == 1)
+                {
+                    cards = cards.OrderBy(x => x.PlayerCards.Select(p => p.Player).OrderBy(y => y.LastName).ThenBy(y => y.FirstName).FirstOrDefault().LastName).ThenBy(x => x.PlayerCards.Select(p => p.Player).OrderBy(y => y.LastName).ThenBy(y => y.FirstName).FirstOrDefault().FirstName).ToList().AsQueryable();
+                }
+                else
+                {
+                    cards = cards.OrderByDescending(x => x.PlayerCards.Select(p => p.Player).OrderByDescending(y => y.LastName).ThenByDescending(y => y.FirstName).FirstOrDefault().LastName).ThenByDescending(x => x.PlayerCards.Select(p => p.Player).OrderByDescending(y => y.LastName).ThenByDescending(y => y.FirstName).FirstOrDefault().FirstName).ToList().AsQueryable();
+                }
+            }
+
+            if (filter.TeamSort > 0)
+            {
+                hasCustomOrder = true;
+                if (filter.TeamSort == 1)
+                {
+                    cards = cards.OrderBy(x => x.TeamCards.Select(p => p.Team).OrderBy(y => y.City).ThenBy(y => y.Name).FirstOrDefault().City).ThenBy(x => x.TeamCards.Select(p => p.Team).OrderBy(y => y.Name).ThenBy(y => y.Name).FirstOrDefault().Name).ToList().AsQueryable();
+                }
+                else
+                {
+                    cards = cards.OrderByDescending(x => x.TeamCards.Select(p => p.Team).OrderByDescending(y => y.City).ThenByDescending(y => y.Name).FirstOrDefault().City).ThenByDescending(x => x.TeamCards.Select(p => p.Team).OrderByDescending(y => y.Name).ThenByDescending(y => y.Name).FirstOrDefault().Name).ToList().AsQueryable();
+                }
+            }
+
+            if (!hasCustomOrder)
+            {
+                cards = cards.OrderByDescending(x => x.TimeStamp);
+            }
+
             return cards;
         }
 
