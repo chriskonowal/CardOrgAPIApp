@@ -1,5 +1,6 @@
 <template>
   <div class="wrapper">
+    <GChart type="ColumnChart" @ready="onChartReady" />
     <v-app id="inspire">
       <v-carousel
         v-bind="hideDelimiters"
@@ -35,9 +36,13 @@
 
 <script>
 import axios from "axios";
+import { GChart } from "vue-google-charts";
 
 export default {
   name: "Home",
+  components: {
+    GChart,
+  },
   data() {
     return {
       slides: [],
@@ -84,6 +89,31 @@ export default {
       } else {
         return false;
       }
+    }, // eslint-disable-next-line no-unused-vars
+    onChartReady(chart, google) {
+      axios
+        .get(process.env.VUE_APP_ROOT_API + "public/rookie_auto_patch_graph")
+        .then((response) => {
+          if (response.data.isSuccessful) {
+            console.log("hitting");
+            var chartData = google.visualization.arrayToDataTable([
+              ["Cards", "Rookies", "Autos", "Patches"],
+              [
+                "Cards",
+                response.data.value.rookies,
+                response.data.value.autos,
+                response.data.value.patches,
+              ],
+            ]);
+            const options = {
+              chart: {
+                title: "Card Summary",
+                subtitle: "Rookies, Autos, and Patches",
+              },
+            };
+            chart.draw(chartData, options);
+          }
+        });
     },
   },
 };

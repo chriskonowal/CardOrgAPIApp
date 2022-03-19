@@ -1,5 +1,6 @@
 ﻿using CardOrgAPI.Application.Cards.Carousel;
 using CardOrgAPI.Application.Cards.LandingPage;
+using CardOrgAPI.Application.Cards.RookieAutoPatchGraph;
 using CardOrgAPI.Application.GradeCompanies.Delete;
 using CardOrgAPI.Application.GradeCompanies.Save;
 using CardOrgAPI.Application.GradeCompanies.Search;
@@ -55,6 +56,18 @@ namespace CardOrgAPI.Controllers.Public
                 return BadRequest(ModelState);
 
             var cards = await _mediator.Send(request, cancellationToken).ConfigureAwait(false);
+
+            return Ok(cards);
+        }
+
+        [Route("rookie_auto_patch_graph"), HttpGet]
+        public async Task<ActionResult<ApiResponse<LandingPageResponse>>> GetRookieAutoPatchGraphAsync(CancellationToken cancellationToken)
+        {
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var cards = await _mediator.Send(new RookieAutoPatchGraphRequest(), cancellationToken).ConfigureAwait(false);
 
             return Ok(cards);
         }
