@@ -29,7 +29,7 @@ namespace CardOrgAPITests.Repositories
             //Act
             var getYearsResults =  yearRepository.Object.GetAsync(It.IsAny<GetYearsQueryFilter>(), CancellationToken.None).ConfigureAwait(false).GetAwaiter().GetResult();
             //Assert
-            getYearsResults.Should().BeNull();
+            getYearsResults.Should().NotBeNull();
             getYearsResults.Count().Should().Be(1);
             getYearsResults.First().YearId.Should().Be(2);
         }
