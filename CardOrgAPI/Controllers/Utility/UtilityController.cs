@@ -1,5 +1,7 @@
 ﻿using CardOrgAPI.Application.GradeCompanies.Search;
+using CardOrgAPI.Application.Utility.CreateCSVFiles;
 using CardOrgAPI.Application.Utility.DeletePictures;
+using CardOrgAPI.Application.Utility.PopulateTables;
 using CardOrgAPI.Application.Utility.ResizePictures;
 using CardOrgAPI.Responses;
 using MediatR;
@@ -42,6 +44,30 @@ namespace CardOrgAPI.Controllers.Utility
                 return BadRequest(ModelState);
 
             var years = await _mediator.Send(new DeletePicturesRequest(), cancellationToken).ConfigureAwait(false);
+
+            return Ok(years);
+        }
+
+        [Route("create_csvs"), HttpGet]
+        public async Task<ActionResult<ApiResponse<CreateCSVFilesResponse>>> CreateCSVsAsync(CancellationToken cancellationToken)
+        {
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var years = await _mediator.Send(new CreateCSVFilesRequest(), cancellationToken).ConfigureAwait(false);
+
+            return Ok(years);
+        }
+
+        [Route("populate_tables"), HttpGet]
+        public async Task<ActionResult<ApiResponse<PopulateTablesResponse>>> PopulateTablesAsync(CancellationToken cancellationToken)
+        {
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var years = await _mediator.Send(new PopulateTablesRequest(), cancellationToken).ConfigureAwait(false);
 
             return Ok(years);
         }
