@@ -24,7 +24,7 @@ namespace CardOrgAPI.Repositories
 
         public async Task<IEnumerable<GradeCompany>> GetAsync(GenericSearchQueryFilter filter, CancellationToken cancellationToken)
         {
-            var query = _context.GradeCompanies.AsQueryable();
+            var query = _context.GradeCompany.AsQueryable();
             query = Search(query, filter.SearchTerm);
             if (!String.IsNullOrWhiteSpace(filter.SearchTerm))
             {
@@ -57,21 +57,21 @@ namespace CardOrgAPI.Repositories
 
         public int GetTotal(string searchTerm)
         {
-            var query = _context.GradeCompanies.AsQueryable();
+            var query = _context.GradeCompany.AsQueryable();
             query = Search(query, searchTerm);
             return query.Count();
         }
 
         public bool Exists(string searchTerm)
         {
-            return _context.GradeCompanies
+            return _context.GradeCompany
                 .Any(x => x.Name.ToLower().Contains(searchTerm.ToLower()));
 
         }
 
         public async Task<bool> InsertAsync(GradeCompany model, CancellationToken cancellationToken)
         {
-            await _context.GradeCompanies.AddAsync(model, cancellationToken).ConfigureAwait(false);
+            await _context.GradeCompany.AddAsync(model, cancellationToken).ConfigureAwait(false);
             if (model.GradeCompanyId > 0)
             {
                 _context.Entry(model).State = EntityState.Modified;
@@ -84,8 +84,8 @@ namespace CardOrgAPI.Repositories
         {
             if (id > 0)
             {
-                var year = new GradeCompany { GradeCompanyId = id };
-                _context.Entry(year).State = EntityState.Deleted;
+                var gradeCompany = new GradeCompany { GradeCompanyId = id };
+                _context.Entry(gradeCompany).State = EntityState.Deleted;
                 var result = await _context.SaveChangesAsync(cancellationToken);
                 return result == 1;
             }

@@ -27,7 +27,7 @@ namespace CardOrgAPI.Repositories
 
         public async Task<IEnumerable<Year>> GetAsync(GetYearsQueryFilter filter, CancellationToken cancellationToken)
         {
-            var query = _context.Years.AsQueryable();
+            var query = _context.Year.AsQueryable();
             query = Search(query, filter.SearchYear);
 
             if (!String.IsNullOrWhiteSpace(filter.SortByField))
@@ -67,21 +67,21 @@ namespace CardOrgAPI.Repositories
 
         public int GetTotal(int searchYear)
         {
-            var query = _context.Years.AsQueryable();
+            var query = _context.Year.AsQueryable();
             query = Search(query, searchYear);
             return query.Count();
         }
 
         public bool Exists(int beginningYear, int endingYear)
         {
-            return _context.Years
+            return _context.Year
                 .Any(x => x.BeginningYear == beginningYear && x.EndingYear == endingYear);
 
         }
 
         public async Task<bool> InsertAsync(Year model, CancellationToken cancellationToken)
         {
-            await _context.Years.AddAsync(model, cancellationToken).ConfigureAwait(false);
+            await _context.Year.AddAsync(model, cancellationToken).ConfigureAwait(false);
             if (model.YearId > 0)
             {
                 _context.Entry(model).State = EntityState.Modified;

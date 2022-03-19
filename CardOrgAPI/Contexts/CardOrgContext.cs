@@ -16,17 +16,17 @@ namespace CardOrgAPI.Contexts
         {
         }
 
-        public virtual DbSet<Card> Cards { get; set; }
-        public virtual DbSet<GradeCompany> GradeCompanies { get; set; }
-        public virtual DbSet<Location> Locations { get; set; }
-        public virtual DbSet<Player> Players { get; set; }
-        public virtual DbSet<PlayerCard> PlayerCards { get; set; }
-        public virtual DbSet<SearchSort> SearchSorts { get; set; }
-        public virtual DbSet<Set> Sets { get; set; }
-        public virtual DbSet<Sport> Sports { get; set; }
-        public virtual DbSet<Team> Teams { get; set; }
-        public virtual DbSet<TeamCard> TeamCards { get; set; }
-        public virtual DbSet<Year> Years { get; set; }
+        public virtual DbSet<Card> Card { get; set; }
+        public virtual DbSet<GradeCompany> GradeCompany { get; set; }
+        public virtual DbSet<Location> Location { get; set; }
+        public virtual DbSet<Player> Player { get; set; }
+        public virtual DbSet<PlayerCard> PlayerCard { get; set; }
+        public virtual DbSet<SearchSort> SearchSort { get; set; }
+        public virtual DbSet<Set> Set { get; set; }
+        public virtual DbSet<Sport> Sport { get; set; }
+        public virtual DbSet<Team> Team { get; set; }
+        public virtual DbSet<TeamCard> TeamCard { get; set; }
+        public virtual DbSet<Year> Year { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

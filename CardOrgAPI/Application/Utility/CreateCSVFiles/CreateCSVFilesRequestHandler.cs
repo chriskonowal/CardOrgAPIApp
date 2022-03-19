@@ -33,17 +33,17 @@ namespace CardOrgAPI.Application.Utility.CreateCSVFiles
             var path = _hostEnvironment.ContentRootPath + @"\Database\";
 
             //years
-            var years = await _context.Years.ToListAsync().ConfigureAwait(false);
+            var years = await _context.Year.ToListAsync().ConfigureAwait(false);
             using (var writer = new StreamWriter(path + "years.csv"))
             using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
             {
-                csv.WriteRecordsAsync(years);
+                csv.WriteRecords(years);
             }
 
             processedAmount += years.Count();
 
             //teams
-            var teams = await _context.Teams.ToListAsync().ConfigureAwait(false);
+            var teams = await _context.Team.ToListAsync().ConfigureAwait(false);
             using (var writer = new StreamWriter(path + "teams.csv"))
             using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
             {
@@ -53,7 +53,7 @@ namespace CardOrgAPI.Application.Utility.CreateCSVFiles
             processedAmount += teams.Count();
 
             //sports
-            var sports = await _context.Sports.ToListAsync().ConfigureAwait(false);
+            var sports = await _context.Sport.ToListAsync().ConfigureAwait(false);
             using (var writer = new StreamWriter(path + "sports.csv"))
             using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
             {
@@ -63,7 +63,7 @@ namespace CardOrgAPI.Application.Utility.CreateCSVFiles
             processedAmount += sports.Count();
 
             //sets
-            var sets = await _context.Sets.ToListAsync().ConfigureAwait(false);
+            var sets = await _context.Set.ToListAsync().ConfigureAwait(false);
             using (var writer = new StreamWriter(path + "sets.csv"))
             using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
             {
@@ -73,7 +73,7 @@ namespace CardOrgAPI.Application.Utility.CreateCSVFiles
             processedAmount += sets.Count();
 
             //players
-            var players = await _context.Players.ToListAsync().ConfigureAwait(false);
+            var players = await _context.Player.ToListAsync().ConfigureAwait(false);
             using (var writer = new StreamWriter(path + "players.csv"))
             using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
             {
@@ -83,7 +83,7 @@ namespace CardOrgAPI.Application.Utility.CreateCSVFiles
             processedAmount += players.Count();
 
             //locations
-            var locations = await _context.Locations.ToListAsync().ConfigureAwait(false);
+            var locations = await _context.Location.ToListAsync().ConfigureAwait(false);
             using (var writer = new StreamWriter(path + "locations.csv"))
             using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
             {
@@ -93,7 +93,7 @@ namespace CardOrgAPI.Application.Utility.CreateCSVFiles
             processedAmount += locations.Count();
 
             //gradeCompanies
-            var gradeCompanies = await _context.GradeCompanies.ToListAsync().ConfigureAwait(false);
+            var gradeCompanies = await _context.GradeCompany.ToListAsync().ConfigureAwait(false);
             using (var writer = new StreamWriter(path + "gradeCompanies.csv"))
             using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
             {
@@ -103,7 +103,7 @@ namespace CardOrgAPI.Application.Utility.CreateCSVFiles
             processedAmount += gradeCompanies.Count();
 
             //cards
-            var cards = await _context.Cards.ToListAsync().ConfigureAwait(false);
+            var cards = await _context.Card.ToListAsync().ConfigureAwait(false);
             using (var writer = new StreamWriter(path + "cards.csv"))
             {
                 using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
@@ -144,7 +144,7 @@ namespace CardOrgAPI.Application.Utility.CreateCSVFiles
             processedAmount += cards.Count();
 
             //playerCards
-            var playerCards = await _context.PlayerCards.ToListAsync().ConfigureAwait(false);
+            var playerCards = await _context.PlayerCard.ToListAsync().ConfigureAwait(false);
             using (var writer = new StreamWriter(path + "playerCards.csv"))
             using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
             {
@@ -158,7 +158,7 @@ namespace CardOrgAPI.Application.Utility.CreateCSVFiles
             processedAmount += playerCards.Count();
 
             //teamCards
-            var teamCards = await _context.TeamCards.ToListAsync().ConfigureAwait(false);
+            var teamCards = await _context.TeamCard.ToListAsync().ConfigureAwait(false);
             using (var writer = new StreamWriter(path + "teamCards.csv"))
             using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
             {
