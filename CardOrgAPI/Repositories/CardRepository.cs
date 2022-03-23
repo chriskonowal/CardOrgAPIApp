@@ -112,6 +112,12 @@ namespace CardOrgAPI.Repositories
                 cards = cards.Where(x => x.TeamCards.Any(y => teams.Contains(y.Team.TeamId)));
             }
 
+            if (!String.IsNullOrWhiteSpace(filter.SportIds))
+            {
+                var sports = filter.SportIds.Split(",").Select(x => int.Parse(x));
+                cards = cards.Where(x => sports.Contains(x.SportId.GetValueOrDefault()));
+            }
+
             if (!String.IsNullOrWhiteSpace(filter.YearIds)) 
             {
                 var years = filter.YearIds.Split(",").Select(x => int.Parse(x));

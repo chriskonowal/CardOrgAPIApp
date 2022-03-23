@@ -57,75 +57,127 @@
                   </v-row>
                   <v-divider></v-divider>
                   <v-row>
-                    <div class="d-block pa-2">Players</div>
-                    <div class="d-block pa-2">
-                      <v-data-table
-                        v-model="playersSelected"
-                        :headers="playersHeaders"
-                        :page="page"
-                        :items="players"
-                        :options.sync="playersOptions"
-                        :sort-by.sync="sortBy"
-                        :sort-desc.sync="sortDesc"
-                        :server-items-length="totalPlayers"
-                        :loading="playersLoading"
-                        :items-per-page="5"
-                        :search="playersSearch"
-                        class="elevation-1 tblSearch"
-                        show-select
-                        :single-select="false"
-                        item-key="playerId"
-                      >
-                      </v-data-table>
-                    </div>
+                    <v-data-table
+                      v-model="playersSelected"
+                      :headers="playersHeaders"
+                      :page="page"
+                      :items="players"
+                      :options.sync="playersOptions"
+                      :sort-by.sync="sortBy"
+                      :sort-desc.sync="sortDesc"
+                      :server-items-length="totalPlayers"
+                      :loading="playersLoading"
+                      :items-per-page="5"
+                      :search="playersSearch"
+                      class="elevation-1 tblSearch"
+                      show-select
+                      :single-select="false"
+                      item-key="playerId"
+                    >
+                      <template v-slot:top>
+                        <div class="d-block pa-2">Players</div>
+                        <v-text-field
+                          v-model="playersSearch"
+                          label="Search"
+                          class="mx-4"
+                          @blur="readDataForPlayersFromAPI()"
+                          @keyup="readDataForPlayersFromAPI()"
+                        ></v-text-field>
+                      </template>
+                    </v-data-table>
                   </v-row>
                   <v-divider></v-divider>
                   <v-row>
-                    <div class="d-block pa-2">Teams</div>
-                    <div class="d-block pa-2">
-                      <v-data-table
-                        v-model="teamsSelected"
-                        :headers="teamsHeaders"
-                        :page="page"
-                        :items="teams"
-                        :options.sync="teamsOptions"
-                        :sort-by.sync="sortBy"
-                        :sort-desc.sync="sortDesc"
-                        :server-items-length="totalTeams"
-                        :loading="teamsLoading"
-                        :items-per-page="5"
-                        :search="teamsSearch"
-                        class="elevation-1 tblSearch"
-                        show-select
-                        :single-select="false"
-                        item-key="teamId"
-                      >
-                      </v-data-table>
-                    </div>
+                    <v-data-table
+                      v-model="teamsSelected"
+                      :headers="teamsHeaders"
+                      :page="page"
+                      :items="teams"
+                      :options.sync="teamsOptions"
+                      :sort-by.sync="sortBy"
+                      :sort-desc.sync="sortDesc"
+                      :server-items-length="totalTeams"
+                      :loading="teamsLoading"
+                      :items-per-page="5"
+                      :search="teamsSearch"
+                      class="elevation-1 tblSearch"
+                      show-select
+                      :single-select="false"
+                      item-key="teamId"
+                    >
+                      <template v-slot:top>
+                        <div class="d-block pa-2">Teams</div>
+                        <v-text-field
+                          v-model="teamsSearch"
+                          label="Search"
+                          class="mx-4"
+                          @blur="readDataForTeamsFromAPI()"
+                          @keyup="readDataForTeamsFromAPI()"
+                        ></v-text-field>
+                      </template>
+                    </v-data-table>
                   </v-row>
                   <v-divider></v-divider>
                   <v-row>
-                    <div class="d-block pa-2">Years</div>
-                    <div class="d-block pa-2">
-                      <v-data-table
-                        v-model="yearsSelected"
-                        :headers="yearsHeaders"
-                        :page="page"
-                        :items="years"
-                        :options.sync="yearsOptions"
-                        :sort-by.sync="sortBy"
-                        :sort-desc.sync="sortDesc"
-                        :server-items-length="totalYears"
-                        :loading="yearsLoading"
-                        :items-per-page="5"
-                        :search="yearsSearch"
-                        class="elevation-1 tblSearch"
-                        show-select
-                        :single-select="false"
-                        item-key="yearId"
-                      >
-                      </v-data-table>
-                    </div>
+                    <v-data-table
+                      v-model="sportsSelected"
+                      :headers="sportsHeaders"
+                      :page="page"
+                      :items="sports"
+                      :options.sync="sportsOptions"
+                      :sort-by.sync="sortBy"
+                      :sort-desc.sync="sortDesc"
+                      :server-items-length="totalSports"
+                      :loading="sportsLoading"
+                      :items-per-page="5"
+                      :search="sportsSearch"
+                      class="elevation-1 tblSearch"
+                      show-select
+                      :single-select="false"
+                      item-key="sportId"
+                    >
+                      <template v-slot:top>
+                        <div class="d-block pa-2">Sport</div>
+                        <v-text-field
+                          v-model="sportsSearch"
+                          label="Search"
+                          class="mx-4"
+                          @blur="readDataForSportsFromAPI()"
+                          @keyup="readDataForSportsFromAPI()"
+                        ></v-text-field>
+                      </template>
+                    </v-data-table>
+                  </v-row>
+                  <v-divider></v-divider>
+                  <v-row>
+                    <v-data-table
+                      v-model="yearsSelected"
+                      :headers="yearsHeaders"
+                      :page="page"
+                      :items="years"
+                      :options.sync="yearsOptions"
+                      :sort-by.sync="sortBy"
+                      :sort-desc.sync="sortDesc"
+                      :server-items-length="totalYears"
+                      :loading="yearsLoading"
+                      :items-per-page="5"
+                      :search="yearsSearch"
+                      class="elevation-1 tblSearch"
+                      show-select
+                      :single-select="false"
+                      item-key="yearId"
+                    >
+                      <template v-slot:top>
+                        <div class="d-block pa-2">Year</div>
+                        <v-text-field
+                          v-model="yearsSearch"
+                          label="Search"
+                          class="mx-4"
+                          @blur="readDataForYearsFromAPI()"
+                          @keyup="readDataForYearsFromAPI()"
+                        ></v-text-field>
+                      </template>
+                    </v-data-table>
                   </v-row>
                   <v-divider></v-divider>
                   <v-row style="margin-top: 30px">
@@ -315,6 +367,7 @@ export default {
       frontImage: {},
       images: [],
       txtCardDescription: "",
+      teamsSelected: [],
       teamsLoading: true,
       teamsOptions: {},
       teamsNumberOfPages: 0,
@@ -356,7 +409,22 @@ export default {
           value: "lastName",
         },
       ],
-      teamsSelected: [],
+      sportsSelected: [],
+      sportsLoading: true,
+      sportsOptions: {},
+      sportsNumberOfPages: 0,
+      sportsSearch: "",
+      sports: [],
+      totalSports: 0,
+      sportsHeaders: [
+        {
+          text: "Name",
+          align: "start",
+          sortable: true,
+          value: "name",
+        },
+      ],
+      yearsSelected: [],
       yearsLoading: true,
       yearsOptions: {},
       yearsNumberOfPages: 0,
@@ -378,7 +446,7 @@ export default {
         },
         { text: "End Year", value: "endingYear" },
       ],
-      yearsSelected: [],
+
       isGraded: false,
       playerNameSort: "0",
       teamSort: "0",
@@ -410,6 +478,14 @@ export default {
       handler(newVal, oldVal) {
         if (newVal != oldVal) {
           this.readDataForTeamsFromAPI();
+        }
+      },
+      deep: true,
+    },
+    sportsOptions: {
+      handler(newVal, oldVal) {
+        if (newVal != oldVal) {
+          this.readDataForSportsFromAPI();
         }
       },
       deep: true,
@@ -513,6 +589,7 @@ export default {
     readDataFromAPI(clear) {
       this.readDataForPlayersFromAPI();
       this.readDataForTeamsFromAPI();
+      this.readDataForSportsFromAPI();
       this.readDataForYearsFromAPI();
 
       this.loading = true;
@@ -554,6 +631,7 @@ export default {
             isGameWornJersey: this.isGameWornJersey,
             teamIds: this.getTeamsIds(this.teamsSelected),
             playerIds: this.getPlayersIds(this.playersSelected),
+            sportIds: this.getSportIds(this.sportsSelected),
           },
         };
       }
@@ -591,7 +669,7 @@ export default {
       const { sortBy, sortDesc, page, itemsPerPage } = this.playersOptions;
 
       const request = {
-        searchYear: this.playersSearch,
+        searchTerm: this.playersSearch,
         rowsPerPage: itemsPerPage,
         pageNumber: page,
         sortByField: sortBy != null ? sortBy[0] : "",
@@ -616,7 +694,7 @@ export default {
       const { sortBy, sortDesc, page, itemsPerPage } = this.teamsOptions;
 
       const request = {
-        searchYear: this.teamsSearch,
+        searchTerm: this.teamsSearch,
         rowsPerPage: itemsPerPage,
         pageNumber: page,
         sortByField: sortBy != null ? sortBy[0] : "",
@@ -629,10 +707,35 @@ export default {
           console.log(response.data);
           if (response.data.isSuccessful) {
             this.teams = response.data.value.teams;
-            this.totalTeams = response.data.value.totalTeams;
+            this.totalTeams = response.data.value.total;
           }
 
           this.teamsLoading = false;
+        });
+    },
+    readDataForSportsFromAPI() {
+      this.sportsLoading = true;
+      console.log(this.sportsOptions);
+      const { sortBy, sortDesc, page, itemsPerPage } = this.sportsOptions;
+
+      const request = {
+        searchTerm: this.sportsSearch,
+        rowsPerPage: itemsPerPage,
+        pageNumber: page,
+        sortByField: sortBy != null ? sortBy[0] : "",
+        isSortDesc: sortDesc != null ? sortDesc[0] : false,
+      };
+      console.log(request);
+      axios
+        .post(process.env.VUE_APP_ROOT_API + "admin/sports", request)
+        .then((response) => {
+          console.log(response.data);
+          if (response.data.isSuccessful) {
+            this.sports = response.data.value.sports;
+            this.totalSports = response.data.value.total;
+          }
+
+          this.sportsLoading = false;
         });
     },
     readDataForYearsFromAPI() {
@@ -664,6 +767,9 @@ export default {
           this.yearsLoading = false;
         });
     },
+    validInt: function (text) {
+      return text % 1 === 0;
+    },
     getPlayersIds(playerArray) {
       var ids = "";
       for (var i = 0; i < playerArray.length; i++) {
@@ -681,6 +787,16 @@ export default {
           ids += ",";
         }
         ids += teamArray[i].teamId.toString();
+      }
+      return ids;
+    },
+    getSportIds(sportArray) {
+      var ids = "";
+      for (var i = 0; i < sportArray.length; i++) {
+        if (ids.length > 0) {
+          ids += ",";
+        }
+        ids += sportArray[i].sportId.toString();
       }
       return ids;
     },

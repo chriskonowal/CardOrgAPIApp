@@ -68,14 +68,14 @@ namespace CardOrgAPI.Repositories
             return query.Count();
         }
 
-        private IQueryable<Player> Search(IQueryable<Player> teams, string searchTerm)
+        private IQueryable<Player> Search(IQueryable<Player> query, string searchTerm)
         {
             if (!String.IsNullOrWhiteSpace(searchTerm))
             {
-                teams = teams.Where(x => x.LastName.ToLower().Contains(searchTerm.ToLower()) ||
+                query = query.Where(x => x.LastName.ToLower().Contains(searchTerm.ToLower()) ||
                 x.FirstName.ToLower().Contains(searchTerm.ToLower()));
             }
-            return teams;
+            return query;
         }
     }
 }
