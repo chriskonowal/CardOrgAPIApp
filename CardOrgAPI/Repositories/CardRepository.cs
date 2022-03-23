@@ -124,6 +124,12 @@ namespace CardOrgAPI.Repositories
                 cards = cards.Where(x => years.Contains(x.Year.YearId));
             }
 
+            if (!String.IsNullOrWhiteSpace(filter.SetIds))
+            {
+                var sets = filter.SetIds.Split(",").Select(x => int.Parse(x));
+                cards = cards.Where(x => sets.Contains(x.Set.SetId));
+            }
+
             if (filter.IsGraded)
             {
                 cards = cards.Where(x => x.IsGraded);

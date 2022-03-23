@@ -180,6 +180,37 @@
                     </v-data-table>
                   </v-row>
                   <v-divider></v-divider>
+                  <v-row>
+                    <v-data-table
+                      v-model="setsSelected"
+                      :headers="setsHeaders"
+                      :page="page"
+                      :items="sets"
+                      :options.sync="setsOptions"
+                      :sort-by.sync="sortBy"
+                      :sort-desc.sync="sortDesc"
+                      :server-items-length="totalSets"
+                      :loading="setsLoading"
+                      :items-per-page="5"
+                      :search="setsSearch"
+                      class="elevation-1 tblSearch"
+                      show-select
+                      :single-select="false"
+                      item-key="setId"
+                    >
+                      <template v-slot:top>
+                        <div class="d-block pa-2">Set</div>
+                        <v-text-field
+                          v-model="setsSearch"
+                          label="Search"
+                          class="mx-4"
+                          @blur="readDataForSetsFromAPI()"
+                          @keyup="readDataForSetsFromAPI()"
+                        ></v-text-field>
+                      </template>
+                    </v-data-table>
+                  </v-row>
+                  <v-divider></v-divider>
                   <v-row style="margin-top: 30px">
                     <v-col cols="12" sm="6" md="3">
                       <v-btn
@@ -446,6 +477,21 @@ export default {
         },
         { text: "End Year", value: "endingYear" },
       ],
+      setsSelected: [],
+      setsLoading: true,
+      setsOptions: {},
+      setsNumberOfPages: 0,
+      setsSearch: "",
+      sets: [],
+      totalSets: 0,
+      setsHeaders: [
+        {
+          text: "Name",
+          align: "start",
+          sortable: true,
+          value: "name",
+        },
+      ],
 
       isGraded: false,
       playerNameSort: "0",
@@ -494,6 +540,14 @@ export default {
       handler(newVal, oldVal) {
         if (newVal != oldVal) {
           this.readDataForYearsFromAPI();
+        }
+      },
+      deep: true,
+    },
+    setsOptions: {
+      handler(newVal, oldVal) {
+        if (newVal != oldVal) {
+          this.readDataForSetsFromAPI();
         }
       },
       deep: true,
@@ -591,6 +645,7 @@ export default {
       this.readDataForTeamsFromAPI();
       this.readDataForSportsFromAPI();
       this.readDataForYearsFromAPI();
+      this.readDataForSetsFromAPI();
 
       this.loading = true;
       const { page, itemsPerPage } = this.options;
@@ -632,6 +687,7 @@ export default {
             teamIds: this.getTeamsIds(this.teamsSelected),
             playerIds: this.getPlayersIds(this.playersSelected),
             sportIds: this.getSportIds(this.sportsSelected),
+            setIds: this.getSetIds(this.setsSelected),
           },
         };
       }
@@ -767,6 +823,30 @@ export default {
           this.yearsLoading = false;
         });
     },
+    readDataForSetsFromAPI() {
+      this.setsLoading = true;
+      console.log(this.setsOptions);
+      const { sortBy, sortDesc, page, itemsPerPage } = this.setsOptions;
+      const request = {
+        searchTerm: this.setsSearch,
+        rowsPerPage: itemsPerPage,
+        pageNumber: page,
+        sortByField: sortBy != null ? sortBy[0] : "",
+        isSortDesc: sortDesc != null ? sortDesc[0] : false,
+      };
+      console.log(request);
+      axios
+        .post(process.env.VUE_APP_ROOT_API + "admin/sets", request)
+        .then((response) => {
+          console.log(response.data);
+          if (response.data.isSuccessful) {
+            this.sets = response.data.value.sets;
+            this.totalSets = response.data.value.total;
+          }
+
+          this.setsLoading = false;
+        });
+    },
     validInt: function (text) {
       return text % 1 === 0;
     },
@@ -807,6 +887,16 @@ export default {
           ids += ",";
         }
         ids += yearArray[i].yearId.toString();
+      }
+      return ids;
+    },
+    getSetIds(setArray) {
+      var ids = "";
+      for (var i = 0; i < setArray.length; i++) {
+        if (ids.length > 0) {
+          ids += ",";
+        }
+        ids += setArray[i].setId.toString();
       }
       return ids;
     },
