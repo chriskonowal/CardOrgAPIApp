@@ -349,8 +349,9 @@
     <v-dialog v-model="frontPictureDialog" width="85%" persistent>
       <v-card>
         <v-card-title class="text-h5 text-center block">Front</v-card-title>
-        <v-img v-bind:src="showFrontImage"> </v-img>
-
+        <div class="justify-center" style="text-align: center">
+          <img v-bind:src="showFrontImage" width="75%" />
+        </div>
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="blue darken-1" text @click="closefrontPicture"

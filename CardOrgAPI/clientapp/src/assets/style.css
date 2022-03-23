@@ -1,0 +1,7 @@
+.v-application--is-ltr .v-data-footer__pagination {
+  margin: 0 0px 0 0px !important;
+}
+
+.v-application--is-ltr .v-data-footer__select {
+  margin-left: 0px !important;
+}
