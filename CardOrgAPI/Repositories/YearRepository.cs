@@ -18,7 +18,6 @@ namespace CardOrgAPI.Repositories
     public class YearRepository : IYearRepository
     {
         private readonly CardOrgContext _context;
-        private bool disposed = false;
 
         public YearRepository(CardOrgContext context)
         {
@@ -109,24 +108,6 @@ namespace CardOrgAPI.Repositories
                 years = years.Where(x => x.BeginningYear == searchYear || x.EndingYear == searchYear);
             }
             return years;
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!this.disposed)
-            {
-                if (disposing)
-                {
-                    _context.Dispose();
-                }
-            }
-            this.disposed = true;
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
         }
     }
 }

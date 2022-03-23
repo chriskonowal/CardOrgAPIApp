@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CardOrgAPI.Interfaces.Repositories
 {
-    public interface ICardRepository :IDisposable
+    public interface ICardRepository 
     {
         Task<IEnumerable<Card>> GetCardsByAmountAsync(int count, CancellationToken cancellationToken);
 

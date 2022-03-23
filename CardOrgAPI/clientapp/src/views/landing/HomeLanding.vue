@@ -25,30 +25,124 @@
                   </v-row>
                   <v-divider></v-divider>
                   <v-row>
-                    <v-data-table
-                      v-model="yearsSelected"
-                      :headers="yearsHeaders"
-                      :page="page"
-                      :items="years"
-                      :options.sync="yearsOptions"
-                      :sort-by.sync="sortBy"
-                      :sort-desc.sync="sortDesc"
-                      :server-items-length="totalYears"
-                      :loading="yearsLoading"
-                      :items-per-page="5"
-                      :search="yearsSearch"
-                      class="elevation-1 tblYears"
-                      show-select
-                      :single-select="false"
-                      item-key="yearId"
-                    >
-                    </v-data-table>
+                    <v-switch
+                      v-model="isRookie"
+                      :label="'Is Rookie'"
+                    ></v-switch>
+                  </v-row>
+                  <v-divider></v-divider>
+                  <v-row>
+                    <v-switch
+                      v-model="isAutograph"
+                      :label="'Is Autograph'"
+                    ></v-switch>
+                  </v-row>
+                  <v-divider></v-divider>
+                  <v-row>
+                    <v-switch
+                      v-model="isOnCardAutograph"
+                      :label="'Is On Card Autograph'"
+                    ></v-switch>
+                  </v-row>
+                  <v-divider></v-divider>
+                  <v-row>
+                    <v-switch v-model="isPatch" :label="'Is Patch'"> </v-switch>
+                  </v-row>
+                  <v-divider></v-divider>
+                  <v-row>
+                    <v-switch
+                      v-model="isGameWornJersey"
+                      :label="'Is Game Worn Jersey'"
+                    ></v-switch>
+                  </v-row>
+                  <v-divider></v-divider>
+                  <v-row>
+                    <div class="d-block pa-2">Players</div>
+                    <div class="d-block pa-2">
+                      <v-data-table
+                        v-model="playersSelected"
+                        :headers="playersHeaders"
+                        :page="page"
+                        :items="players"
+                        :options.sync="playersOptions"
+                        :sort-by.sync="sortBy"
+                        :sort-desc.sync="sortDesc"
+                        :server-items-length="totalPlayers"
+                        :loading="playersLoading"
+                        :items-per-page="5"
+                        :search="playersSearch"
+                        class="elevation-1 tblSearch"
+                        show-select
+                        :single-select="false"
+                        item-key="playerId"
+                      >
+                      </v-data-table>
+                    </div>
+                  </v-row>
+                  <v-divider></v-divider>
+                  <v-row>
+                    <div class="d-block pa-2">Teams</div>
+                    <div class="d-block pa-2">
+                      <v-data-table
+                        v-model="teamsSelected"
+                        :headers="teamsHeaders"
+                        :page="page"
+                        :items="teams"
+                        :options.sync="teamsOptions"
+                        :sort-by.sync="sortBy"
+                        :sort-desc.sync="sortDesc"
+                        :server-items-length="totalTeams"
+                        :loading="teamsLoading"
+                        :items-per-page="5"
+                        :search="teamsSearch"
+                        class="elevation-1 tblSearch"
+                        show-select
+                        :single-select="false"
+                        item-key="teamId"
+                      >
+                      </v-data-table>
+                    </div>
+                  </v-row>
+                  <v-divider></v-divider>
+                  <v-row>
+                    <div class="d-block pa-2">Years</div>
+                    <div class="d-block pa-2">
+                      <v-data-table
+                        v-model="yearsSelected"
+                        :headers="yearsHeaders"
+                        :page="page"
+                        :items="years"
+                        :options.sync="yearsOptions"
+                        :sort-by.sync="sortBy"
+                        :sort-desc.sync="sortDesc"
+                        :server-items-length="totalYears"
+                        :loading="yearsLoading"
+                        :items-per-page="5"
+                        :search="yearsSearch"
+                        class="elevation-1 tblSearch"
+                        show-select
+                        :single-select="false"
+                        item-key="yearId"
+                      >
+                      </v-data-table>
+                    </div>
                   </v-row>
                   <v-divider></v-divider>
                   <v-row style="margin-top: 30px">
                     <v-col cols="12" sm="6" md="3">
-                      <v-btn depressed elevation="2" @click="readDataFromAPI()"
+                      <v-btn
+                        depressed
+                        elevation="2"
+                        @click="readDataFromAPI(false)"
                         >Search</v-btn
+                      >
+                    </v-col>
+                    <v-col cols="12" sm="6" md="3">
+                      <v-btn
+                        depressed
+                        elevation="2"
+                        @click="readDataFromAPI(true)"
+                        >Clear Search</v-btn
                       >
                     </v-col>
                   </v-row>
@@ -84,8 +178,19 @@
                   <v-divider></v-divider>
                   <v-row style="margin-top: 30px">
                     <v-col cols="12" sm="6" md="3">
-                      <v-btn depressed elevation="2" @click="readDataFromAPI()"
+                      <v-btn
+                        depressed
+                        elevation="2"
+                        @click="readDataFromAPI(false)"
                         >Sort</v-btn
+                      >
+                    </v-col>
+                    <v-col cols="12" sm="6" md="3">
+                      <v-btn
+                        depressed
+                        elevation="2"
+                        @click="readDataFromAPI(true)"
+                        >Clear Sort</v-btn
                       >
                     </v-col>
                   </v-row>
@@ -101,8 +206,8 @@
           label="Search"
           single-line
           hide-details
-          @blur="readDataFromAPI()"
-          @keyup="readDataFromAPI()"
+          @blur="readDataFromAPI(false)"
+          @keyup="readDataFromAPI(false)"
         ></v-text-field>
       </v-card-title>
       <v-data-table
@@ -210,6 +315,48 @@ export default {
       frontImage: {},
       images: [],
       txtCardDescription: "",
+      teamsLoading: true,
+      teamsOptions: {},
+      teamsNumberOfPages: 0,
+      teamsSearch: "",
+      teams: [],
+      totalTeams: 0,
+      teamsHeaders: [
+        {
+          text: "City",
+          align: "start",
+          sortable: true,
+          value: "city",
+        },
+        {
+          text: "Name",
+          align: "start",
+          sortable: true,
+          value: "name",
+        },
+      ],
+      playersSelected: [],
+      playersLoading: true,
+      playersOptions: {},
+      playersNumberOfPages: 0,
+      playersSearch: "",
+      players: [],
+      totalPlayers: 0,
+      playersHeaders: [
+        {
+          text: "First Name",
+          align: "start",
+          sortable: true,
+          value: "firstName",
+        },
+        {
+          text: "Last Name",
+          align: "start",
+          sortable: true,
+          value: "lastName",
+        },
+      ],
+      teamsSelected: [],
       yearsLoading: true,
       yearsOptions: {},
       yearsNumberOfPages: 0,
@@ -235,13 +382,34 @@ export default {
       isGraded: false,
       playerNameSort: "0",
       teamSort: "0",
+      isRookie: false,
+      isAutograph: false,
+      isPatch: false,
+      isOnCardAutograph: false,
+      isGameWornJersey: false,
     };
   },
   watch: {
     options: {
       handler(newVal, oldVal) {
         if (newVal != oldVal) {
-          this.readDataFromAPI();
+          this.readDataFromAPI(false);
+        }
+      },
+      deep: true,
+    },
+    playersOptions: {
+      handler(newVal, oldVal) {
+        if (newVal != oldVal) {
+          this.readDataForPlayersFromAPI();
+        }
+      },
+      deep: true,
+    },
+    teamsOptions: {
+      handler(newVal, oldVal) {
+        if (newVal != oldVal) {
+          this.readDataForTeamsFromAPI();
         }
       },
       deep: true,
@@ -255,7 +423,6 @@ export default {
       deep: true,
     },
   },
-
   mounted() {
     //this.$set(this.hideDelimiters, "hide-delimiters", this.isMobile());
   },
@@ -343,24 +510,53 @@ export default {
         currency: "USD",
       });
     },
-    readDataFromAPI() {
+    readDataFromAPI(clear) {
+      this.readDataForPlayersFromAPI();
+      this.readDataForTeamsFromAPI();
       this.readDataForYearsFromAPI();
-      console.log(this.txtCardDescription);
-      console.log(this.yearsSelected);
+
       this.loading = true;
       const { page, itemsPerPage } = this.options;
-      const request = {
-        quickSearch: this.search,
-        rowsPerPage: itemsPerPage,
-        pageNumber: page,
-        searchSortRequest: {
-          cardDescription: this.txtCardDescription,
-          yearIds: this.getYearIds(this.yearsSelected),
-          isGraded: this.isGraded,
-          playerNameSort: parseInt(this.playerNameSort),
-          teamSort: parseInt(this.teamSort),
-        },
-      };
+      var request = {};
+      if (clear) {
+        request = {
+          quickSearch: "",
+          rowsPerPage: itemsPerPage,
+          pageNumber: page,
+          searchSortRequest: {
+            cardDescription: "",
+            yearIds: "",
+            isGraded: false,
+            playerNameSort: 0,
+            teamSort: 0,
+            isRookie: false,
+            isAutograph: false,
+            isPatch: false,
+            isOnCardAutograph: false,
+            isGameWornJersey: false,
+          },
+        };
+      } else {
+        request = {
+          quickSearch: this.search,
+          rowsPerPage: itemsPerPage,
+          pageNumber: page,
+          searchSortRequest: {
+            cardDescription: this.txtCardDescription,
+            yearIds: this.getYearIds(this.yearsSelected),
+            isGraded: this.isGraded,
+            playerNameSort: parseInt(this.playerNameSort),
+            teamSort: parseInt(this.teamSort),
+            isRookie: this.isRookie,
+            isAutograph: this.isAutograph,
+            isPatch: this.isPatch,
+            isOnCardAutograph: this.isOnCardAutograph,
+            isGameWornJersey: this.isGameWornJersey,
+            teamIds: this.getTeamsIds(this.teamsSelected),
+            playerIds: this.getPlayersIds(this.playersSelected),
+          },
+        };
+      }
 
       console.log(request);
       axios
@@ -388,6 +584,56 @@ export default {
       } else {
         return false;
       }
+    },
+    readDataForPlayersFromAPI() {
+      this.teamsLoading = true;
+      console.log(this.playersOptions);
+      const { sortBy, sortDesc, page, itemsPerPage } = this.playersOptions;
+
+      const request = {
+        searchYear: this.playersSearch,
+        rowsPerPage: itemsPerPage,
+        pageNumber: page,
+        sortByField: sortBy != null ? sortBy[0] : "",
+        isSortDesc: sortDesc != null ? sortDesc[0] : false,
+      };
+      console.log(request);
+      axios
+        .post(process.env.VUE_APP_ROOT_API + "admin/players", request)
+        .then((response) => {
+          console.log(response.data);
+          if (response.data.isSuccessful) {
+            this.players = response.data.value.players;
+            this.totalPlayers = response.data.value.totalPlayers;
+          }
+
+          this.playersLoading = false;
+        });
+    },
+    readDataForTeamsFromAPI() {
+      this.teamsLoading = true;
+      console.log(this.teamsOptions);
+      const { sortBy, sortDesc, page, itemsPerPage } = this.teamsOptions;
+
+      const request = {
+        searchYear: this.teamsSearch,
+        rowsPerPage: itemsPerPage,
+        pageNumber: page,
+        sortByField: sortBy != null ? sortBy[0] : "",
+        isSortDesc: sortDesc != null ? sortDesc[0] : false,
+      };
+      console.log(request);
+      axios
+        .post(process.env.VUE_APP_ROOT_API + "admin/teams", request)
+        .then((response) => {
+          console.log(response.data);
+          if (response.data.isSuccessful) {
+            this.teams = response.data.value.teams;
+            this.totalTeams = response.data.value.totalTeams;
+          }
+
+          this.teamsLoading = false;
+        });
     },
     readDataForYearsFromAPI() {
       this.yearsLoading = true;
@@ -417,6 +663,26 @@ export default {
 
           this.yearsLoading = false;
         });
+    },
+    getPlayersIds(playerArray) {
+      var ids = "";
+      for (var i = 0; i < playerArray.length; i++) {
+        if (ids.length > 0) {
+          ids += ",";
+        }
+        ids += playerArray[i].playerId.toString();
+      }
+      return ids;
+    },
+    getTeamsIds(teamArray) {
+      var ids = "";
+      for (var i = 0; i < teamArray.length; i++) {
+        if (ids.length > 0) {
+          ids += ",";
+        }
+        ids += teamArray[i].teamId.toString();
+      }
+      return ids;
     },
     getYearIds(yearArray) {
       var ids = "";
@@ -448,7 +714,7 @@ export default {
 .block {
   display: block !important;
 }
-.tblYears .v-data-table__mobile-row__header {
+.tblSearch .v-data-table__mobile-row__header {
   min-width: 100px;
 }
 .v-input--radio-group--row {

@@ -41,6 +41,8 @@ namespace CardOrgAPI
             services.AddScoped<ICardRepository, CardRepository>();
             services.AddScoped<ILocationRepository, LocationRepository>();
             services.AddScoped<IImageService, ImageService>();
+            services.AddScoped<ITeamRepository, TeamRepository>();
+            services.AddScoped<IPlayerRepository, PlayerRepository>();
 
             services.AddControllers();
 

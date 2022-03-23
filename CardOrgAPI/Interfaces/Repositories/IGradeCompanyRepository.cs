@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CardOrgAPI.Interfaces.Repositories
 {
-    public interface IGradeCompanyRepository : IDisposable
+    public interface IGradeCompanyRepository 
     {
         Task<IEnumerable<GradeCompany>> GetAsync(GenericSearchQueryFilter filter, CancellationToken cancellationToken);
         int GetTotal(string searchTerm);

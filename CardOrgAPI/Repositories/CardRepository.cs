@@ -16,7 +16,6 @@ namespace CardOrgAPI.Repositories
     public class CardRepository : ICardRepository
     {
         private readonly CardOrgContext _context;
-        private bool disposed = false;
 
         public CardRepository(CardOrgContext context)
         {
@@ -101,6 +100,18 @@ namespace CardOrgAPI.Repositories
                 cards = cards.Where(x => x.CardDescription.ToLower().Contains(filter.CardDescription.ToLower()));
             }
 
+            if (!String.IsNullOrWhiteSpace(filter.PlayerIds))
+            {
+                var players = filter.PlayerIds.Split(",").Select(x => int.Parse(x));
+                cards = cards.Where(x => x.PlayerCards.Any(y => players.Contains(y.Player.PlayerId)));
+            }
+
+            if (!String.IsNullOrWhiteSpace(filter.TeamIds))
+            {
+                var teams = filter.TeamIds.Split(",").Select(x => int.Parse(x));
+                cards = cards.Where(x => x.TeamCards.Any(y => teams.Contains(y.Team.TeamId)));
+            }
+
             if (!String.IsNullOrWhiteSpace(filter.YearIds)) 
             {
                 var years = filter.YearIds.Split(",").Select(x => int.Parse(x));
@@ -110,6 +121,31 @@ namespace CardOrgAPI.Repositories
             if (filter.IsGraded)
             {
                 cards = cards.Where(x => x.IsGraded);
+            }
+
+            if (filter.IsRookie)
+            {
+                cards = cards.Where(x => x.IsRookie);
+            }
+
+            if (filter.IsAutograph)
+            {
+                cards = cards.Where(x => x.IsAutograph);
+            }
+
+            if (filter.IsOnCardAutograph)
+            {
+                cards = cards.Where(x => x.IsOnCardAutograph);
+            }
+
+            if (filter.IsPatch)
+            {
+                cards = cards.Where(x => x.IsPatch);
+            }
+
+            if (filter.IsGameWornJersey)
+            {
+                cards = cards.Where(x => x.IsGameWornJersey);
             }
 
             if (filter.PlayerNameSort > 0)
@@ -144,24 +180,6 @@ namespace CardOrgAPI.Repositories
             }
 
             return cards;
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!this.disposed)
-            {
-                if (disposing)
-                {
-                    _context.Dispose();
-                }
-            }
-            this.disposed = true;
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
         }
     }
 }

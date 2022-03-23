@@ -15,7 +15,6 @@ namespace CardOrgAPI.Repositories
     public class GradeCompanyRepository : IGradeCompanyRepository
     {
         private readonly CardOrgContext _context;
-        private bool disposed = false;
 
         public GradeCompanyRepository(CardOrgContext context)
         {
@@ -99,24 +98,6 @@ namespace CardOrgAPI.Repositories
                 gradeCompanies = gradeCompanies.Where(x => x.Name.ToLower().Contains(searchTerm.ToLower()));
             }
             return gradeCompanies;
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!this.disposed)
-            {
-                if (disposing)
-                {
-                    _context.Dispose();
-                }
-            }
-            this.disposed = true;
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
         }
     }
 }

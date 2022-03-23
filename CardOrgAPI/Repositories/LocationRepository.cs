@@ -15,7 +15,6 @@ namespace CardOrgAPI.Repositories
     public class LocationRepository : ILocationRepository
     {
         private readonly CardOrgContext _context;
-        private bool disposed = false;
 
         public LocationRepository(CardOrgContext context)
         {
@@ -103,24 +102,6 @@ namespace CardOrgAPI.Repositories
                 locations = locations.Where(x => x.Name.ToLower().Contains(searchTerm.ToLower()));
             }
             return locations;
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!this.disposed)
-            {
-                if (disposing)
-                {
-                    _context.Dispose();
-                }
-            }
-            this.disposed = true;
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
         }
     }
 }
