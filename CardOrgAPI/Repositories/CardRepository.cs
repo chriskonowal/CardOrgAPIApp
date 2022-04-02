@@ -186,6 +186,19 @@ namespace CardOrgAPI.Repositories
                 }
             }
 
+            if (filter.HighestBeckettPriceSort > 0)
+            {
+                hasCustomOrder = true;
+                if (filter.TeamSort == 1)
+                {
+                    cards = cards.OrderBy(x => x.HighestBeckettPrice).ToList().AsQueryable();
+                }
+                else
+                {
+                    cards = cards.OrderByDescending(x => x.HighestBeckettPrice).ToList().AsQueryable();
+                }
+            }
+
             if (!hasCustomOrder)
             {
                 cards = cards.OrderByDescending(x => x.TimeStamp);

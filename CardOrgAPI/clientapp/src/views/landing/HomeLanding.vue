@@ -258,6 +258,18 @@
                       <v-radio label="Desc" value="2"></v-radio>
                     </v-radio-group>
                   </v-row>
+                  <v-row>
+                    <h5>Highest Beckett High Price</h5>
+                    <v-radio-group
+                      v-model="highestBeckettPriceSort"
+                      style="width: 100%"
+                      row
+                    >
+                      <v-radio label="None" value="0"></v-radio>
+                      <v-radio label="Asc" value="1"></v-radio>
+                      <v-radio label="Desc" value="2"></v-radio>
+                    </v-radio-group>
+                  </v-row>
                   <v-divider></v-divider>
                   <v-row style="margin-top: 30px">
                     <v-col cols="12" sm="6" md="3">
@@ -502,6 +514,7 @@ export default {
       isPatch: false,
       isOnCardAutograph: false,
       isGameWornJersey: false,
+      highestBeckettPriceSort: "0",
     };
   },
   watch: {
@@ -689,6 +702,7 @@ export default {
             playerIds: this.getPlayersIds(this.playersSelected),
             sportIds: this.getSportIds(this.sportsSelected),
             setIds: this.getSetIds(this.setsSelected),
+            highestBeckettPriceSort: parseInt(this.highestBeckettPriceSort),
           },
         };
       }
