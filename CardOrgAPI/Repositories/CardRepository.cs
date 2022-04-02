@@ -189,7 +189,7 @@ namespace CardOrgAPI.Repositories
             if (filter.HighestBeckettPriceSort > 0)
             {
                 hasCustomOrder = true;
-                if (filter.TeamSort == 1)
+                if (filter.HighestBeckettPriceSort == 1)
                 {
                     cards = cards.OrderBy(x => x.HighestBeckettPrice).ToList().AsQueryable();
                 }
