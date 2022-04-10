@@ -164,13 +164,13 @@ namespace CardOrgAPI.Contexts
 
                 entity.Property(e => e.GradeLow).HasColumnType("decimal(18, 2)");
 
-                entity.Property(e => e.HighestBecketPriceHigh).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.HighestBeckettPriceHigh).HasColumnType("decimal(18, 2)");
 
-                entity.Property(e => e.HighestBecketPriceLow).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.HighestBeckettPriceLow).HasColumnType("decimal(18, 2)");
 
-                entity.Property(e => e.LowestBecketPriceHigh).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.LowestBeckettPriceHigh).HasColumnType("decimal(18, 2)");
 
-                entity.Property(e => e.LowestBecketPriceLow).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.LowestBeckettPriceLow).HasColumnType("decimal(18, 2)");
 
                 entity.Property(e => e.LowestComcpriceHigh)
                     .HasColumnType("decimal(18, 2)")
