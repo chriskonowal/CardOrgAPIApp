@@ -328,6 +328,7 @@
           <img
             v-bind:src="showImage(item.backCardThumbnailImagePath)"
             style="max-width: 150px; padding: 5px"
+            @click="onClickBackImage(item)"
           />
           <br />
           <p style="text-align: left">
@@ -366,7 +367,22 @@
         </div>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="closefrontPicture"
+          <v-btn color="blue darken-1" text @click="closeFrontPicture"
+            >Close</v-btn
+          >
+          <v-spacer></v-spacer>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <v-dialog v-model="backPictureDialog" width="85%" persistent>
+      <v-card>
+        <v-card-title class="text-h5 text-center block">Back</v-card-title>
+        <div class="justify-center" style="text-align: center">
+          <img v-bind:src="showBackImage" width="75%" />
+        </div>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="blue darken-1" text @click="closeBackPicture"
             >Close</v-btn
           >
           <v-spacer></v-spacer>
@@ -409,6 +425,10 @@ export default {
       frontPictureDialog: false,
       showFrontImage: "",
       frontImage: {},
+      frontBackDialog: false,
+      showBackImage: "",
+      backPictureDialog: false,
+      backImage: {},
       images: [],
       txtCardDescription: "",
       teamsSelected: [],
@@ -724,8 +744,16 @@ export default {
       this.showFrontImageZoom = "/Uploads/Large/" + item.frontCardMainImagePath;
       this.frontPictureDialog = true;
     },
-    closefrontPicture() {
+    onClickBackImage(item) {
+      this.showBackImage = "/Uploads/Mid/" + item.backCardMainImagePath;
+      this.showBackImageZoom = "/Uploads/Large/" + item.backCardMainImagePath;
+      this.backPictureDialog = true;
+    },
+    closeFrontPicture() {
       this.frontPictureDialog = false;
+    },
+    closeBackPicture() {
+      this.backPictureDialog = false;
     },
     isMobile() {
       if (screen.width <= 760) {
