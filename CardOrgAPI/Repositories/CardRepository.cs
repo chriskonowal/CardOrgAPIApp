@@ -173,6 +173,18 @@ namespace CardOrgAPI.Repositories
                 cards = cards.Where(x => x.IsGameWornJersey);
             }
 
+            if (filter.LowestBeckettPriceLow >= 0 && filter.LowestBeckettPriceHigh > 0)
+            {
+                cards = cards.Where(x => x.LowestBeckettPrice >= filter.LowestBeckettPriceLow &&
+                x.LowestBeckettPrice <= filter.LowestBeckettPriceHigh);
+            }
+
+            if (filter.HighestBeckettPriceLow >= 0 && filter.HighestBeckettPriceHigh > 0)
+            {
+                cards = cards.Where(x => x.HighestBeckettPrice >= filter.HighestBeckettPriceLow &&
+                x.HighestBeckettPrice <= filter.HighestBeckettPriceHigh);
+            }
+
             if (filter.PlayerNameSort > 0)
             {
                 hasCustomOrder = true;

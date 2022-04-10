@@ -24,10 +24,10 @@ namespace CardOrgAPI.QueryFilters
         public string GradeCompanyIds { get; set; }
         public string LocationIds { get; set; }
         public string CardDescription { get; set; }
-        public decimal LowestBecketPriceLow { get; set; }
-        public decimal LowestBecketPriceHigh { get; set; }
-        public decimal HighestBecketPriceLow { get; set; }
-        public decimal HighestBecketPriceHigh { get; set; }
+        public decimal LowestBeckettPriceLow { get; set; }
+        public decimal LowestBeckettPriceHigh { get; set; }
+        public decimal HighestBeckettPriceLow { get; set; }
+        public decimal HighestBeckettPriceHigh { get; set; }
         public decimal LowestComcpriceLow { get; set; }
         public decimal LowestComcpriceHigh { get; set; }
         public decimal EbayPriceLow { get; set; }

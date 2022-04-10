@@ -273,6 +273,54 @@
                     </v-data-table>
                   </v-row>
                   <v-divider></v-divider>
+                  <v-row style="padding-top: 30px">
+                    <h5>Lowest Beckett Price</h5>
+                  </v-row>
+                  <v-row>
+                    <v-col>
+                      <v-text-field
+                        label="Low"
+                        outlined
+                        v-model="lowestBeckettPriceLow"
+                        prefix="$"
+                        type="number"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col>
+                      <v-text-field
+                        label="High"
+                        outlined
+                        v-model="lowestBeckettPriceHigh"
+                        prefix="$"
+                        type="number"
+                      ></v-text-field>
+                    </v-col>
+                  </v-row>
+                  <v-divider></v-divider>
+                  <v-row style="padding-top: 30px">
+                    <h5>Highest Beckett Price</h5>
+                  </v-row>
+                  <v-row>
+                    <v-col>
+                      <v-text-field
+                        label="Low"
+                        outlined
+                        v-model="highestBeckettPriceLow"
+                        prefix="$"
+                        type="number"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col>
+                      <v-text-field
+                        label="High"
+                        outlined
+                        v-model="highestBeckettPriceHigh"
+                        prefix="$"
+                        type="number"
+                      ></v-text-field>
+                    </v-col>
+                  </v-row>
+                  <v-divider></v-divider>
                   <v-row style="margin-top: 30px">
                     <v-col cols="12" sm="6" md="3">
                       <v-btn
@@ -640,6 +688,10 @@ export default {
       isOnCardAutograph: false,
       isGameWornJersey: false,
       highestBeckettPriceSort: "0",
+      lowestBeckettPriceLow: 0,
+      lowestBeckettPriceHigh: 0,
+      highestBeckettPriceLow: 0,
+      highestBeckettPriceHigh: 0,
     };
   },
   watch: {
@@ -850,6 +902,10 @@ export default {
             ),
             locationIds: this.getLocationIds(this.locationsSelected),
             highestBeckettPriceSort: parseInt(this.highestBeckettPriceSort),
+            lowestBeckettPriceLow: this.lowestBeckettPriceLow,
+            lowestBeckettPriceHigh: this.lowestBeckettPriceHigh,
+            highestBeckettPriceLow: this.highestBeckettPriceLow,
+            highestBeckettPriceHigh: this.highestBeckettPriceHigh,
           },
         };
       }
