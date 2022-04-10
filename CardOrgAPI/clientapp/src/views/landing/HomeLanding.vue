@@ -63,8 +63,8 @@
                       :page="page"
                       :items="players"
                       :options.sync="playersOptions"
-                      :sort-by.sync="sortBy"
-                      :sort-desc.sync="sortDesc"
+                      :sort-by.sync="playersSortBy"
+                      :sort-desc.sync="playersSortDesc"
                       :server-items-length="totalPlayers"
                       :loading="playersLoading"
                       :items-per-page="5"
@@ -94,8 +94,8 @@
                       :page="page"
                       :items="teams"
                       :options.sync="teamsOptions"
-                      :sort-by.sync="sortBy"
-                      :sort-desc.sync="sortDesc"
+                      :sort-by.sync="teamsSortBy"
+                      :sort-desc.sync="teamsSortDesc"
                       :server-items-length="totalTeams"
                       :loading="teamsLoading"
                       :items-per-page="5"
@@ -125,8 +125,8 @@
                       :page="page"
                       :items="sports"
                       :options.sync="sportsOptions"
-                      :sort-by.sync="sortBy"
-                      :sort-desc.sync="sortDesc"
+                      :sort-by.sync="sportsSortBy"
+                      :sort-desc.sync="sportsSortDesc"
                       :server-items-length="totalSports"
                       :loading="sportsLoading"
                       :items-per-page="5"
@@ -156,8 +156,8 @@
                       :page="page"
                       :items="years"
                       :options.sync="yearsOptions"
-                      :sort-by.sync="sortBy"
-                      :sort-desc.sync="sortDesc"
+                      :sort-by.sync="yearsSortBy"
+                      :sort-desc.sync="yearsSortDesc"
                       :server-items-length="totalYears"
                       :loading="yearsLoading"
                       :items-per-page="5"
@@ -187,8 +187,8 @@
                       :page="page"
                       :items="sets"
                       :options.sync="setsOptions"
-                      :sort-by.sync="sortBy"
-                      :sort-desc.sync="sortDesc"
+                      :sort-by.sync="setsSortBy"
+                      :sort-desc.sync="setsSortDesc"
                       :server-items-length="totalSets"
                       :loading="setsLoading"
                       :items-per-page="5"
@@ -218,8 +218,8 @@
                       :page="page"
                       :items="gradeCompanies"
                       :options.sync="gradeCompaniesOptions"
-                      :sort-by.sync="sortBy"
-                      :sort-desc.sync="sortDesc"
+                      :sort-by.sync="gradeCompaniesSortBy"
+                      :sort-desc.sync="gradeCompaniesSortDesc"
                       :server-items-length="totalGradeCompanies"
                       :loading="gradeCompaniesLoading"
                       :items-per-page="5"
@@ -249,8 +249,8 @@
                       :page="page"
                       :items="locations"
                       :options.sync="locationsOptions"
-                      :sort-by.sync="sortBy"
-                      :sort-desc.sync="sortDesc"
+                      :sort-by.sync="locationsSortBy"
+                      :sort-desc.sync="locationsSortDesc"
                       :server-items-length="totalLocations"
                       :loading="locationsLoading"
                       :items-per-page="5"
@@ -500,6 +500,8 @@ export default {
       teamsSearch: "",
       teams: [],
       totalTeams: 0,
+      teamsSortBy: "",
+      teamsSortDesc: false,
       teamsHeaders: [
         {
           text: "City",
@@ -521,6 +523,8 @@ export default {
       playersSearch: "",
       players: [],
       totalPlayers: 0,
+      playersSortBy: "",
+      playersSortDesc: false,
       playersHeaders: [
         {
           text: "First Name",
@@ -542,6 +546,8 @@ export default {
       sportsSearch: "",
       sports: [],
       totalSports: 0,
+      sportsSortBy: "",
+      sportsSortDesc: false,
       sportsHeaders: [
         {
           text: "Name",
@@ -557,6 +563,8 @@ export default {
       yearsSearch: "",
       years: [],
       totalYears: 0,
+      yearsSortBy: "",
+      yearsSortDesc: false,
       yearsHeaders: [
         {
           text: "Year",
@@ -579,6 +587,8 @@ export default {
       setsSearch: "",
       sets: [],
       totalSets: 0,
+      setsSortBy: "",
+      setsSortDesc: false,
       setsHeaders: [
         {
           text: "Name",
@@ -594,6 +604,8 @@ export default {
       gradeCompaniesSearch: "",
       gradeCompanies: [],
       totalGradeCompanies: 0,
+      gradeCompaniesSortBy: "",
+      gradeCompaniesSortDesc: false,
       gradeCompaniesHeaders: [
         {
           text: "Name",
@@ -609,6 +621,8 @@ export default {
       locationsSearch: "",
       locations: [],
       totalLocations: 0,
+      locationsSortBy: "",
+      locationsSortDesc: false,
       locationsHeaders: [
         {
           text: "Name",
