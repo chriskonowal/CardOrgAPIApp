@@ -211,6 +211,68 @@
                     </v-data-table>
                   </v-row>
                   <v-divider></v-divider>
+                  <v-row>
+                    <v-data-table
+                      v-model="gradeCompaniesSelected"
+                      :headers="gradeCompaniesHeaders"
+                      :page="page"
+                      :items="gradeCompanies"
+                      :options.sync="gradeCompaniesOptions"
+                      :sort-by.sync="sortBy"
+                      :sort-desc.sync="sortDesc"
+                      :server-items-length="totalGradeCompanies"
+                      :loading="gradeCompaniesLoading"
+                      :items-per-page="5"
+                      :search="gradeCompaniesSearch"
+                      class="elevation-1 tblSearch"
+                      show-select
+                      :single-select="false"
+                      item-key="gradeCompanyId"
+                    >
+                      <template v-slot:top>
+                        <div class="d-block pa-2">Grade Company</div>
+                        <v-text-field
+                          v-model="gradeCompaniesSearch"
+                          label="Search"
+                          class="mx-4"
+                          @blur="readDataForGradeCompaniesFromAPI()"
+                          @keyup="readDataForGradeCompaniesFromAPI()"
+                        ></v-text-field>
+                      </template>
+                    </v-data-table>
+                  </v-row>
+                  <v-divider></v-divider>
+                  <v-row>
+                    <v-data-table
+                      v-model="locationsSelected"
+                      :headers="locationsHeaders"
+                      :page="page"
+                      :items="locations"
+                      :options.sync="locationsOptions"
+                      :sort-by.sync="sortBy"
+                      :sort-desc.sync="sortDesc"
+                      :server-items-length="totalLocations"
+                      :loading="locationsLoading"
+                      :items-per-page="5"
+                      :search="locationsSearch"
+                      class="elevation-1 tblSearch"
+                      show-select
+                      :single-select="false"
+                      item-key="locationId"
+                    >
+                      <template v-slot:top>
+                        <div class="d-block pa-2">Location</div>
+                        <v-text-field
+                          v-model="locationsSearch"
+                          label="Search"
+                          class="mx-4"
+                          @blur="readDataForLocationsFromAPI()"
+                          @keyup="readDataForLocationsFromAPI()"
+                        ></v-text-field>
+                      </template>
+                    </v-data-table>
+                  </v-row>
+                  <v-divider></v-divider>
                   <v-row style="margin-top: 30px">
                     <v-col cols="12" sm="6" md="3">
                       <v-btn
@@ -525,7 +587,36 @@ export default {
           value: "name",
         },
       ],
-
+      gradeCompaniesSelected: [],
+      gradeCompaniesLoading: true,
+      gradeCompaniesOptions: {},
+      gradeCompaniesNumberOfPages: 0,
+      gradeCompaniesSearch: "",
+      gradeCompanies: [],
+      totalGradeCompanies: 0,
+      gradeCompaniesHeaders: [
+        {
+          text: "Name",
+          align: "start",
+          sortable: true,
+          value: "name",
+        },
+      ],
+      locationsSelected: [],
+      locationsLoading: true,
+      locationsOptions: {},
+      locationsNumberOfPages: 0,
+      locationsSearch: "",
+      locations: [],
+      totalLocations: 0,
+      locationsHeaders: [
+        {
+          text: "Name",
+          align: "start",
+          sortable: true,
+          value: "name",
+        },
+      ],
       isGraded: false,
       playerNameSort: "0",
       teamSort: "0",
@@ -582,6 +673,22 @@ export default {
       handler(newVal, oldVal) {
         if (newVal != oldVal) {
           this.readDataForSetsFromAPI();
+        }
+      },
+      deep: true,
+    },
+    gradeCompaniesOptions: {
+      handler(newVal, oldVal) {
+        if (newVal != oldVal) {
+          this.readDataForGradeCompaniesFromAPI();
+        }
+      },
+      deep: true,
+    },
+    locationsOptions: {
+      handler(newVal, oldVal) {
+        if (newVal != oldVal) {
+          this.readDataForLocationsFromAPI();
         }
       },
       deep: true,
@@ -680,6 +787,8 @@ export default {
       this.readDataForSportsFromAPI();
       this.readDataForYearsFromAPI();
       this.readDataForSetsFromAPI();
+      this.readDataForGradeCompaniesFromAPI();
+      this.readDataForLocationsFromAPI();
 
       this.loading = true;
       const { page, itemsPerPage } = this.options;
@@ -722,6 +831,10 @@ export default {
             playerIds: this.getPlayersIds(this.playersSelected),
             sportIds: this.getSportIds(this.sportsSelected),
             setIds: this.getSetIds(this.setsSelected),
+            gradeCompanyIds: this.getGradeCompanyIds(
+              this.gradeCompaniesSelected
+            ),
+            locationIds: this.getLocationIds(this.locationsSelected),
             highestBeckettPriceSort: parseInt(this.highestBeckettPriceSort),
           },
         };
@@ -890,6 +1003,55 @@ export default {
           this.setsLoading = false;
         });
     },
+    readDataForGradeCompaniesFromAPI() {
+      this.gradeCompaniesLoading = true;
+      console.log(this.gradeCompaniesOptions);
+      const { sortBy, sortDesc, page, itemsPerPage } =
+        this.gradeCompaniesOptions;
+      const request = {
+        searchTerm: this.gradeCompaniesSearch,
+        rowsPerPage: itemsPerPage,
+        pageNumber: page,
+        sortByField: sortBy != null ? sortBy[0] : "",
+        isSortDesc: sortDesc != null ? sortDesc[0] : false,
+      };
+      console.log(request);
+      axios
+        .post(process.env.VUE_APP_ROOT_API + "admin/grade_companies", request)
+        .then((response) => {
+          console.log(response.data);
+          if (response.data.isSuccessful) {
+            this.gradeCompanies = response.data.value.gradeCompanies;
+            this.totalGradeCompanies = response.data.value.total;
+          }
+
+          this.gradeCompaniesLoading = false;
+        });
+    },
+    readDataForLocationsFromAPI() {
+      this.locationsLoading = true;
+      console.log(this.locationsOptions);
+      const { sortBy, sortDesc, page, itemsPerPage } = this.locationsOptions;
+      const request = {
+        searchTerm: this.locationsSearch,
+        rowsPerPage: itemsPerPage,
+        pageNumber: page,
+        sortByField: sortBy != null ? sortBy[0] : "",
+        isSortDesc: sortDesc != null ? sortDesc[0] : false,
+      };
+      console.log(request);
+      axios
+        .post(process.env.VUE_APP_ROOT_API + "admin/locations", request)
+        .then((response) => {
+          console.log(response.data);
+          if (response.data.isSuccessful) {
+            this.locations = response.data.value.locations;
+            this.totalLocations = response.data.value.total;
+          }
+
+          this.locationsLoading = false;
+        });
+    },
     validInt: function (text) {
       return text % 1 === 0;
     },
@@ -940,6 +1102,26 @@ export default {
           ids += ",";
         }
         ids += setArray[i].setId.toString();
+      }
+      return ids;
+    },
+    getGradeCompanyIds(gradeCompanyArray) {
+      var ids = "";
+      for (var i = 0; i < gradeCompanyArray.length; i++) {
+        if (ids.length > 0) {
+          ids += ",";
+        }
+        ids += gradeCompanyArray[i].gradeCompanyId.toString();
+      }
+      return ids;
+    },
+    getLocationIds(locationArray) {
+      var ids = "";
+      for (var i = 0; i < locationArray.length; i++) {
+        if (ids.length > 0) {
+          ids += ",";
+        }
+        ids += locationArray[i].locationId.toString();
       }
       return ids;
     },

@@ -130,6 +130,19 @@ namespace CardOrgAPI.Repositories
                 cards = cards.Where(x => sets.Contains(x.Set.SetId));
             }
 
+            if (!String.IsNullOrWhiteSpace(filter.GradeCompanyIds))
+            {
+                var gradeCompanies = filter.GradeCompanyIds.Split(",").Select(x => int.Parse(x));
+                cards = cards.Where(x => gradeCompanies.Contains(x.GradeCompany.GradeCompanyId));
+            }
+
+
+            if (!String.IsNullOrWhiteSpace(filter.LocationIds))
+            {
+                var locations = filter.LocationIds.Split(",").Select(x => int.Parse(x));
+                cards = cards.Where(x => locations.Contains(x.Location.LocationId));
+            }
+
             if (filter.IsGraded)
             {
                 cards = cards.Where(x => x.IsGraded);
