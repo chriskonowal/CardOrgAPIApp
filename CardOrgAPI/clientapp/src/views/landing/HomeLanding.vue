@@ -57,6 +57,20 @@
                   </v-row>
                   <v-divider></v-divider>
                   <v-row>
+                    <v-switch
+                      v-model="hasImage"
+                      :label="'Has Image'"
+                    ></v-switch>
+                  </v-row>
+                  <v-divider></v-divider>
+                  <v-row>
+                    <v-switch
+                      v-model="isSerialNumbered"
+                      :label="'Is Serial Numbered'"
+                    ></v-switch>
+                  </v-row>
+                  <v-divider></v-divider>
+                  <v-row>
                     <v-data-table
                       v-model="playersSelected"
                       :headers="playersHeaders"
@@ -321,6 +335,150 @@
                     </v-col>
                   </v-row>
                   <v-divider></v-divider>
+                  <v-row style="padding-top: 30px">
+                    <h5>Lowest COMC Price</h5>
+                  </v-row>
+                  <v-row>
+                    <v-col>
+                      <v-text-field
+                        label="Low"
+                        outlined
+                        v-model="lowestCOMCPriceLow"
+                        prefix="$"
+                        type="number"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col>
+                      <v-text-field
+                        label="High"
+                        outlined
+                        v-model="lowestCOMCPriceHigh"
+                        prefix="$"
+                        type="number"
+                      ></v-text-field>
+                    </v-col>
+                  </v-row>
+                  <v-divider></v-divider>
+                  <v-row style="padding-top: 30px">
+                    <h5>Ebay Price</h5>
+                  </v-row>
+                  <v-row>
+                    <v-col>
+                      <v-text-field
+                        label="Low"
+                        outlined
+                        v-model="ebayPriceLow"
+                        prefix="$"
+                        type="number"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col>
+                      <v-text-field
+                        label="High"
+                        outlined
+                        v-model="ebayPriceHigh"
+                        prefix="$"
+                        type="number"
+                      ></v-text-field>
+                    </v-col>
+                  </v-row>
+                  <v-divider></v-divider>
+                  <v-row style="padding-top: 30px">
+                    <h5>Price Paid</h5>
+                  </v-row>
+                  <v-row>
+                    <v-col>
+                      <v-text-field
+                        label="Low"
+                        outlined
+                        v-model="pricePaidLow"
+                        prefix="$"
+                        type="number"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col>
+                      <v-text-field
+                        label="High"
+                        outlined
+                        v-model="pricePaidHigh"
+                        prefix="$"
+                        type="number"
+                      ></v-text-field>
+                    </v-col>
+                  </v-row>
+                  <v-divider></v-divider>
+                  <v-row style="padding-top: 30px">
+                    <h5>Grade</h5>
+                  </v-row>
+                  <v-row>
+                    <v-col>
+                      <v-text-field
+                        label="Low"
+                        outlined
+                        v-model="gradeLow"
+                        prefix="$"
+                        type="number"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col>
+                      <v-text-field
+                        label="High"
+                        outlined
+                        v-model="gradeHigh"
+                        prefix="$"
+                        type="number"
+                      ></v-text-field>
+                    </v-col>
+                  </v-row>
+                  <v-divider></v-divider>
+                  <v-row style="padding-top: 30px">
+                    <h5>Copies</h5>
+                  </v-row>
+                  <v-row>
+                    <v-col>
+                      <v-text-field
+                        label="Low"
+                        outlined
+                        v-model="copiesLow"
+                        prefix="$"
+                        type="number"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col>
+                      <v-text-field
+                        label="High"
+                        outlined
+                        v-model="copiesHigh"
+                        prefix="$"
+                        type="number"
+                      ></v-text-field>
+                    </v-col>
+                  </v-row>
+                  <v-divider></v-divider>
+                  <v-row style="padding-top: 30px">
+                    <h5>Serial Number</h5>
+                  </v-row>
+                  <v-row>
+                    <v-col>
+                      <v-text-field
+                        label="Low"
+                        outlined
+                        v-model="serialNumberLow"
+                        prefix="$"
+                        type="number"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col>
+                      <v-text-field
+                        label="High"
+                        outlined
+                        v-model="serialNumberHigh"
+                        prefix="$"
+                        type="number"
+                      ></v-text-field>
+                    </v-col>
+                  </v-row>
+                  <v-divider></v-divider>
                   <v-row style="margin-top: 30px">
                     <v-col cols="12" sm="6" md="3">
                       <v-btn
@@ -369,9 +527,241 @@
                     </v-radio-group>
                   </v-row>
                   <v-row>
+                    <h5>Card Description Sort</h5>
+                    <v-radio-group
+                      v-model="cardDescriptionSort"
+                      style="width: 100%"
+                      row
+                    >
+                      <v-radio label="None" value="0"></v-radio>
+                      <v-radio label="Asc" value="1"></v-radio>
+                      <v-radio label="Desc" value="2"></v-radio>
+                    </v-radio-group>
+                  </v-row>
+                  <v-row>
+                    <h5>Lowest Beckett Price Sort</h5>
+                    <v-radio-group
+                      v-model="lowestBeckettPriceSort"
+                      style="width: 100%"
+                      row
+                    >
+                      <v-radio label="None" value="0"></v-radio>
+                      <v-radio label="Asc" value="1"></v-radio>
+                      <v-radio label="Desc" value="2"></v-radio>
+                    </v-radio-group>
+                  </v-row>
+                  <v-row>
                     <h5>Highest Beckett High Price</h5>
                     <v-radio-group
                       v-model="highestBeckettPriceSort"
+                      style="width: 100%"
+                      row
+                    >
+                      <v-radio label="None" value="0"></v-radio>
+                      <v-radio label="Asc" value="1"></v-radio>
+                      <v-radio label="Desc" value="2"></v-radio>
+                    </v-radio-group>
+                  </v-row>
+                  <v-row>
+                    <h5>Lowest COMC Price</h5>
+                    <v-radio-group
+                      v-model="lowestCOMCPriceSort"
+                      style="width: 100%"
+                      row
+                    >
+                      <v-radio label="None" value="0"></v-radio>
+                      <v-radio label="Asc" value="1"></v-radio>
+                      <v-radio label="Desc" value="2"></v-radio>
+                    </v-radio-group>
+                  </v-row>
+                  <v-row>
+                    <h5>Ebay Price</h5>
+                    <v-radio-group
+                      v-model="ebayPriceSort"
+                      style="width: 100%"
+                      row
+                    >
+                      <v-radio label="None" value="0"></v-radio>
+                      <v-radio label="Asc" value="1"></v-radio>
+                      <v-radio label="Desc" value="2"></v-radio>
+                    </v-radio-group>
+                  </v-row>
+                  <v-row>
+                    <h5>Price Paid</h5>
+                    <v-radio-group
+                      v-model="pricePaidSort"
+                      style="width: 100%"
+                      row
+                    >
+                      <v-radio label="None" value="0"></v-radio>
+                      <v-radio label="Asc" value="1"></v-radio>
+                      <v-radio label="Desc" value="2"></v-radio>
+                    </v-radio-group>
+                  </v-row>
+                  <v-row>
+                    <h5>Has Image</h5>
+                    <v-radio-group
+                      v-model="hasImageSort"
+                      style="width: 100%"
+                      row
+                    >
+                      <v-radio label="None" value="0"></v-radio>
+                      <v-radio label="Asc" value="1"></v-radio>
+                      <v-radio label="Desc" value="2"></v-radio>
+                    </v-radio-group>
+                  </v-row>
+                  <v-row>
+                    <h5>Is Graded</h5>
+                    <v-radio-group
+                      v-model="isGradedSort"
+                      style="width: 100%"
+                      row
+                    >
+                      <v-radio label="None" value="0"></v-radio>
+                      <v-radio label="Asc" value="1"></v-radio>
+                      <v-radio label="Desc" value="2"></v-radio>
+                    </v-radio-group>
+                  </v-row>
+                  <v-row>
+                    <h5>Copies</h5>
+                    <v-radio-group v-model="copiesSort" style="width: 100%" row>
+                      <v-radio label="None" value="0"></v-radio>
+                      <v-radio label="Asc" value="1"></v-radio>
+                      <v-radio label="Desc" value="2"></v-radio>
+                    </v-radio-group>
+                  </v-row>
+                  <v-row>
+                    <h5>Serial Number</h5>
+                    <v-radio-group
+                      v-model="serialNumberSort"
+                      style="width: 100%"
+                      row
+                    >
+                      <v-radio label="None" value="0"></v-radio>
+                      <v-radio label="Asc" value="1"></v-radio>
+                      <v-radio label="Desc" value="2"></v-radio>
+                    </v-radio-group>
+                  </v-row>
+                  <v-row>
+                    <h5>Grade</h5>
+                    <v-radio-group v-model="gradeSort" style="width: 100%" row>
+                      <v-radio label="None" value="0"></v-radio>
+                      <v-radio label="Asc" value="1"></v-radio>
+                      <v-radio label="Desc" value="2"></v-radio>
+                    </v-radio-group>
+                  </v-row>
+                  <v-row>
+                    <h5>Is Rookie</h5>
+                    <v-radio-group
+                      v-model="isRookieSort"
+                      style="width: 100%"
+                      row
+                    >
+                      <v-radio label="None" value="0"></v-radio>
+                      <v-radio label="Asc" value="1"></v-radio>
+                      <v-radio label="Desc" value="2"></v-radio>
+                    </v-radio-group>
+                  </v-row>
+                  <v-row>
+                    <h5>Is Autograph</h5>
+                    <v-radio-group
+                      v-model="isAutographSort"
+                      style="width: 100%"
+                      row
+                    >
+                      <v-radio label="None" value="0"></v-radio>
+                      <v-radio label="Asc" value="1"></v-radio>
+                      <v-radio label="Desc" value="2"></v-radio>
+                    </v-radio-group>
+                  </v-row>
+                  <v-row>
+                    <h5>Is On Card Autograph</h5>
+                    <v-radio-group
+                      v-model="isOnCardAutographSort"
+                      style="width: 100%"
+                      row
+                    >
+                      <v-radio label="None" value="0"></v-radio>
+                      <v-radio label="Asc" value="1"></v-radio>
+                      <v-radio label="Desc" value="2"></v-radio>
+                    </v-radio-group>
+                  </v-row>
+                  <v-row>
+                    <h5>Is Patch</h5>
+                    <v-radio-group
+                      v-model="isPatchSort"
+                      style="width: 100%"
+                      row
+                    >
+                      <v-radio label="None" value="0"></v-radio>
+                      <v-radio label="Asc" value="1"></v-radio>
+                      <v-radio label="Desc" value="2"></v-radio>
+                    </v-radio-group>
+                  </v-row>
+                  <v-row>
+                    <h5>Is Game Worn Jersey</h5>
+                    <v-radio-group
+                      v-model="isGameWornJerseySort"
+                      style="width: 100%"
+                      row
+                    >
+                      <v-radio label="None" value="0"></v-radio>
+                      <v-radio label="Asc" value="1"></v-radio>
+                      <v-radio label="Desc" value="2"></v-radio>
+                    </v-radio-group>
+                  </v-row>
+                  <v-row>
+                    <h5>Sport</h5>
+                    <v-radio-group v-model="sportSort" style="width: 100%" row>
+                      <v-radio label="None" value="0"></v-radio>
+                      <v-radio label="Asc" value="1"></v-radio>
+                      <v-radio label="Desc" value="2"></v-radio>
+                    </v-radio-group>
+                  </v-row>
+                  <v-row>
+                    <h5>Year</h5>
+                    <v-radio-group v-model="yearSort" style="width: 100%" row>
+                      <v-radio label="None" value="0"></v-radio>
+                      <v-radio label="Asc" value="1"></v-radio>
+                      <v-radio label="Desc" value="2"></v-radio>
+                    </v-radio-group>
+                  </v-row>
+                  <v-row>
+                    <h5>Set</h5>
+                    <v-radio-group v-model="setSort" style="width: 100%" row>
+                      <v-radio label="None" value="0"></v-radio>
+                      <v-radio label="Asc" value="1"></v-radio>
+                      <v-radio label="Desc" value="2"></v-radio>
+                    </v-radio-group>
+                  </v-row>
+                  <v-row>
+                    <h5>Grade Company</h5>
+                    <v-radio-group
+                      v-model="gradeCompanySort"
+                      style="width: 100%"
+                      row
+                    >
+                      <v-radio label="None" value="0"></v-radio>
+                      <v-radio label="Asc" value="1"></v-radio>
+                      <v-radio label="Desc" value="2"></v-radio>
+                    </v-radio-group>
+                  </v-row>
+                  <v-row>
+                    <h5>Location</h5>
+                    <v-radio-group
+                      v-model="locationSort"
+                      style="width: 100%"
+                      row
+                    >
+                      <v-radio label="None" value="0"></v-radio>
+                      <v-radio label="Asc" value="1"></v-radio>
+                      <v-radio label="Desc" value="2"></v-radio>
+                    </v-radio-group>
+                  </v-row>
+                  <v-row>
+                    <h5>Time Stamp</h5>
+                    <v-radio-group
+                      v-model="timeStampSort"
                       style="width: 100%"
                       row
                     >
@@ -692,6 +1082,41 @@ export default {
       lowestBeckettPriceHigh: 0,
       highestBeckettPriceLow: 0,
       highestBeckettPriceHigh: 0,
+      lowestCOMCPriceLow: 0,
+      lowestCOMCPriceHigh: 0,
+      ebayPriceHigh: 0,
+      ebayPriceLow: 0,
+      pricePaidLow: 0,
+      pricePaidHigh: 0,
+      gradeLow: 0,
+      gradeHigh: 0,
+      copiesLow: 0,
+      copiesHigh: 0,
+      serialNumberLow: 0,
+      serialNumberHigh: 0,
+      hasImage: false,
+      isSerialNumbered: false,
+      cardDescriptionSort: "0",
+      lowestBeckettPriceSort: "0",
+      lowestCOMCPriceSort: "0",
+      ebayPriceSort: "0",
+      pricePaidSort: "0",
+      hasImageSort: "0",
+      isGradedSort: "0",
+      copiesSort: "0",
+      serialNumberSort: "0",
+      gradeSort: "0",
+      isRookieSort: "0",
+      isAutographSort: "0",
+      isPatchSort: "0",
+      isOnCardAutographSort: "0",
+      isGameWornJerseySort: "0",
+      sportSort: "0",
+      yearSort: "0",
+      setSort: "0",
+      gradeCompanySort: "0",
+      locationSort: "0",
+      timeStampSort: "0",
     };
   },
   watch: {
@@ -906,6 +1331,41 @@ export default {
             lowestBeckettPriceHigh: this.lowestBeckettPriceHigh,
             highestBeckettPriceLow: this.highestBeckettPriceLow,
             highestBeckettPriceHigh: this.highestBeckettPriceHigh,
+            lowestCOMCPriceLow: this.lowestCOMCPriceLow,
+            lowestCOMCPriceHigh: this.lowestCOMCPriceHigh,
+            ebayPriceLow: this.ebayPriceLow,
+            ebayPriceHigh: this.ebayPriceHigh,
+            pricePaidLow: this.pricePaidLow,
+            pricePaidHigh: this.pricePaidHigh,
+            gradeLow: this.gradeLow,
+            gradeHigh: this.gradeHigh,
+            copiesLow: this.copiesLow,
+            copiesHigh: this.copiesHigh,
+            serialNumberLow: this.serialNumberLow,
+            serialNumberHigh: this.serialNumberHigh,
+            hasImage: this.hasImage,
+            isSerialNumbered: this.isSerialNumbered,
+            cardDescriptionSort: parseInt(this.cardDescriptionSort),
+            lowestBeckettPriceSort: parseInt(this.lowestBeckettPriceSort),
+            lowestCOMCPriceSort: parseInt(this.lowestCOMCPriceSort),
+            ebayPriceSort: parseInt(this.ebayPriceSort),
+            pricePaidSort: parseInt(this.pricePaidSort),
+            hasImageSort: parseInt(this.hasImageSort),
+            isGradedSort: parseInt(this.isGradedSort),
+            copiesSort: parseInt(this.copiesSort),
+            serialNumberSort: parseInt(this.serialNumberSort),
+            gradeSort: parseInt(this.gradeSort),
+            isRookieSort: parseInt(this.isRookieSort),
+            isAutographSort: parseInt(this.isAutographSort),
+            isPatchSort: parseInt(this.isPatchSort),
+            isOnCardAutographSort: parseInt(this.isOnCardAutographSort),
+            isGameWornJerseySort: parseInt(this.isGameWornJerseySort),
+            sportSort: parseInt(this.sportSort),
+            yearSort: parseInt(this.yearSort),
+            setSort: parseInt(this.setSort),
+            gradeCompanySort: parseInt(this.gradeCompanySort),
+            locationSort: parseInt(this.locationSort),
+            timeStampSort: parseInt(this.timeStampSort),
           },
         };
       }

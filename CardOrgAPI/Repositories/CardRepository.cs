@@ -1,4 +1,5 @@
-﻿using CardOrgAPI.Contexts;
+﻿using CardOrgAPI.Constants;
+using CardOrgAPI.Contexts;
 using CardOrgAPI.Helpers;
 using CardOrgAPI.Interfaces.Repositories;
 using CardOrgAPI.Model;
@@ -173,6 +174,16 @@ namespace CardOrgAPI.Repositories
                 cards = cards.Where(x => x.IsGameWornJersey);
             }
 
+            if (filter.HasImage)
+            {
+                cards = cards.Where(x => x.FrontCardMainImagePath.ToLower() != CardConstants.MissingImage);
+            }
+
+            if (filter.IsSerialNumbered)
+            {
+                cards = cards.Where(x => x.SerialNumber > 0);
+            }
+
             if (filter.LowestBeckettPriceLow >= 0 && filter.LowestBeckettPriceHigh > 0)
             {
                 cards = cards.Where(x => x.LowestBeckettPrice >= filter.LowestBeckettPriceLow &&
@@ -183,6 +194,42 @@ namespace CardOrgAPI.Repositories
             {
                 cards = cards.Where(x => x.HighestBeckettPrice >= filter.HighestBeckettPriceLow &&
                 x.HighestBeckettPrice <= filter.HighestBeckettPriceHigh);
+            }
+
+            if (filter.LowestComcpriceLow >= 0 && filter.LowestComcpriceHigh > 0)
+            {
+                cards = cards.Where(x => x.LowestComcprice >= filter.LowestComcpriceLow &&
+                x.LowestComcprice <= filter.LowestComcpriceHigh);
+            }
+            
+            if (filter.EbayPriceLow >= 0 && filter.EbayPriceHigh > 0)
+            {
+                cards = cards.Where(x => x.EbayPrice >= filter.EbayPriceLow &&
+                x.EbayPrice <= filter.EbayPriceHigh);
+            }
+
+            if (filter.PricePaidLow >= 0 && filter.PricePaidHigh > 0)
+            {
+                cards = cards.Where(x => x.PricePaid >= filter.PricePaidLow &&
+                x.PricePaid <= filter.PricePaidHigh);
+            }
+
+            if (filter.GradeLow >= 0 && filter.GradeHigh > 0)
+            {
+                cards = cards.Where(x => x.Grade >= filter.GradeLow &&
+                x.Grade <= filter.GradeHigh);
+            }
+
+            if (filter.CopiesLow >= 0 && filter.CopiesHigh > 0)
+            {
+                cards = cards.Where(x => x.Copies >= filter.CopiesLow &&
+                x.Copies <= filter.CopiesHigh);
+            }
+
+            if (filter.SerialNumberLow >= 0 && filter.SerialNumberHigh > 0)
+            {
+                cards = cards.Where(x => x.SerialNumber >= filter.SerialNumberLow &&
+                x.SerialNumber <= filter.SerialNumberHigh);
             }
 
             if (filter.PlayerNameSort > 0)
@@ -211,6 +258,32 @@ namespace CardOrgAPI.Repositories
                 }
             }
 
+            if (filter.CardDescriptionSort > 0)
+            {
+                hasCustomOrder = true;
+                if (filter.CardDescriptionSort == 1)
+                {
+                    cards = cards.OrderBy(x => x.CardDescription).ToList().AsQueryable();
+                }
+                else
+                {
+                    cards = cards.OrderByDescending(x => x.CardDescription).ToList().AsQueryable();
+                }
+            }
+
+            if (filter.LowestBeckettPriceSort > 0)
+            {
+                hasCustomOrder = true;
+                if (filter.LowestBeckettPriceSort == 1)
+                {
+                    cards = cards.OrderBy(x => x.LowestBeckettPrice).ToList().AsQueryable();
+                }
+                else
+                {
+                    cards = cards.OrderByDescending(x => x.LowestBeckettPrice).ToList().AsQueryable();
+                }
+            }
+
             if (filter.HighestBeckettPriceSort > 0)
             {
                 hasCustomOrder = true;
@@ -221,6 +294,253 @@ namespace CardOrgAPI.Repositories
                 else
                 {
                     cards = cards.OrderByDescending(x => x.HighestBeckettPrice).ToList().AsQueryable();
+                }
+            }
+
+            if (filter.LowestComcpriceSort > 0)
+            {
+                hasCustomOrder = true;
+                if (filter.LowestComcpriceSort == 1)
+                {
+                    cards = cards.OrderBy(x => x.LowestComcprice).ToList().AsQueryable();
+                }
+                else
+                {
+                    cards = cards.OrderByDescending(x => x.LowestComcprice).ToList().AsQueryable();
+                }
+            }
+
+            if (filter.EbayPriceSort > 0)
+            {
+                hasCustomOrder = true;
+                if (filter.EbayPriceSort == 1)
+                {
+                    cards = cards.OrderBy(x => x.EbayPrice).ToList().AsQueryable();
+                }
+                else
+                {
+                    cards = cards.OrderByDescending(x => x.EbayPrice).ToList().AsQueryable();
+                }
+            }
+
+            if (filter.PricePaidSort > 0)
+            {
+                hasCustomOrder = true;
+                if (filter.PricePaidSort == 1)
+                {
+                    cards = cards.OrderBy(x => x.PricePaid).ToList().AsQueryable();
+                }
+                else
+                {
+                    cards = cards.OrderByDescending(x => x.PricePaid).ToList().AsQueryable();
+                }
+            }
+
+            if (filter.HasImageSort > 0)
+            {
+                hasCustomOrder = true;
+                if (filter.HasImageSort == 1)
+                {
+                    cards = cards.OrderBy(x => x.FrontCardMainImagePath.ToLower() != CardConstants.MissingImage).ToList().AsQueryable();
+                }
+                else
+                {
+                    cards = cards.OrderByDescending(x => x.FrontCardMainImagePath.ToLower() != CardConstants.MissingImage).ToList().AsQueryable();
+                }
+            }
+
+            if (filter.IsGradedSort > 0)
+            {
+                hasCustomOrder = true;
+                if (filter.IsGradedSort == 1)
+                {
+                    cards = cards.OrderBy(x => x.Grade > 0).ToList().AsQueryable();
+                }
+                else
+                {
+                    cards = cards.OrderByDescending(x => x.Grade > 0).ToList().AsQueryable();
+                }
+            }
+
+            if (filter.CopiesSort > 0)
+            {
+                hasCustomOrder = true;
+                if (filter.CopiesSort == 1)
+                {
+                    cards = cards.OrderBy(x => x.Copies).ToList().AsQueryable();
+                }
+                else
+                {
+                    cards = cards.OrderByDescending(x => x.Copies).ToList().AsQueryable();
+                }
+            }
+
+            if (filter.SerialNumberSort > 0)
+            {
+                hasCustomOrder = true;
+                if (filter.SerialNumberSort == 1)
+                {
+                    cards = cards.OrderBy(x => x.SerialNumber).ToList().AsQueryable();
+                }
+                else
+                {
+                    cards = cards.OrderByDescending(x => x.SerialNumber).ToList().AsQueryable();
+                }
+            }
+
+            if (filter.GradeSort > 0)
+            {
+                hasCustomOrder = true;
+                if (filter.GradeSort == 1)
+                {
+                    cards = cards.OrderBy(x => x.Grade).ToList().AsQueryable();
+                }
+                else
+                {
+                    cards = cards.OrderByDescending(x => x.Grade).ToList().AsQueryable();
+                }
+            }
+
+            if (filter.IsRookieSort > 0)
+            {
+                hasCustomOrder = true;
+                if (filter.IsRookieSort == 1)
+                {
+                    cards = cards.OrderBy(x => x.IsRookie).ToList().AsQueryable();
+                }
+                else
+                {
+                    cards = cards.OrderByDescending(x => x.IsRookie).ToList().AsQueryable();
+                }
+            }
+
+            if (filter.IsAutographSort > 0)
+            {
+                hasCustomOrder = true;
+                if (filter.IsAutographSort == 1)
+                {
+                    cards = cards.OrderBy(x => x.IsAutograph).ToList().AsQueryable();
+                }
+                else
+                {
+                    cards = cards.OrderByDescending(x => x.IsAutograph).ToList().AsQueryable();
+                }
+            }
+
+            if (filter.IsPatchSort > 0)
+            {
+                hasCustomOrder = true;
+                if (filter.IsPatchSort == 1)
+                {
+                    cards = cards.OrderBy(x => x.IsPatch).ToList().AsQueryable();
+                }
+                else
+                {
+                    cards = cards.OrderByDescending(x => x.IsPatch).ToList().AsQueryable();
+                }
+            }
+
+            if (filter.IsOnCardAutographSort > 0)
+            {
+                hasCustomOrder = true;
+                if (filter.IsOnCardAutographSort == 1)
+                {
+                    cards = cards.OrderBy(x => x.IsOnCardAutograph).ToList().AsQueryable();
+                }
+                else
+                {
+                    cards = cards.OrderByDescending(x => x.IsOnCardAutograph).ToList().AsQueryable();
+                }
+            }
+
+            if (filter.IsGameWornJerseySort > 0)
+            {
+                hasCustomOrder = true;
+                if (filter.IsGameWornJerseySort == 1)
+                {
+                    cards = cards.OrderBy(x => x.IsGameWornJersey).ToList().AsQueryable();
+                }
+                else
+                {
+                    cards = cards.OrderByDescending(x => x.IsGameWornJersey).ToList().AsQueryable();
+                }
+            }
+
+            if (filter.SportSort > 0)
+            {
+                hasCustomOrder = true;
+                if (filter.SportSort == 1)
+                {
+                    cards = cards.OrderBy(x => x.Sport.Name).ToList().AsQueryable();
+                }
+                else
+                {
+                    cards = cards.OrderByDescending(x => x.Sport.Name).ToList().AsQueryable();
+                }
+            }
+
+            if (filter.YearSort > 0)
+            {
+                hasCustomOrder = true;
+                if (filter.YearSort == 1)
+                {
+                    cards = cards.OrderBy(x => x.Year.BeginningYear).ToList().AsQueryable();
+                }
+                else
+                {
+                    cards = cards.OrderByDescending(x => x.Year.BeginningYear).ToList().AsQueryable();
+                }
+            }
+
+            if (filter.SetSort > 0)
+            {
+                hasCustomOrder = true;
+                if (filter.SetSort == 1)
+                {
+                    cards = cards.OrderBy(x => x.Set.Name).ToList().AsQueryable();
+                }
+                else
+                {
+                    cards = cards.OrderByDescending(x => x.Set.Name).ToList().AsQueryable();
+                }
+            }
+
+            if (filter.GradeCompanySort > 0)
+            {
+                hasCustomOrder = true;
+                if (filter.GradeCompanySort == 1)
+                {
+                    cards = cards.OrderBy(x => x.GradeCompany != null ? x.GradeCompany.Name : string.Empty).ToList().AsQueryable();
+                }
+                else
+                {
+                    cards = cards.OrderByDescending(x => x.GradeCompany != null ? x.GradeCompany.Name : string.Empty).ToList().AsQueryable();
+                }
+            }
+
+            if (filter.LocationSort > 0)
+            {
+                hasCustomOrder = true;
+                if (filter.LocationSort == 1)
+                {
+                    cards = cards.OrderBy(x => x.Location.Name).ToList().AsQueryable();
+                }
+                else
+                {
+                    cards = cards.OrderByDescending(x => x.Location.Name).ToList().AsQueryable();
+                }
+            }
+
+            if (filter.TimeStampSort > 0)
+            {
+                hasCustomOrder = true;
+                if (filter.TimeStampSort == 1)
+                {
+                    cards = cards.OrderBy(x => x.TimeStamp).ToList().AsQueryable();
+                }
+                else
+                {
+                    cards = cards.OrderByDescending(x => x.TimeStamp).ToList().AsQueryable();
                 }
             }
 
