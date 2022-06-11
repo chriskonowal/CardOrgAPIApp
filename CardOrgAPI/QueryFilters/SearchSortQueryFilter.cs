@@ -16,13 +16,13 @@ namespace CardOrgAPI.QueryFilters
         public bool IsPatch { get; set; }
         public bool IsOnCardAutograph { get; set; }
         public bool IsGameWornJersey { get; set; }
-        public string PlayerIds { get; set; }
-        public string TeamIds { get; set; }
-        public string SportIds { get; set; }
-        public string YearIds { get; set; }
-        public string SetIds { get; set; }
-        public string GradeCompanyIds { get; set; }
-        public string LocationIds { get; set; }
+        public IEnumerable<int> PlayerIds { get; set; }
+        public IEnumerable<int> TeamIds { get; set; }
+        public IEnumerable<int> SportIds { get; set; }
+        public IEnumerable<int> YearIds { get; set; }
+        public IEnumerable<int> SetIds { get; set; }
+        public IEnumerable<int> GradeCompanyIds { get; set; }
+        public IEnumerable<int> LocationIds { get; set; }
         public string CardDescription { get; set; }
         public decimal LowestBeckettPriceLow { get; set; }
         public decimal LowestBeckettPriceHigh { get; set; }

@@ -1,5 +1,4 @@
-﻿using CardOrgAPI.Contexts;
-using CardOrgAPI.Entities;
+﻿using CardOrgAPI.Entities;
 using CardOrgAPI.Helpers;
 using CardOrgAPI.Interfaces.Repositories;
 using CardOrgAPI.QueryFilters;

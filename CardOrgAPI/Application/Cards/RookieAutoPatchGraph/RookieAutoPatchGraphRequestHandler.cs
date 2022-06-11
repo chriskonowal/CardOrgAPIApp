@@ -1,5 +1,4 @@
-﻿using CardOrgAPI.Contexts;
-using CardOrgAPI.Entities;
+﻿using CardOrgAPI.Entities;
 using CardOrgAPI.Responses;
 using MediatR;
 using System;

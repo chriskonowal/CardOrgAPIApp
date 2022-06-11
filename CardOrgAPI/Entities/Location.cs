@@ -10,13 +10,13 @@ namespace CardOrgAPI.Entities
         public Location()
         {
             Cards = new HashSet<Card>();
-            SearchSortGradeLocations = new HashSet<SearchSortGradeLocation>();
+            SearchSortLocations = new HashSet<SearchSortLocation>();
         }
 
         public int LocationId { get; set; }
         public string Name { get; set; }
 
         public virtual ICollection<Card> Cards { get; set; }
-        public virtual ICollection<SearchSortGradeLocation> SearchSortGradeLocations { get; set; }
+        public virtual ICollection<SearchSortLocation> SearchSortLocations { get; set; }
     }
 }

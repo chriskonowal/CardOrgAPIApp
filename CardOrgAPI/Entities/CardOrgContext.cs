@@ -1,11 +1,10 @@
 ﻿using System;
-using CardOrgAPI.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
 #nullable disable
 
-namespace CardOrgAPI.Contexts
+namespace CardOrgAPI.Entities
 {
     public partial class CardOrgContext : DbContext
     {
@@ -25,7 +24,7 @@ namespace CardOrgAPI.Contexts
         public virtual DbSet<PlayerCard> PlayerCards { get; set; }
         public virtual DbSet<SearchSort> SearchSorts { get; set; }
         public virtual DbSet<SearchSortGradeCompany> SearchSortGradeCompanies { get; set; }
-        public virtual DbSet<SearchSortGradeLocation> SearchSortGradeLocations { get; set; }
+        public virtual DbSet<SearchSortLocation> SearchSortLocations { get; set; }
         public virtual DbSet<SearchSortPlayer> SearchSortPlayers { get; set; }
         public virtual DbSet<SearchSortSet> SearchSortSets { get; set; }
         public virtual DbSet<SearchSortSport> SearchSortSports { get; set; }
@@ -231,19 +230,19 @@ namespace CardOrgAPI.Contexts
                     .HasConstraintName("FK_SearchSortGradeCompany_SearchSortId");
             });
 
-            modelBuilder.Entity<SearchSortGradeLocation>(entity =>
+            modelBuilder.Entity<SearchSortLocation>(entity =>
             {
-                entity.ToTable("SearchSortGradeLocation");
+                entity.ToTable("SearchSortLocation");
 
                 entity.HasOne(d => d.Location)
-                    .WithMany(p => p.SearchSortGradeLocations)
+                    .WithMany(p => p.SearchSortLocations)
                     .HasForeignKey(d => d.LocationId)
-                    .HasConstraintName("FK_SearchSortGradeLocation_LocationId");
+                    .HasConstraintName("FK_SearchSortLocation_LocationId");
 
                 entity.HasOne(d => d.SearchSort)
-                    .WithMany(p => p.SearchSortGradeLocations)
+                    .WithMany(p => p.SearchSortLocations)
                     .HasForeignKey(d => d.SearchSortId)
-                    .HasConstraintName("FK_SearchSortGradeLocation_SearchSortId");
+                    .HasConstraintName("FK_SearchSortLocation_SearchSortId");
             });
 
             modelBuilder.Entity<SearchSortPlayer>(entity =>

@@ -798,7 +798,7 @@
         <v-text-field
           v-model="search"
           append-icon="mdi-magnify"
-          label="Search"
+          label="Quick Search"
           single-line
           hide-details
           @blur="readDataFromAPI(false)"
@@ -1370,6 +1370,7 @@ export default {
         };
       }
 
+      console.log("request:");
       console.log(request);
       axios
         .post(process.env.VUE_APP_ROOT_API + "public/cards", request)
@@ -1586,72 +1587,51 @@ export default {
       return text % 1 === 0;
     },
     getPlayersIds(playerArray) {
-      var ids = "";
+      var ids = new Array();
       for (var i = 0; i < playerArray.length; i++) {
-        if (ids.length > 0) {
-          ids += ",";
-        }
-        ids += playerArray[i].playerId.toString();
+        ids.push(parseInt(playerArray[i].playerId));
       }
       return ids;
     },
     getTeamsIds(teamArray) {
-      var ids = "";
+      var ids = new Array();
       for (var i = 0; i < teamArray.length; i++) {
-        if (ids.length > 0) {
-          ids += ",";
-        }
-        ids += teamArray[i].teamId.toString();
+        ids.push(parseInt(teamArray[i].teamId));
       }
       return ids;
     },
     getSportIds(sportArray) {
-      var ids = "";
+      var ids = new Array();
       for (var i = 0; i < sportArray.length; i++) {
-        if (ids.length > 0) {
-          ids += ",";
-        }
-        ids += sportArray[i].sportId.toString();
+        ids.push(parseInt(sportArray[i].sportId));
       }
       return ids;
     },
     getYearIds(yearArray) {
-      var ids = "";
+      var ids = new Array();
       for (var i = 0; i < yearArray.length; i++) {
-        if (ids.length > 0) {
-          ids += ",";
-        }
-        ids += yearArray[i].yearId.toString();
+        ids.push(parseInt(yearArray[i].yearId));
       }
       return ids;
     },
     getSetIds(setArray) {
-      var ids = "";
+      var ids = new Array();
       for (var i = 0; i < setArray.length; i++) {
-        if (ids.length > 0) {
-          ids += ",";
-        }
-        ids += setArray[i].setId.toString();
+        ids.push(parseInt(setArray[i].setId));
       }
       return ids;
     },
     getGradeCompanyIds(gradeCompanyArray) {
-      var ids = "";
+      var ids = new Array();
       for (var i = 0; i < gradeCompanyArray.length; i++) {
-        if (ids.length > 0) {
-          ids += ",";
-        }
-        ids += gradeCompanyArray[i].gradeCompanyId.toString();
+        ids.push(parseInt(gradeCompanyArray[i].gradeCompanyId));
       }
       return ids;
     },
     getLocationIds(locationArray) {
-      var ids = "";
+      var ids = new Array();
       for (var i = 0; i < locationArray.length; i++) {
-        if (ids.length > 0) {
-          ids += ",";
-        }
-        ids += locationArray[i].locationId.toString();
+        ids.push(parseInt(locationArray[i].locationId));
       }
       return ids;
     },

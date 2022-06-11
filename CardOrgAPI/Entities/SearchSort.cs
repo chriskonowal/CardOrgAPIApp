@@ -10,7 +10,7 @@ namespace CardOrgAPI.Entities
         public SearchSort()
         {
             SearchSortGradeCompanies = new HashSet<SearchSortGradeCompany>();
-            SearchSortGradeLocations = new HashSet<SearchSortGradeLocation>();
+            SearchSortLocations = new HashSet<SearchSortLocation>();
             SearchSortPlayers = new HashSet<SearchSortPlayer>();
             SearchSortSets = new HashSet<SearchSortSet>();
             SearchSortSports = new HashSet<SearchSortSport>();
@@ -27,13 +27,6 @@ namespace CardOrgAPI.Entities
         public bool IsPatch { get; set; }
         public bool IsOnCardAutograph { get; set; }
         public bool IsGameWornJersey { get; set; }
-        public string PlayerIds { get; set; }
-        public string TeamIds { get; set; }
-        public string SportIds { get; set; }
-        public string YearIds { get; set; }
-        public string SetIds { get; set; }
-        public string GradeCompanyIds { get; set; }
-        public string LocationIds { get; set; }
         public string CardDescription { get; set; }
         public decimal LowestBeckettPriceLow { get; set; }
         public decimal LowestBeckettPriceHigh { get; set; }
@@ -82,7 +75,7 @@ namespace CardOrgAPI.Entities
         public DateTime TimeStamp { get; set; }
 
         public virtual ICollection<SearchSortGradeCompany> SearchSortGradeCompanies { get; set; }
-        public virtual ICollection<SearchSortGradeLocation> SearchSortGradeLocations { get; set; }
+        public virtual ICollection<SearchSortLocation> SearchSortLocations { get; set; }
         public virtual ICollection<SearchSortPlayer> SearchSortPlayers { get; set; }
         public virtual ICollection<SearchSortSet> SearchSortSets { get; set; }
         public virtual ICollection<SearchSortSport> SearchSortSports { get; set; }

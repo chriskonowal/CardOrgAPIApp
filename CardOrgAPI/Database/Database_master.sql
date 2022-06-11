@@ -8,7 +8,6 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-
 IF OBJECT_ID('dbo.FK_Card_GradeCompanyId') IS NOT NULL AND OBJECT_ID(N'dbo.Card') IS NOT NULL  
 BEGIN
 	ALTER TABLE dbo.Card DROP CONSTRAINT FK_Card_GradeCompanyId;
@@ -114,14 +113,14 @@ BEGIN
 	ALTER TABLE dbo.SearchSortGradeCompany DROP CONSTRAINT FK_SearchSortGradeCompany_GradeCompanyId;
 END
 
-IF OBJECT_ID('dbo.FK_SearchSortGradeLocation_SearchSortId') IS NOT NULL AND OBJECT_ID(N'dbo.SearchSortGradeLocation') IS NOT NULL  
+IF OBJECT_ID('dbo.FK_SearchSortLocation_SearchSortId') IS NOT NULL AND OBJECT_ID(N'dbo.SearchSortLocation') IS NOT NULL  
 BEGIN
-	ALTER TABLE dbo.SearchSortGradeLocation DROP CONSTRAINT FK_SearchSortGradeLocation_SearchSortId;
+	ALTER TABLE dbo.SearchSortLocation DROP CONSTRAINT FK_SearchSortLocation_SearchSortId;
 END
 
-IF OBJECT_ID('dbo.FK_SearchSortGradeLocation_LocationId') IS NOT NULL AND OBJECT_ID(N'dbo.SearchSortGradeLocation') IS NOT NULL  
+IF OBJECT_ID('dbo.FK_SearchSortLocation_LocationId') IS NOT NULL AND OBJECT_ID(N'dbo.SearchSortLocation') IS NOT NULL  
 BEGIN
-	ALTER TABLE dbo.SearchSortGradeLocation DROP CONSTRAINT FK_SearchSortGradeLocation_LocationId;
+	ALTER TABLE dbo.SearchSortLocation DROP CONSTRAINT FK_SearchSortLocation_LocationId;
 END
 
 IF OBJECT_ID(N'dbo.Year') IS NOT NULL  
@@ -175,8 +174,8 @@ IF OBJECT_ID(N'dbo.[SearchSortSet]') IS NOT NULL
 IF OBJECT_ID(N'dbo.[SearchSortGradeCompany]') IS NOT NULL  
    DROP TABLE [dbo].SearchSortGradeCompany;
 
-IF OBJECT_ID(N'dbo.[SearchSortGradeLocation]') IS NOT NULL  
-   DROP TABLE [dbo].SearchSortGradeLocation;
+IF OBJECT_ID(N'dbo.[SearchSortLocation]') IS NOT NULL  
+   DROP TABLE [dbo].SearchSortLocation;
    
 CREATE TABLE [dbo].[Year](
 	[YearId] [int] IDENTITY(1,1) NOT NULL,
@@ -398,13 +397,6 @@ CREATE TABLE [dbo].[SearchSort](
 	[IsPatch] [bit] NOT NULL,
 	[IsOnCardAutograph] [bit] NOT NULL,
 	[IsGameWornJersey] [bit] NOT NULL,
-	[PlayerIds] [nvarchar](max) NULL,
-	[TeamIds] [nvarchar](max) NULL,
-	[SportIds] [nvarchar](max) NULL,
-	[YearIds] [nvarchar](max) NULL,
-	[SetIds] [nvarchar](max) NULL,
-	[GradeCompanyIds] [nvarchar](max) NULL,
-	[LocationIds] [nvarchar](max) NULL,
 	[CardDescription] [nvarchar](max) NULL,
 	[LowestBeckettPriceLow] [decimal](18, 2) NOT NULL,
 	[LowestBeckettPriceHigh] [decimal](18, 2) NOT NULL,
@@ -633,31 +625,31 @@ GO
 ALTER TABLE [dbo].SearchSortGradeCompany CHECK CONSTRAINT [FK_SearchSortGradeCompany_GradeCompanyId]
 GO
 
-CREATE TABLE [dbo].SearchSortGradeLocation(
-	[SearchSortGradeLocationId] [int] IDENTITY(1,1) NOT NULL,
+CREATE TABLE [dbo].SearchSortLocation(
+	[SearchSortLocationId] [int] IDENTITY(1,1) NOT NULL,
 	[SearchSortId] [int] NOT NULL,
 	[LocationId] [int] NOT NULL,
 PRIMARY KEY CLUSTERED 
 (
-	[SearchSortGradeLocationId] ASC
+	[SearchSortLocationId] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
 
-ALTER TABLE [dbo].SearchSortGradeLocation  WITH CHECK ADD  CONSTRAINT [FK_SearchSortGradeLocation_SearchSortId] FOREIGN KEY([SearchSortId])
+ALTER TABLE [dbo].SearchSortLocation  WITH CHECK ADD  CONSTRAINT [FK_SearchSortLocation_SearchSortId] FOREIGN KEY([SearchSortId])
 REFERENCES [dbo].SearchSort([SearchSortId])
 ON UPDATE CASCADE
 ON DELETE CASCADE
 GO
 
-ALTER TABLE [dbo].SearchSortGradeLocation CHECK CONSTRAINT [FK_SearchSortGradeLocation_SearchSortId]
+ALTER TABLE [dbo].SearchSortLocation CHECK CONSTRAINT [FK_SearchSortLocation_SearchSortId]
 GO
 
-ALTER TABLE [dbo].SearchSortGradeLocation  WITH CHECK ADD  CONSTRAINT [FK_SearchSortGradeLocation_LocationId] FOREIGN KEY(LocationId)
+ALTER TABLE [dbo].SearchSortLocation  WITH CHECK ADD  CONSTRAINT [FK_SearchSortLocation_LocationId] FOREIGN KEY(LocationId)
 REFERENCES [dbo].[Location] (LocationId)
 ON UPDATE CASCADE
 ON DELETE CASCADE
 GO
 
-ALTER TABLE [dbo].SearchSortGradeLocation CHECK CONSTRAINT [FK_SearchSortGradeLocation_LocationId]
+ALTER TABLE [dbo].SearchSortLocation CHECK CONSTRAINT [FK_SearchSortLocation_LocationId]
 GO

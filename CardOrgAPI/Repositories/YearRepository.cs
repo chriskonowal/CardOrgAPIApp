@@ -1,5 +1,4 @@
 ﻿using CardOrgAPI.Constants;
-using CardOrgAPI.Contexts;
 using CardOrgAPI.Entities;
 using CardOrgAPI.Extensions;
 using CardOrgAPI.Helpers;
@@ -26,42 +25,49 @@ namespace CardOrgAPI.Repositories
 
         public async Task<IEnumerable<Year>> GetAsync(GetYearsQueryFilter filter, CancellationToken cancellationToken)
         {
-            var query = _context.Years.AsQueryable();
-            query = Search(query, filter.SearchYear);
-
-            if (!String.IsNullOrWhiteSpace(filter.SortByField))
+            try
             {
-                if (filter.SortByField.ToLower().Equals("beginningyear"))
+                var query = _context.Years.AsQueryable();
+                query = Search(query, filter.SearchYear);
+
+                if (!String.IsNullOrWhiteSpace(filter.SortByField))
                 {
-                    if (filter.IsSortDesc)
+                    if (filter.SortByField.ToLower().Equals("beginningyear"))
                     {
-                        query = query.OrderByDescending(x => x.BeginningYear);
+                        if (filter.IsSortDesc)
+                        {
+                            query = query.OrderByDescending(x => x.BeginningYear);
+                        }
+                        else
+                        {
+                            query = query.OrderBy(x => x.BeginningYear);
+                        }
                     }
-                    else
+                    else if (filter.SortByField.ToLower().Equals("endingyear"))
                     {
-                        query = query.OrderBy(x => x.BeginningYear);
+                        if (filter.IsSortDesc)
+                        {
+                            query = query.OrderByDescending(x => x.EndingYear);
+                        }
+                        else
+                        {
+                            query = query.OrderBy(x => x.EndingYear);
+                        }
                     }
                 }
-                else if (filter.SortByField.ToLower().Equals("endingyear"))
+                else
                 {
-                    if (filter.IsSortDesc)
-                    {
-                        query = query.OrderByDescending(x => x.EndingYear);
-                    }
-                    else
-                    {
-                        query = query.OrderBy(x => x.EndingYear);
-                    }
+                    query = query.OrderByDescending(x => x.EndingYear);
                 }
+
+                query = RepositoryHelpers.Paging(query, filter.RowsPerPage, filter.PageNumber);
+
+                return await query.ToListAsync(cancellationToken).ConfigureAwait(false);
             }
-            else
+            catch (Exception ex)
             {
-                query = query.OrderByDescending(x => x.EndingYear);
+                throw ex;
             }
-
-            query = RepositoryHelpers.Paging(query, filter.RowsPerPage, filter.PageNumber);
-
-            return await query.ToListAsync(cancellationToken).ConfigureAwait(false);
         }
 
         public int GetTotal(int searchYear)

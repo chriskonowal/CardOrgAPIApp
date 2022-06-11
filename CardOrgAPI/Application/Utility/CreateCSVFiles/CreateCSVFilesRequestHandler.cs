@@ -1,4 +1,4 @@
-﻿using CardOrgAPI.Contexts;
+﻿using CardOrgAPI.Entities;
 using CardOrgAPI.Responses;
 using CsvHelper;
 using MediatR;

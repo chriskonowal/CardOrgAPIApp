@@ -1,4 +1,4 @@
-using CardOrgAPI.Contexts;
+using CardOrgAPI.Entities;
 using CardOrgAPI.Helpers;
 using CardOrgAPI.Interfaces.Repositories;
 using CardOrgAPI.Interfaces.Services;
@@ -45,6 +45,7 @@ namespace CardOrgAPI
             services.AddScoped<IPlayerRepository, PlayerRepository>();
             services.AddScoped<ISportRepository, SportRepository>();
             services.AddScoped<ISetRepository, SetRepository>();
+            services.AddScoped<ISearchSortRepository, SearchSortRepository>();
 
             services.AddControllers();
 

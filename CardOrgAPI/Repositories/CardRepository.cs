@@ -1,5 +1,4 @@
 ﻿using CardOrgAPI.Constants;
-using CardOrgAPI.Contexts;
 using CardOrgAPI.Entities;
 using CardOrgAPI.Helpers;
 using CardOrgAPI.Interfaces.Repositories;
@@ -101,47 +100,39 @@ namespace CardOrgAPI.Repositories
                 cards = cards.Where(x => x.CardDescription.ToLower().Contains(filter.CardDescription.ToLower()));
             }
 
-            if (!String.IsNullOrWhiteSpace(filter.PlayerIds))
+            if (filter.PlayerIds.Any())
             {
-                var players = filter.PlayerIds.Split(",").Select(x => int.Parse(x));
-                cards = cards.Where(x => x.PlayerCards.Any(y => players.Contains(y.Player.PlayerId)));
+                cards = cards.Where(x => x.PlayerCards.Any(y => filter.PlayerIds.Contains(y.Player.PlayerId)));
             }
 
-            if (!String.IsNullOrWhiteSpace(filter.TeamIds))
+            if (filter.TeamIds.Any())
             {
-                var teams = filter.TeamIds.Split(",").Select(x => int.Parse(x));
-                cards = cards.Where(x => x.TeamCards.Any(y => teams.Contains(y.Team.TeamId)));
+                cards = cards.Where(x => x.TeamCards.Any(y => filter.TeamIds.Contains(y.Team.TeamId)));
             }
 
-            if (!String.IsNullOrWhiteSpace(filter.SportIds))
+            if (filter.SportIds.Any())
             {
-                var sports = filter.SportIds.Split(",").Select(x => int.Parse(x));
-                cards = cards.Where(x => sports.Contains(x.SportId.GetValueOrDefault()));
+                cards = cards.Where(x => filter.SportIds.Contains(x.SportId.GetValueOrDefault()));
             }
 
-            if (!String.IsNullOrWhiteSpace(filter.YearIds)) 
+            if (filter.YearIds.Any()) 
             {
-                var years = filter.YearIds.Split(",").Select(x => int.Parse(x));
-                cards = cards.Where(x => years.Contains(x.Year.YearId));
+                cards = cards.Where(x => filter.YearIds.Contains(x.Year.YearId));
             }
 
-            if (!String.IsNullOrWhiteSpace(filter.SetIds))
+            if (filter.SetIds.Any())
             {
-                var sets = filter.SetIds.Split(",").Select(x => int.Parse(x));
-                cards = cards.Where(x => sets.Contains(x.Set.SetId));
+                cards = cards.Where(x => filter.SetIds.Contains(x.Set.SetId));
             }
 
-            if (!String.IsNullOrWhiteSpace(filter.GradeCompanyIds))
+            if (filter.GradeCompanyIds.Any())
             {
-                var gradeCompanies = filter.GradeCompanyIds.Split(",").Select(x => int.Parse(x));
-                cards = cards.Where(x => gradeCompanies.Contains(x.GradeCompany.GradeCompanyId));
+                cards = cards.Where(x => filter.GradeCompanyIds.Contains(x.GradeCompany.GradeCompanyId));
             }
 
-
-            if (!String.IsNullOrWhiteSpace(filter.LocationIds))
+            if (filter.LocationIds.Any())
             {
-                var locations = filter.LocationIds.Split(",").Select(x => int.Parse(x));
-                cards = cards.Where(x => locations.Contains(x.Location.LocationId));
+                cards = cards.Where(x => filter.LocationIds.Contains(x.Location.LocationId));
             }
 
             if (filter.IsGraded)

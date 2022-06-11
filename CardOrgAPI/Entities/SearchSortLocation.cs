@@ -5,9 +5,9 @@ using System.Collections.Generic;
 
 namespace CardOrgAPI.Entities
 {
-    public partial class SearchSortGradeLocation
+    public partial class SearchSortLocation
     {
-        public int SearchSortGradeLocationId { get; set; }
+        public int SearchSortLocationId { get; set; }
         public int SearchSortId { get; set; }
         public int LocationId { get; set; }
 
