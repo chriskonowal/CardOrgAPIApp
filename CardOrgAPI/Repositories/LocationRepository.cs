@@ -1,7 +1,7 @@
 ﻿using CardOrgAPI.Contexts;
+using CardOrgAPI.Entities;
 using CardOrgAPI.Helpers;
 using CardOrgAPI.Interfaces.Repositories;
-using CardOrgAPI.Model;
 using CardOrgAPI.QueryFilters;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -23,7 +23,7 @@ namespace CardOrgAPI.Repositories
 
         public async Task<IEnumerable<Location>> GetAsync(GenericSearchQueryFilter filter, CancellationToken cancellationToken)
         {
-            var query = _context.Location.AsQueryable();
+            var query = _context.Locations.AsQueryable();
             query = Search(query, filter.SearchTerm);
             if (!String.IsNullOrWhiteSpace(filter.SearchTerm))
             {
@@ -56,21 +56,21 @@ namespace CardOrgAPI.Repositories
 
         public int GetTotal(string searchTerm)
         {
-            var query = _context.Location.AsQueryable();
+            var query = _context.Locations.AsQueryable();
             query = Search(query, searchTerm);
             return query.Count();
         }
 
         public bool Exists(string searchTerm)
         {
-            return _context.Location
+            return _context.Locations
                 .Any(x => x.Name.ToLower().Contains(searchTerm.ToLower()));
 
         }
 
         public async Task<bool> InsertAsync(Location model, CancellationToken cancellationToken)
         {
-            await _context.Location.AddAsync(model, cancellationToken).ConfigureAwait(false);
+            await _context.Locations.AddAsync(model, cancellationToken).ConfigureAwait(false);
             if (model.LocationId > 0)
             {
                 _context.Entry(model).State = EntityState.Modified;

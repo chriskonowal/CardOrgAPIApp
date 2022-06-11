@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 #nullable disable
 
-namespace CardOrgAPI.Model
+namespace CardOrgAPI.Entities
 {
     public partial class TeamCard
     {

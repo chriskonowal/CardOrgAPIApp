@@ -1,7 +1,7 @@
 ﻿using CardOrgAPI.Contexts;
+using CardOrgAPI.Entities;
 using CardOrgAPI.Helpers;
 using CardOrgAPI.Interfaces.Repositories;
-using CardOrgAPI.Model;
 using CardOrgAPI.QueryFilters;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -23,7 +23,7 @@ namespace CardOrgAPI.Repositories
 
         public async Task<IEnumerable<Team>> GetAsync(GenericSearchQueryFilter filter, CancellationToken cancellationToken)
         {
-            var query = _context.Team.AsQueryable();
+            var query = _context.Teams.AsQueryable();
             query = Search(query, filter.SearchTerm);
 
             if (!String.IsNullOrWhiteSpace(filter.SortByField))
@@ -63,7 +63,7 @@ namespace CardOrgAPI.Repositories
 
         public int GetTotal(string searchTerm)
         {
-            var query = _context.Team.AsQueryable();
+            var query = _context.Teams.AsQueryable();
             query = Search(query, searchTerm);
             return query.Count();
         }

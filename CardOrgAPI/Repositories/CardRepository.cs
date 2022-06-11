@@ -1,5 +1,6 @@
 ﻿using CardOrgAPI.Constants;
 using CardOrgAPI.Contexts;
+using CardOrgAPI.Entities;
 using CardOrgAPI.Helpers;
 using CardOrgAPI.Interfaces.Repositories;
 using CardOrgAPI.Model;
@@ -25,7 +26,7 @@ namespace CardOrgAPI.Repositories
 
         public async Task<IEnumerable<Card>> GetCardsByAmountAsync(int count, CancellationToken cancellationToken)
         {
-            var query = _context.Card.AsQueryable();
+            var query = _context.Cards.AsQueryable();
             query = IncludeAllModels(query)
                     .Where(x => !String.IsNullOrWhiteSpace(x.FrontCardMainImagePath) &&
                     !String.IsNullOrWhiteSpace(x.BackCardMainImagePath))
@@ -37,7 +38,7 @@ namespace CardOrgAPI.Repositories
 
         public async Task<IEnumerable<Card>> GetAsync(CardSearchQueryFilter filter, CancellationToken cancellationToken)
         {
-            var query = _context.Card.AsQueryable();
+            var query = _context.Cards.AsQueryable();
             query = IncludeAllModels(query);
             query = QuickSearch(query, filter.QuickSearchTerm);
             query = FullSearchSort(query, filter.SearchSortQueryFilter);
@@ -55,7 +56,7 @@ namespace CardOrgAPI.Repositories
 
         public int GetTotal(CardSearchQueryFilter filter)
         {
-            var query = _context.Card.AsQueryable();
+            var query = _context.Cards.AsQueryable();
             query = IncludeAllModels(query);
             query = QuickSearch(query, filter.QuickSearchTerm);
             query = FullSearchSort(query, filter.SearchSortQueryFilter);

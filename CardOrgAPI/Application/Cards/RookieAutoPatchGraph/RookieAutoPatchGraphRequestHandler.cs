@@ -1,4 +1,5 @@
 ﻿using CardOrgAPI.Contexts;
+using CardOrgAPI.Entities;
 using CardOrgAPI.Responses;
 using MediatR;
 using System;
@@ -20,13 +21,13 @@ namespace CardOrgAPI.Application.Cards.RookieAutoPatchGraph
 
         public Task<ApiResponse<RookieAutoPatchGraphResponse>> Handle(RookieAutoPatchGraphRequest request, CancellationToken cancellationToken)
         {
-            var rookieCount = _context.Card
+            var rookieCount = _context.Cards
                 .Where(x => x.IsRookie).Count();
 
-            var autosCount = _context.Card
+            var autosCount = _context.Cards
                 .Where(x => x.IsAutograph).Count();
 
-            var patchCount = _context.Card
+            var patchCount = _context.Cards
                 .Where(x => x.IsPatch).Count();
 
             return Task.FromResult(new ApiResponse<RookieAutoPatchGraphResponse>()

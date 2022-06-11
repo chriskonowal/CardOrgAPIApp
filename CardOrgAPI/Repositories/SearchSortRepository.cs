@@ -1,4 +1,5 @@
 ﻿using CardOrgAPI.Contexts;
+using CardOrgAPI.Entities;
 using CardOrgAPI.Model;
 using CardOrgAPI.QueryFilters;
 using Microsoft.EntityFrameworkCore;
@@ -21,7 +22,7 @@ namespace CardOrgAPI.Repositories
 
         public async Task<bool> SaveAsync(SearchSort model, CancellationToken cancellationToken)
         {
-            await _context.SearchSort.AddAsync(model, cancellationToken).ConfigureAwait(false);
+            await _context.SearchSorts.AddAsync(model, cancellationToken).ConfigureAwait(false);
             if (model.SearchSortId > 0)
             {
                 _context.Entry(model).State = EntityState.Modified;

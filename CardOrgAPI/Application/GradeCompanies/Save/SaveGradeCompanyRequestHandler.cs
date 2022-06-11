@@ -1,4 +1,5 @@
-﻿using CardOrgAPI.Interfaces.Repositories;
+﻿using CardOrgAPI.Entities;
+using CardOrgAPI.Interfaces.Repositories;
 using CardOrgAPI.Model;
 using CardOrgAPI.Responses;
 using MediatR;

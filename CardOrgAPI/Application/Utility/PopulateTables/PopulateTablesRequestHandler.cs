@@ -63,12 +63,12 @@ namespace CardOrgAPI.Application.Utility.PopulateTables
 
         private async Task<int> PopulateYearsAsync(int processedAmount, CancellationToken cancellationToken)
         {
-            var years = new List<Year>();
+            var years = new List<Entities.Year>();
             using (var reader = new StreamReader(_path + "years.csv"))
             {
                 using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
                 {
-                    years = csv.GetRecords<Year>().ToList();
+                    years = csv.GetRecords<Entities.Year>().ToList();
                 }
             }
 
@@ -76,7 +76,7 @@ namespace CardOrgAPI.Application.Utility.PopulateTables
             {
                 _context.Database.ExecuteSqlRaw(@"SET IDENTITY_INSERT [dbo].[Year] ON");
                 _context.Database.ExecuteSqlRaw(@"DELETE FROM [dbo].[Year]");
-                await _context.Year.AddRangeAsync(years, cancellationToken).ConfigureAwait(false);
+                await _context.Years.AddRangeAsync(years, cancellationToken).ConfigureAwait(false);
                 processedAmount += await _context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
 
                 _context.Database.ExecuteSqlRaw(@"SET IDENTITY_INSERT [dbo].[Year] OFF");
@@ -88,12 +88,12 @@ namespace CardOrgAPI.Application.Utility.PopulateTables
 
         private async Task<int> PopulateTeamsAsync(int processedAmount, CancellationToken cancellationToken)
         {
-            var teams = new List<Team>();
+            var teams = new List<Entities.Team>();
             using (var reader = new StreamReader(_path + "teams.csv"))
             {
                 using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
                 {
-                    teams = csv.GetRecords<Team>().ToList();
+                    teams = csv.GetRecords<Entities.Team>().ToList();
                 }
             }
 
@@ -101,7 +101,7 @@ namespace CardOrgAPI.Application.Utility.PopulateTables
             {
                 _context.Database.ExecuteSqlRaw(@"SET IDENTITY_INSERT [dbo].[Team] ON");
                 _context.Database.ExecuteSqlRaw(@"DELETE FROM [dbo].[Team]");
-                await _context.Team.AddRangeAsync(teams, cancellationToken).ConfigureAwait(false);
+                await _context.Teams.AddRangeAsync(teams, cancellationToken).ConfigureAwait(false);
                 processedAmount += await _context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
 
                 _context.Database.ExecuteSqlRaw(@"SET IDENTITY_INSERT [dbo].[Team] OFF");
@@ -113,12 +113,12 @@ namespace CardOrgAPI.Application.Utility.PopulateTables
 
         private async Task<int> PopulateSportsAsync(int processedAmount, CancellationToken cancellationToken)
         {
-            var sports = new List<Sport>();
+            var sports = new List<Entities.Sport>();
             using (var reader = new StreamReader(_path + "sports.csv"))
             {
                 using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
                 {
-                    sports = csv.GetRecords<Sport>().ToList();
+                    sports = csv.GetRecords<Entities.Sport>().ToList();
                 }
             }
 
@@ -126,7 +126,7 @@ namespace CardOrgAPI.Application.Utility.PopulateTables
             {
                 _context.Database.ExecuteSqlRaw(@"SET IDENTITY_INSERT [dbo].[Sport] ON");
                 _context.Database.ExecuteSqlRaw(@"DELETE FROM [dbo].[Sport]");
-                await _context.Sport.AddRangeAsync(sports, cancellationToken).ConfigureAwait(false);
+                await _context.Sports.AddRangeAsync(sports, cancellationToken).ConfigureAwait(false);
                 processedAmount += await _context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
 
                 _context.Database.ExecuteSqlRaw(@"SET IDENTITY_INSERT [dbo].[Sport] OFF");
@@ -138,12 +138,12 @@ namespace CardOrgAPI.Application.Utility.PopulateTables
 
         private async Task<int> PopulateSetsAsync(int processedAmount, CancellationToken cancellationToken)
         {
-            var sets = new List<Set>();
+            var sets = new List<Entities.Set>();
             using (var reader = new StreamReader(_path + "sets.csv"))
             {
                 using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
                 {
-                    sets = csv.GetRecords<Set>().ToList();
+                    sets = csv.GetRecords<Entities.Set>().ToList();
                 }
             }
 
@@ -151,7 +151,7 @@ namespace CardOrgAPI.Application.Utility.PopulateTables
             {
                 _context.Database.ExecuteSqlRaw(@"SET IDENTITY_INSERT [dbo].[Set] ON");
                 _context.Database.ExecuteSqlRaw(@"DELETE FROM [dbo].[Set]");
-                await _context.Set.AddRangeAsync(sets, cancellationToken).ConfigureAwait(false);
+                await _context.Sets.AddRangeAsync(sets, cancellationToken).ConfigureAwait(false);
                 processedAmount += await _context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
 
                 _context.Database.ExecuteSqlRaw(@"SET IDENTITY_INSERT [dbo].[Set] OFF");
@@ -163,12 +163,12 @@ namespace CardOrgAPI.Application.Utility.PopulateTables
 
         private async Task<int> PopulatePlayersAsync(int processedAmount, CancellationToken cancellationToken) 
         {
-            var players = new List<Player>();
+            var players = new List<Entities.Player>();
             using (var reader = new StreamReader(_path + "players.csv"))
             {
                 using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
                 {
-                    players = csv.GetRecords<Player>().ToList();
+                    players = csv.GetRecords<Entities.Player>().ToList();
                 }
             }
 
@@ -176,7 +176,7 @@ namespace CardOrgAPI.Application.Utility.PopulateTables
             {
                 _context.Database.ExecuteSqlRaw(@"SET IDENTITY_INSERT [dbo].[Player] ON");
                 _context.Database.ExecuteSqlRaw(@"DELETE FROM [dbo].[Player]");
-                await _context.Player.AddRangeAsync(players, cancellationToken).ConfigureAwait(false);
+                await _context.Players.AddRangeAsync(players, cancellationToken).ConfigureAwait(false);
                 processedAmount += await _context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
 
                 _context.Database.ExecuteSqlRaw(@"SET IDENTITY_INSERT [dbo].[Player] OFF");
@@ -188,12 +188,12 @@ namespace CardOrgAPI.Application.Utility.PopulateTables
 
         private async Task<int> PopulateLocationsAsync(int processedAmount, CancellationToken cancellationToken)
         {
-            var locations = new List<Location>();
+            var locations = new List<Entities.Location>();
             using (var reader = new StreamReader(_path + "locations.csv"))
             {
                 using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
                 {
-                    locations = csv.GetRecords<Location>().ToList();
+                    locations = csv.GetRecords<Entities.Location>().ToList();
                 }
             }
 
@@ -201,7 +201,7 @@ namespace CardOrgAPI.Application.Utility.PopulateTables
             {
                 _context.Database.ExecuteSqlRaw(@"SET IDENTITY_INSERT [dbo].[Location] ON");
                 _context.Database.ExecuteSqlRaw(@"DELETE FROM [dbo].[Location]");
-                await _context.Location.AddRangeAsync(locations, cancellationToken).ConfigureAwait(false);
+                await _context.Locations.AddRangeAsync(locations, cancellationToken).ConfigureAwait(false);
                 processedAmount += await _context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
 
                 _context.Database.ExecuteSqlRaw(@"SET IDENTITY_INSERT [dbo].[Location] OFF");
@@ -213,12 +213,12 @@ namespace CardOrgAPI.Application.Utility.PopulateTables
 
         private async Task<int> PopulateGradeCompaniesAsync(int processedAmount, CancellationToken cancellationToken)
         {
-            var gradeCompanies = new List<GradeCompany>();
+            var gradeCompanies = new List<Entities.GradeCompany>();
             using (var reader = new StreamReader(_path + "gradeCompanies.csv"))
             {
                 using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
                 {
-                    gradeCompanies = csv.GetRecords<GradeCompany>().ToList();
+                    gradeCompanies = csv.GetRecords<Entities.GradeCompany>().ToList();
                 }
             }
 
@@ -226,7 +226,7 @@ namespace CardOrgAPI.Application.Utility.PopulateTables
             {
                 _context.Database.ExecuteSqlRaw(@"SET IDENTITY_INSERT [dbo].[GradeCompany] ON");
                 _context.Database.ExecuteSqlRaw(@"DELETE FROM [dbo].[GradeCompany]");
-                await _context.GradeCompany.AddRangeAsync(gradeCompanies, cancellationToken).ConfigureAwait(false);
+                await _context.GradeCompanies.AddRangeAsync(gradeCompanies, cancellationToken).ConfigureAwait(false);
                 processedAmount += await _context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
 
                 _context.Database.ExecuteSqlRaw(@"SET IDENTITY_INSERT [dbo].[GradeCompany] OFF");
@@ -251,7 +251,7 @@ namespace CardOrgAPI.Application.Utility.PopulateTables
             {
                 _context.Database.ExecuteSqlRaw(@"SET IDENTITY_INSERT [dbo].[Card] ON");
                 _context.Database.ExecuteSqlRaw(@"DELETE FROM [dbo].[Card]");
-                await _context.Card.AddRangeAsync(cards.Select(x => new Card()
+                await _context.Cards.AddRangeAsync(cards.Select(x => new Entities.Card()
                 {
                     BackCardMainImagePath = x.BackCardMainImagePath,
                     BackCardThumbnailImagePath = x.BackCardThumbnailImagePath,
@@ -305,7 +305,7 @@ namespace CardOrgAPI.Application.Utility.PopulateTables
             {
                 _context.Database.ExecuteSqlRaw(@"SET IDENTITY_INSERT [dbo].[PlayerCard] ON");
                 _context.Database.ExecuteSqlRaw(@"DELETE FROM [dbo].[PlayerCard]");
-                await _context.PlayerCard.AddRangeAsync(playerCards.Select(x => new PlayerCard()
+                await _context.PlayerCards.AddRangeAsync(playerCards.Select(x => new Entities.PlayerCard()
                 {
                     CardId = x.CardId,
                     PlayerCardId = x.PlayerCardId,
@@ -335,7 +335,7 @@ namespace CardOrgAPI.Application.Utility.PopulateTables
             {
                 _context.Database.ExecuteSqlRaw(@"SET IDENTITY_INSERT [dbo].[TeamCard] ON");
                 _context.Database.ExecuteSqlRaw(@"DELETE FROM [dbo].[TeamCard]");
-                await _context.TeamCard.AddRangeAsync(teamCards.Select(x => new TeamCard()
+                await _context.TeamCards.AddRangeAsync(teamCards.Select(x => new Entities.TeamCard()
                 {
                     CardId = x.CardId,
                     TeamCardId = x.TeamCardId,

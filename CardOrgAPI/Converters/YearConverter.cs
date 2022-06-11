@@ -1,5 +1,5 @@
 ﻿using CardOrgAPI.Application.Years.Search;
-using CardOrgAPI.Model;
+using CardOrgAPI.Entities;
 using CardOrgAPI.Responses;
 using System;
 using System.Collections.Generic;

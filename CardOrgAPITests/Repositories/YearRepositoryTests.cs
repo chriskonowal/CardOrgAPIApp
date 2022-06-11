@@ -1,5 +1,5 @@
 ﻿using CardOrgAPI.Interfaces.Repositories;
-using CardOrgAPI.Model;
+using CardOrgAPI.Entities;
 using CardOrgAPI.QueryFilters;
 using CardOrgAPI.Repositories;
 using FluentAssertions;

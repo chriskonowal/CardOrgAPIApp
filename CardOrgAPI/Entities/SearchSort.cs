@@ -3,10 +3,21 @@ using System.Collections.Generic;
 
 #nullable disable
 
-namespace CardOrgAPI.Model
+namespace CardOrgAPI.Entities
 {
     public partial class SearchSort
     {
+        public SearchSort()
+        {
+            SearchSortGradeCompanies = new HashSet<SearchSortGradeCompany>();
+            SearchSortGradeLocations = new HashSet<SearchSortGradeLocation>();
+            SearchSortPlayers = new HashSet<SearchSortPlayer>();
+            SearchSortSets = new HashSet<SearchSortSet>();
+            SearchSortSports = new HashSet<SearchSortSport>();
+            SearchSortTeams = new HashSet<SearchSortTeam>();
+            SearchSortYears = new HashSet<SearchSortYear>();
+        }
+
         public int SearchSortId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
@@ -69,5 +80,13 @@ namespace CardOrgAPI.Model
         public int LocationSort { get; set; }
         public int TimeStampSort { get; set; }
         public DateTime TimeStamp { get; set; }
+
+        public virtual ICollection<SearchSortGradeCompany> SearchSortGradeCompanies { get; set; }
+        public virtual ICollection<SearchSortGradeLocation> SearchSortGradeLocations { get; set; }
+        public virtual ICollection<SearchSortPlayer> SearchSortPlayers { get; set; }
+        public virtual ICollection<SearchSortSet> SearchSortSets { get; set; }
+        public virtual ICollection<SearchSortSport> SearchSortSports { get; set; }
+        public virtual ICollection<SearchSortTeam> SearchSortTeams { get; set; }
+        public virtual ICollection<SearchSortYear> SearchSortYears { get; set; }
     }
 }

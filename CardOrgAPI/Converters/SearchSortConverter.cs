@@ -1,4 +1,4 @@
-﻿using CardOrgAPI.Model;
+﻿using CardOrgAPI.Entities;
 using CardOrgAPI.Requests;
 using System;
 using System.Collections.Generic;
