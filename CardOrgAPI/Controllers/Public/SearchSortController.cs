@@ -1,4 +1,5 @@
 ﻿using CardOrgAPI.Application.SearchSort.Save;
+using CardOrgAPI.Application.SearchSort.Search;
 using CardOrgAPI.Responses;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -24,7 +25,6 @@ namespace CardOrgAPI.Controllers.Public
         [Route("save"), HttpPost]
         public async Task<ActionResult<ApiResponse>> SaveSearchSortAsync([FromBody] SaveSearchSortRequest request, CancellationToken cancellationToken)
         {
-
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
@@ -33,5 +33,15 @@ namespace CardOrgAPI.Controllers.Public
             return Ok(result);
         }
 
+        [Route("search"), HttpPost]
+        public async Task<ActionResult<SearchSearchSortResponse>> SearchSearchSortAsync([FromBody] SearchSearchSortRequest request, CancellationToken cancellationToken)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var result = await _mediator.Send(request, cancellationToken).ConfigureAwait(false);
+
+            return Ok(result);
+        }
     }
 }
