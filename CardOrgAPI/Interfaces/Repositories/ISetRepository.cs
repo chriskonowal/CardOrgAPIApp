@@ -13,5 +13,9 @@ namespace CardOrgAPI.Interfaces.Repositories
         Task<IEnumerable<Set>> GetAsync(GenericSearchQueryFilter filter, CancellationToken cancellationToken);
 
         int GetTotal(string searchTerm);
+
+        bool Exists(string searchTerm);
+        Task<bool> InsertAsync(Set model, CancellationToken cancellationToken);
+        Task<bool> DeleteAsync(int id, CancellationToken cancellationToken);
     }
 }

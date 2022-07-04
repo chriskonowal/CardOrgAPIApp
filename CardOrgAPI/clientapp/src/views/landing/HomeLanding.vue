@@ -444,7 +444,7 @@
                         label="Low"
                         outlined
                         v-model="gradeLow"
-                        prefix="$"
+                        prefix=""
                         type="number"
                       ></v-text-field>
                     </v-col>
@@ -453,7 +453,7 @@
                         label="High"
                         outlined
                         v-model="gradeHigh"
-                        prefix="$"
+                        prefix=""
                         type="number"
                       ></v-text-field>
                     </v-col>
@@ -468,7 +468,7 @@
                         label="Low"
                         outlined
                         v-model="copiesLow"
-                        prefix="$"
+                        prefix=""
                         type="number"
                       ></v-text-field>
                     </v-col>
@@ -477,7 +477,7 @@
                         label="High"
                         outlined
                         v-model="copiesHigh"
-                        prefix="$"
+                        prefix=""
                         type="number"
                       ></v-text-field>
                     </v-col>
@@ -492,7 +492,7 @@
                         label="Low"
                         outlined
                         v-model="serialNumberLow"
-                        prefix="$"
+                        prefix=""
                         type="number"
                       ></v-text-field>
                     </v-col>
@@ -501,7 +501,7 @@
                         label="High"
                         outlined
                         v-model="serialNumberHigh"
-                        prefix="$"
+                        prefix=""
                         type="number"
                       ></v-text-field>
                     </v-col>

@@ -77,6 +77,15 @@
               ></v-list-item-title
             >
           </v-list-item>
+          <v-list-item>
+            <v-list-item-title>
+              <router-link
+                to="/set-admin"
+                style="text-decoration: none; color: inherit"
+                >Set</router-link
+              ></v-list-item-title
+            >
+          </v-list-item>
         </v-list-group>
       </v-list>
     </v-menu>
