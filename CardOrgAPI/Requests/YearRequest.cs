@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace CardOrgAPI.Requests
 {
-    public class YearSearchRequest
+    public class YearRequest
     {
-        public int Year { get; set; }
+        public int YearId { get; set; }
     }
 }

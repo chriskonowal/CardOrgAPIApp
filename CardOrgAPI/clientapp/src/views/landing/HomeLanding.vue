@@ -97,6 +97,10 @@
                           @blur="readDataForPlayersFromAPI()"
                           @keyup="readDataForPlayersFromAPI()"
                         ></v-text-field>
+                        <span
+                          class="text-caption selected-search"
+                          v-html="showPlayersSelected(playersSelected)"
+                        ></span>
                       </template>
                     </v-data-table>
                   </v-row>
@@ -128,6 +132,10 @@
                           @blur="readDataForTeamsFromAPI()"
                           @keyup="readDataForTeamsFromAPI()"
                         ></v-text-field>
+                        <span
+                          class="text-caption selected-search"
+                          v-html="showTeamsSelected(teamsSelected)"
+                        ></span>
                       </template>
                     </v-data-table>
                   </v-row>
@@ -159,6 +167,10 @@
                           @blur="readDataForSportsFromAPI()"
                           @keyup="readDataForSportsFromAPI()"
                         ></v-text-field>
+                        <span
+                          class="text-caption selected-search"
+                          v-html="showNamesSelected(sportsSelected)"
+                        ></span>
                       </template>
                     </v-data-table>
                   </v-row>
@@ -190,6 +202,10 @@
                           @blur="readDataForYearsFromAPI()"
                           @keyup="readDataForYearsFromAPI()"
                         ></v-text-field>
+                        <span
+                          class="text-caption selected-search"
+                          v-html="showYearsSelected(yearsSelected)"
+                        ></span>
                       </template>
                     </v-data-table>
                   </v-row>
@@ -221,6 +237,10 @@
                           @blur="readDataForSetsFromAPI()"
                           @keyup="readDataForSetsFromAPI()"
                         ></v-text-field>
+                        <span
+                          class="text-caption selected-search"
+                          v-html="showNamesSelected(setsSelected)"
+                        ></span>
                       </template>
                     </v-data-table>
                   </v-row>
@@ -252,6 +272,10 @@
                           @blur="readDataForGradeCompaniesFromAPI()"
                           @keyup="readDataForGradeCompaniesFromAPI()"
                         ></v-text-field>
+                        <span
+                          class="text-caption selected-search"
+                          v-html="showNamesSelected(gradeCompaniesSelected)"
+                        ></span>
                       </template>
                     </v-data-table>
                   </v-row>
@@ -283,6 +307,10 @@
                           @blur="readDataForLocationsFromAPI()"
                           @keyup="readDataForLocationsFromAPI()"
                         ></v-text-field>
+                        <span
+                          class="text-caption selected-search"
+                          v-html="showNamesSelected(locationsSelected)"
+                        ></span>
                       </template>
                     </v-data-table>
                   </v-row>
@@ -484,7 +512,7 @@
                       <v-btn
                         depressed
                         elevation="2"
-                        @click="readDataFromAPI(false)"
+                        @click="readDataFromAPI(false, false)"
                         >Search</v-btn
                       >
                     </v-col>
@@ -492,7 +520,7 @@
                       <v-btn
                         depressed
                         elevation="2"
-                        @click="readDataFromAPI(true)"
+                        @click="readDataFromAPI(true, false)"
                         >Clear Search</v-btn
                       >
                     </v-col>
@@ -776,7 +804,7 @@
                       <v-btn
                         depressed
                         elevation="2"
-                        @click="readDataFromAPI(false)"
+                        @click="readDataFromAPI(false, false)"
                         >Sort</v-btn
                       >
                     </v-col>
@@ -784,7 +812,7 @@
                       <v-btn
                         depressed
                         elevation="2"
-                        @click="readDataFromAPI(true)"
+                        @click="readDataFromAPI(true, false)"
                         >Clear Sort</v-btn
                       >
                     </v-col>
@@ -816,32 +844,51 @@
                   :single-select="true"
                   item-key="searchSortId"
                 >
-                  <template v-slot:top>
-                    <div class="d-block pa-2">Search Sorts</div>
-                    <v-text-field
-                      v-model="searchSortsSearch"
-                      label="Search"
-                      class="mx-4"
-                      @blur="readDataForSearchSortsFromAPI()"
-                      @keyup="readDataForSearchSortsFromAPI()"
-                    ></v-text-field>
+                  <div class="d-block pa-2">Search Sorts</div>
+                  <v-text-field
+                    v-model="searchSortsSearch"
+                    label="Search"
+                    class="mx-4"
+                    @blur="readDataForSearchSortsFromAPI()"
+                    @keyup="readDataForSearchSortsFromAPI()"
+                  ></v-text-field>
+                  <template v-slot:[`item.actions`]="{ item }">
+                    <v-icon
+                      small
+                      class="mr-2"
+                      @click="editSearchSortItem(item)"
+                    >
+                      mdi-pencil
+                    </v-icon>
+                    <v-icon small @click="deleteSearchSortItem(item)">
+                      mdi-delete
+                    </v-icon>
                   </template>
                 </v-data-table>
               </v-row>
               <v-divider></v-divider>
               <v-row style="margin-top: 30px">
                 <v-col cols="12" sm="6" md="3">
-                  <v-btn depressed elevation="2" @click="readDataFromAPI(false)"
+                  <v-btn
+                    depressed
+                    elevation="2"
+                    @click="readDataFromAPI(false, true)"
                     >Load Search</v-btn
                   >
                 </v-col>
                 <v-col cols="12" sm="6" md="3">
-                  <v-btn depressed elevation="2" @click="readDataFromAPI(true)"
+                  <v-btn
+                    depressed
+                    elevation="2"
+                    @click="readDataFromAPI(true, true)"
                     >Clear Search</v-btn
                   >
                 </v-col>
                 <v-col cols="12" sm="6" md="3">
-                  <v-btn depressed elevation="2" @click="readDataFromAPI(true)"
+                  <v-btn
+                    depressed
+                    elevation="2"
+                    @click="openSaveSearchSortDialog()"
                     >Save Search</v-btn
                   >
                 </v-col>
@@ -856,8 +903,8 @@
           label="Quick Search"
           single-line
           hide-details
-          @blur="readDataFromAPI(false)"
-          @keyup="readDataFromAPI(false)"
+          @blur="readDataFromAPI(false, false)"
+          @keyup="readDataFromAPI(false, false)"
         ></v-text-field>
       </v-card-title>
       <v-data-table
@@ -942,6 +989,110 @@
           >
           <v-spacer></v-spacer>
         </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <v-dialog v-model="editSearchSortDialog" max-width="500px">
+      <v-card>
+        <v-card-title>
+          <span class="text-h5">{{ editSearchSortTitle }}</span>
+        </v-card-title>
+        <v-card-text>
+          <v-container>
+            <v-form
+              ref="editSearchSortForm"
+              v-model="editSearchSortValid"
+              lazy-validation
+            >
+              <v-row>
+                <v-col cols="12" sm="6" md="4">
+                  <v-text-field
+                    v-model="editedSearchSortItem.name"
+                    label="Name"
+                    type="text"
+                    name="editedItem.Name"
+                    :rules="[rules.required]"
+                    @blur="clearSearchSortAddMessage()"
+                    @keyup="clearSearchSortAddMessage()"
+                  ></v-text-field>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-textarea
+                  v-model="editedSearchSortItem.description"
+                  solo
+                  label="Description"
+                ></v-textarea>
+              </v-row>
+              <v-row>
+                <span style="color: red" v-show="hasSearchSortAddError">
+                  <v-icon color="red"> mdi-alert-rhombus-outline </v-icon>
+                  {{ addSearchSortErrorMessage }}
+                </span>
+              </v-row>
+            </v-form>
+          </v-container>
+        </v-card-text>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+
+          <v-btn color="blue darken-1" text @click="editSearchSortClose">
+            Cancel
+          </v-btn>
+          <v-btn color="blue darken-1" text @click="editSearchSortSave">
+            Save
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <v-dialog v-model="dialogSearchSortDelete" max-width="500px">
+      <v-card>
+        <v-card-title class="text-h5"
+          >Are you sure you want to delete this item?</v-card-title
+        >
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="blue darken-1" text @click="closeSearchSortDelete"
+            >Cancel</v-btn
+          >
+          <v-btn color="blue darken-1" text @click="deleteSearchSortItemConfirm"
+            >OK</v-btn
+          >
+          <v-spacer></v-spacer>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <v-dialog v-model="infoSearchSortDialog" max-width="500px">
+      <v-card>
+        <v-card-title>
+          <span class="text-h5">{{ infoSearchSortDialogTitleMessage }}</span>
+        </v-card-title>
+        <v-card-text>
+          <span style="color: green">
+            <v-icon color="green"> mdi-alarm-light-outline </v-icon>
+            {{ infoSearchSortDialogMessage }}
+          </span>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn
+              color="blue darken-1"
+              text
+              @click="infoSearchSortDialogClose"
+            >
+              Ok
+            </v-btn>
+          </v-card-actions>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
+    <v-dialog v-model="dialogSearchSortErrorDelete" max-width="500px">
+      <v-card>
+        <v-card-title class="text-h5"
+          >There was a problem deleting item.</v-card-title
+        >
+        <p style="color: red; text-align: center">
+          {{ deleteSearchSortErrorMessage }}
+        </p>
       </v-card>
     </v-dialog>
   </div>
@@ -1194,14 +1345,40 @@ export default {
           sortable: true,
           value: "description",
         },
+        { text: "Actions", value: "actions", sortable: false },
       ],
+      searchSortName: "",
+      searchSortDescription: "",
+      isSaveSearchButtonDisabled: false,
+      hasSearchSortInfoMessage: false,
+      searchSortInfoMessage: "",
+      editedSearchSortItem: {
+        searchSortId: 0,
+        name: "",
+        description: "",
+      },
+      rules: {
+        required: (value) => !!value || "Required.",
+      },
+      editSearchSortTitle: "",
+      editSearchSortValid: true,
+      hasSearchSortAddError: false,
+      addSearchSortErrorMessage: false,
+      dialogSearchSortDelete: false,
+      searchSortId: 0,
+      dialogSearchSortErrorDelete: false,
+      deleteSearchSortErrorMessage: "",
+      editSearchSortDialog: false,
+      infoSearchSortDialog: false,
+      infoSearchSortDialogMessage: "",
+      infoSearchSortDialogTitleMessage: "",
     };
   },
   watch: {
     options: {
       handler(newVal, oldVal) {
         if (newVal != oldVal) {
-          this.readDataFromAPI(false);
+          this.readDataFromAPI(false, false);
         }
       },
       deep: true,
@@ -1359,7 +1536,7 @@ export default {
       });
     },
     loadSearchSort() {},
-    readDataFromAPI(clear) {
+    readDataFromAPI(clear, isLoadSearch) {
       console.log("this.searchSortsSelected");
       console.log(this.searchSortsSelected);
       this.readDataForPlayersFromAPI();
@@ -1390,6 +1567,7 @@ export default {
         this.sportsSelected = searchSort.sportIds;
         this.setsSelected = searchSort.setIds;
         this.gradeCompaniesSelected = searchSort.gradeCompanyIds;
+        this.fetchI;
         this.locationsSelected = searchSort.locationIds;
         this.highestBeckettPriceSort = searchSort.highestBeckettPriceSort;
         this.lowestBeckettPriceLow = searchSort.lowestBeckettPriceLow;
@@ -1412,7 +1590,7 @@ export default {
         this.isSerialNumbered = searchSort.isSerialNumbered;
         this.cardDescriptionSort = searchSort.cardDescriptionSort;
         this.lowestBeckettPriceSort = searchSort.lowestBeckettPriceSort;
-        this.lowestCOMCPriceSort = searchSort.lowestCOMCPriceSort;
+        this.lowestCOMCPriceSort = searchSort.lowestComcpriceSort;
         this.ebayPriceSort = searchSort.ebayPriceSort;
         this.pricePaidSort = searchSort.pricePaidSort;
         this.hasImageSort = searchSort.hasImageSort;
@@ -1431,155 +1609,323 @@ export default {
         this.gradeCompanySort = searchSort.gradeCompanySort;
         this.locationSort = searchSort.locationSort;
         this.timeStampSort = searchSort.timeStampSort;
+      } else {
+        if (isLoadSearch) {
+          clear = true;
+          this.clearFilters();
+        }
       }
 
       this.loading = true;
+      if (clear) {
+        this.clearFilters();
+      }
       const { page, itemsPerPage } = this.options;
       let request = {};
-      if (clear) {
-        request = {
-          quickSearch: "",
-          rowsPerPage: itemsPerPage,
-          pageNumber: page,
-          searchSortRequest: {
-            cardDescription: "",
-            yearIds: [],
-            isGraded: false,
-            playerNameSort: 0,
-            teamSort: 0,
-            isRookie: false,
-            isAutograph: false,
-            isPatch: false,
-            isOnCardAutograph: false,
-            isGameWornJersey: false,
-            teamIds: [],
-            playerIds: [],
-            sportIds: [],
-            setIds: [],
-            gradeCompanyIds: [],
-            locationIds: [],
-            highestBeckettPriceSort: 0,
-            lowestBeckettPriceLow: 0,
-            lowestBeckettPriceHigh: 0,
-            highestBeckettPriceLow: 0,
-            highestBeckettPriceHigh: 0,
-            lowestCOMCPriceLow: 0,
-            lowestCOMCPriceHigh: 0,
-            ebayPriceLow: 0,
-            ebayPriceHigh: 0,
-            pricePaidLow: 0,
-            pricePaidHigh: 0,
-            gradeLow: 0,
-            gradeHigh: 0,
-            copiesLow: 0,
-            copiesHigh: 0,
-            serialNumberLow: 0,
-            serialNumberHigh: 0,
-            hasImage: false,
-            isSerialNumbered: false,
-            cardDescriptionSort: 0,
-            lowestBeckettPriceSort: 0,
-            lowestCOMCPriceSort: 0,
-            ebayPriceSort: 0,
-            pricePaidSort: 0,
-            hasImageSort: 0,
-            isGradedSort: 0,
-            copiesSort: 0,
-            serialNumberSort: 0,
-            gradeSort: 0,
-            isRookieSort: 0,
-            isAutographSort: 0,
-            isPatchSort: 0,
-            isOnCardAutographSort: 0,
-            isGameWornJerseySort: 0,
-            sportSort: 0,
-            yearSort: 0,
-            setSort: 0,
-            gradeCompanySort: 0,
-            locationSort: 0,
-            timeStampSort: 0,
-          },
-        };
-      } else {
-        request = {
-          quickSearch: this.search,
-          rowsPerPage: itemsPerPage,
-          pageNumber: page,
-          searchSortRequest: {
-            cardDescription: this.txtCardDescription,
-            yearIds: this.getYearIds(this.yearsSelected),
-            isGraded: this.isGraded,
-            playerNameSort: parseInt(this.playerNameSort),
-            teamSort: parseInt(this.teamSort),
-            isRookie: this.isRookie,
-            isAutograph: this.isAutograph,
-            isPatch: this.isPatch,
-            isOnCardAutograph: this.isOnCardAutograph,
-            isGameWornJersey: this.isGameWornJersey,
-            teamIds: this.getTeamsIds(this.teamsSelected),
-            playerIds: this.getPlayersIds(this.playersSelected),
-            sportIds: this.getSportIds(this.sportsSelected),
-            setIds: this.getSetIds(this.setsSelected),
-            gradeCompanyIds: this.getGradeCompanyIds(
-              this.gradeCompaniesSelected
-            ),
-            locationIds: this.getLocationIds(this.locationsSelected),
-            highestBeckettPriceSort: parseInt(this.highestBeckettPriceSort),
-            lowestBeckettPriceLow: this.lowestBeckettPriceLow,
-            lowestBeckettPriceHigh: this.lowestBeckettPriceHigh,
-            highestBeckettPriceLow: this.highestBeckettPriceLow,
-            highestBeckettPriceHigh: this.highestBeckettPriceHigh,
-            lowestCOMCPriceLow: this.lowestCOMCPriceLow,
-            lowestCOMCPriceHigh: this.lowestCOMCPriceHigh,
-            ebayPriceLow: this.ebayPriceLow,
-            ebayPriceHigh: this.ebayPriceHigh,
-            pricePaidLow: this.pricePaidLow,
-            pricePaidHigh: this.pricePaidHigh,
-            gradeLow: this.gradeLow,
-            gradeHigh: this.gradeHigh,
-            copiesLow: this.copiesLow,
-            copiesHigh: this.copiesHigh,
-            serialNumberLow: this.serialNumberLow,
-            serialNumberHigh: this.serialNumberHigh,
-            hasImage: this.hasImage,
-            isSerialNumbered: this.isSerialNumbered,
-            cardDescriptionSort: parseInt(this.cardDescriptionSort),
-            lowestBeckettPriceSort: parseInt(this.lowestBeckettPriceSort),
-            lowestCOMCPriceSort: parseInt(this.lowestCOMCPriceSort),
-            ebayPriceSort: parseInt(this.ebayPriceSort),
-            pricePaidSort: parseInt(this.pricePaidSort),
-            hasImageSort: parseInt(this.hasImageSort),
-            isGradedSort: parseInt(this.isGradedSort),
-            copiesSort: parseInt(this.copiesSort),
-            serialNumberSort: parseInt(this.serialNumberSort),
-            gradeSort: parseInt(this.gradeSort),
-            isRookieSort: parseInt(this.isRookieSort),
-            isAutographSort: parseInt(this.isAutographSort),
-            isPatchSort: parseInt(this.isPatchSort),
-            isOnCardAutographSort: parseInt(this.isOnCardAutographSort),
-            isGameWornJerseySort: parseInt(this.isGameWornJerseySort),
-            sportSort: parseInt(this.sportSort),
-            yearSort: parseInt(this.yearSort),
-            setSort: parseInt(this.setSort),
-            gradeCompanySort: parseInt(this.gradeCompanySort),
-            locationSort: parseInt(this.locationSort),
-            timeStampSort: parseInt(this.timeStampSort),
-          },
-        };
-      }
-
+      let searchSortRequest = this.buildSearchSortRequest();
+      request = {
+        quickSearch: this.search,
+        rowsPerPage: itemsPerPage,
+        pageNumber: page,
+        searchSortRequest: searchSortRequest,
+      };
       console.log("request:");
       console.log(request);
       axios
         .post(process.env.VUE_APP_ROOT_API + "public/cards", request)
         .then((response) => {
-          console.log(response.data);
+          //console.log("response.data");
+          //console.log(response.data);
           if (response.data.isSuccessful) {
             this.cards = response.data.value.cards;
             this.totalCards = response.data.value.totalCards;
             this.loading = false;
           }
         });
+      console.log("end card request:");
+    },
+    clearFilters() {
+      this.txtCardDescription = "";
+      this.yearsSelected = [];
+      this.isGraded = false;
+      this.playerNameSort = 0;
+      this.teamSort = 0;
+      this.isRookie = false;
+      this.isAutograph = false;
+      this.isPatch = false;
+      this.isOnCardAutograph = false;
+      this.isGameWornJersey = false;
+      this.teamsSelected = [];
+      this.playersSelected = [];
+      this.sportsSelected = [];
+      this.setsSelected = [];
+      this.gradeCompaniesSelected = [];
+      this.locationsSelected = [];
+      this.highestBeckettPriceSort = 0;
+      this.lowestBeckettPriceLow = 0;
+      this.lowestBeckettPriceHigh = 0;
+      this.highestBeckettPriceLow = 0;
+      this.highestBeckettPriceHigh = 0;
+      this.lowestCOMCPriceLow = 0;
+      this.lowestCOMCPriceHigh = 0;
+      this.ebayPriceLow = 0;
+      this.ebayPriceHigh = 0;
+      this.pricePaidLow = 0;
+      this.pricePaidHigh = 0;
+      this.gradeLow = 0;
+      this.gradeHigh = 0;
+      this.copiesLow = 0;
+      this.copiesHigh = 0;
+      this.serialNumberLow = 0;
+      this.serialNumberHigh = 0;
+      this.hasImage = false;
+      this.isSerialNumbered = false;
+      this.cardDescriptionSort = 0;
+      this.lowestBeckettPriceSort = 0;
+      this.lowestCOMCPriceSort = 0;
+      this.ebayPriceSort = 0;
+      this.pricePaidSort = 0;
+      this.hasImageSort = 0;
+      this.isGradedSort = 0;
+      this.copiesSort = 0;
+      this.serialNumberSort = 0;
+      this.gradeSort = 0;
+      this.isRookieSort = 0;
+      this.isAutographSort = 0;
+      this.isPatchSort = 0;
+      this.isOnCardAutographSort = 0;
+      this.isGameWornJerseySort = 0;
+      this.sportSort = 0;
+      this.yearSort = 0;
+      this.setSort = 0;
+      this.gradeCompanySort = 0;
+      this.locationSort = 0;
+      this.timeStampSort = 0;
+      this.searchSortsSelected = [];
+    },
+    showNamesSelected(selectedArray) {
+      let names = "";
+      if (selectedArray != null) {
+        for (var i = 0; i < selectedArray.length; i++) {
+          if (names.length > 0) {
+            names += ", ";
+          }
+          names += selectedArray[i].name;
+        }
+      }
+      if (names.length > 0) {
+        names = "Selected: " + names;
+      }
+      return names;
+    },
+    showYearsSelected(selectedArray) {
+      let years = "";
+      if (selectedArray != null) {
+        for (var i = 0; i < selectedArray.length; i++) {
+          if (years.length > 0) {
+            years += ", ";
+          }
+          years += selectedArray[i].year;
+        }
+      }
+      if (years.length > 0) {
+        years = "Selected: " + years;
+      }
+      return years;
+    },
+    showPlayersSelected(selectedArray) {
+      let players = "";
+      if (selectedArray != null) {
+        for (var i = 0; i < selectedArray.length; i++) {
+          if (players.length > 0) {
+            players += ", ";
+          }
+          players += selectedArray[i].fullName;
+        }
+      }
+      if (players.length > 0) {
+        players = "Selected: " + players;
+      }
+      return players;
+    },
+    showTeamsSelected(selectedArray) {
+      let teams = "";
+      if (selectedArray != null) {
+        for (var i = 0; i < selectedArray.length; i++) {
+          if (teams.length > 0) {
+            teams += ", ";
+          }
+          teams += selectedArray[i].team;
+        }
+      }
+      if (teams.length > 0) {
+        teams = "Selected: " + teams;
+      }
+      return teams;
+    },
+    buildSearchSortRequest() {
+      let request = {};
+      request = {
+        name: this.searchSortName,
+        description: this.searchSortDescription,
+        cardDescription: this.txtCardDescription,
+        yearIds: this.yearsSelected,
+        isGraded: this.isGraded,
+        playerNameSort: parseInt(this.playerNameSort),
+        teamSort: parseInt(this.teamSort),
+        isRookie: this.isRookie,
+        isAutograph: this.isAutograph,
+        isPatch: this.isPatch,
+        isOnCardAutograph: this.isOnCardAutograph,
+        isGameWornJersey: this.isGameWornJersey,
+        teamIds: this.teamsSelected,
+        playerIds: this.playersSelected,
+        sportIds: this.sportsSelected,
+        setIds: this.setsSelected,
+        gradeCompanyIds: this.gradeCompaniesSelected,
+        locationIds: this.locationsSelected,
+        highestBeckettPriceSort: parseInt(this.highestBeckettPriceSort),
+        lowestBeckettPriceLow: this.lowestBeckettPriceLow,
+        lowestBeckettPriceHigh: this.lowestBeckettPriceHigh,
+        highestBeckettPriceLow: this.highestBeckettPriceLow,
+        highestBeckettPriceHigh: this.highestBeckettPriceHigh,
+        lowestCOMCPriceLow: this.lowestCOMCPriceLow,
+        lowestCOMCPriceHigh: this.lowestCOMCPriceHigh,
+        ebayPriceLow: this.ebayPriceLow,
+        ebayPriceHigh: this.ebayPriceHigh,
+        pricePaidLow: this.pricePaidLow,
+        pricePaidHigh: this.pricePaidHigh,
+        gradeLow: this.gradeLow,
+        gradeHigh: this.gradeHigh,
+        copiesLow: this.copiesLow,
+        copiesHigh: this.copiesHigh,
+        serialNumberLow: this.serialNumberLow,
+        serialNumberHigh: this.serialNumberHigh,
+        hasImage: this.hasImage,
+        isSerialNumbered: this.isSerialNumbered,
+        cardDescriptionSort: parseInt(this.cardDescriptionSort),
+        lowestBeckettPriceSort: parseInt(this.lowestBeckettPriceSort),
+        lowestCOMCPriceSort: parseInt(this.lowestCOMCPriceSort),
+        ebayPriceSort: parseInt(this.ebayPriceSort),
+        pricePaidSort: parseInt(this.pricePaidSort),
+        hasImageSort: parseInt(this.hasImageSort),
+        isGradedSort: parseInt(this.isGradedSort),
+        copiesSort: parseInt(this.copiesSort),
+        serialNumberSort: parseInt(this.serialNumberSort),
+        gradeSort: parseInt(this.gradeSort),
+        isRookieSort: parseInt(this.isRookieSort),
+        isAutographSort: parseInt(this.isAutographSort),
+        isPatchSort: parseInt(this.isPatchSort),
+        isOnCardAutographSort: parseInt(this.isOnCardAutographSort),
+        isGameWornJerseySort: parseInt(this.isGameWornJerseySort),
+        sportSort: parseInt(this.sportSort),
+        yearSort: parseInt(this.yearSort),
+        setSort: parseInt(this.setSort),
+        gradeCompanySort: parseInt(this.gradeCompanySort),
+        locationSort: parseInt(this.locationSort),
+        timeStampSort: parseInt(this.timeStampSort),
+      };
+      return request;
+    },
+    openSaveSearchSortDialog() {
+      this.editSearchSortTitle = "Add Search Sort";
+      this.editedSearchSortItem = {};
+      this.editSearchSortDialog = true;
+    },
+    editSearchSortItem(item) {
+      console.log(item);
+      this.editSearchSortTitle = "Edit Search Sort";
+      this.editedSearchSortItem = item;
+      this.editSearchSortDialog = true;
+    },
+    editSearchSortSave() {
+      this.clearSearchSortAddMessage();
+      var isEdit = this.editedSearchSortItem.searchSortId > 0;
+      var validEdit = this.$refs.editSearchSortForm.validate();
+      if (!validEdit) {
+        return;
+      }
+      this.hasSearchSortInfoMessage = false;
+      let request = {};
+      let searchSortRequest = this.buildSearchSortRequest();
+      searchSortRequest.searchSortId = this.editedSearchSortItem.searchSortId;
+      searchSortRequest.name = this.editedSearchSortItem.name;
+      searchSortRequest.description = this.editedSearchSortItem.description;
+
+      request = {
+        searchSortRequest: searchSortRequest,
+      };
+      console.log("request:");
+      console.log(request);
+      axios
+        .post(process.env.VUE_APP_ROOT_API + "public/search_sort/save", request)
+        .then((response) => {
+          //console.log("response.data");
+          //console.log(response.data);
+          if (!response.data.isSuccessful) {
+            this.hasAddError = true;
+            this.addErrorMessage = response.data.errorMessage;
+          } else {
+            this.readDataForSearchSortsFromAPI();
+            this.editSearchSortDialog = false;
+            this.infoSearchSortDialog = true;
+            if (isEdit) {
+              this.infoSearchSortDialogMessage = "Edit successful!";
+              this.infoSearchSortDialogTitleMessage = "Edit Search Sort";
+            } else {
+              this.infoSearchSortDialogMessage = "Add successful!";
+              this.infoSearchSortDialogTitleMessage = "Add Search Sort";
+            }
+          }
+        });
+    },
+    editSearchSortClose() {
+      this.searchSortName = "";
+      this.searchSortDescription = "";
+      this.hasSearchSortInfoMessage = false;
+      this.isSaveSearchButtonDisabled = false;
+      this.editSearchSortDialog = false;
+      this.searchSortInfoMessage = "";
+      this.editSearchSortDialog = false;
+    },
+    infoSearchSortDialogClose() {
+      this.infoSearchSortDialog = false;
+    },
+    deleteSearchSortItem(item) {
+      this.SearchSortId = item.searchSortId;
+      this.dialogSearchSortDelete = true;
+    },
+    closeSearchSortDelete() {
+      this.dialogSearchSortDelete = false;
+    },
+    deleteSearchSortItemConfirm() {
+      var request = {
+        id: this.searchSortId,
+      };
+      console.log(request);
+      axios({
+        method: "post", //you can set what request you want to be
+        url: process.env.VUE_APP_ROOT_API + "admin/test/delete",
+        data: request,
+      }).then((response) => {
+        console.log(response.data);
+        if (!response.data.isSuccessful) {
+          this.closeSearchSortDelete();
+          this.dialogSearchSortErrorDelete = true;
+          this.deleteSearchSortErrorMessage = response.data.errorMessage;
+        } else {
+          this.readDataFromAPI();
+          this.editSearchSortDialog = false;
+          this.infoSearchSortDialog = true;
+          this.infoSearchSortDialogMessage = "Delete successful!";
+          this.infoSearchSortDialogTitleMessage = "Delete Location";
+          this.closeSearchSortDelete();
+        }
+      });
+    },
+    clearSearchSortAddMessage() {
+      this.hasSearchSortAddError = false;
+      this.addSearchSortErrorMessage = "";
     },
     onClickFrontImage(item) {
       this.showFrontImage = "/Uploads/Mid/" + item.frontCardMainImagePath;
@@ -1606,7 +1952,7 @@ export default {
     },
     readDataForPlayersFromAPI() {
       this.teamsLoading = true;
-      console.log(this.playersOptions);
+      //console.log(this.playersOptions);
       const { sortBy, sortDesc, page, itemsPerPage } = this.playersOptions;
 
       const request = {
@@ -1616,11 +1962,11 @@ export default {
         sortByField: sortBy != null ? sortBy[0] : "",
         isSortDesc: sortDesc != null ? sortDesc[0] : false,
       };
-      console.log(request);
+      //console.log(request);
       axios
         .post(process.env.VUE_APP_ROOT_API + "admin/players", request)
         .then((response) => {
-          console.log(response.data);
+          //console.log(response.data);
           if (response.data.isSuccessful) {
             this.players = response.data.value.players;
             this.totalPlayers = response.data.value.totalPlayers;
@@ -1631,7 +1977,7 @@ export default {
     },
     readDataForTeamsFromAPI() {
       this.teamsLoading = true;
-      console.log(this.teamsOptions);
+      //console.log(this.teamsOptions);
       const { sortBy, sortDesc, page, itemsPerPage } = this.teamsOptions;
 
       const request = {
@@ -1641,11 +1987,11 @@ export default {
         sortByField: sortBy != null ? sortBy[0] : "",
         isSortDesc: sortDesc != null ? sortDesc[0] : false,
       };
-      console.log(request);
+      //console.log(request);
       axios
         .post(process.env.VUE_APP_ROOT_API + "admin/teams", request)
         .then((response) => {
-          console.log(response.data);
+          //console.log(response.data);
           if (response.data.isSuccessful) {
             this.teams = response.data.value.teams;
             this.totalTeams = response.data.value.total;
@@ -1656,7 +2002,7 @@ export default {
     },
     readDataForSportsFromAPI() {
       this.sportsLoading = true;
-      console.log(this.sportsOptions);
+      //console.log(this.sportsOptions);
       const { sortBy, sortDesc, page, itemsPerPage } = this.sportsOptions;
 
       const request = {
@@ -1666,11 +2012,11 @@ export default {
         sortByField: sortBy != null ? sortBy[0] : "",
         isSortDesc: sortDesc != null ? sortDesc[0] : false,
       };
-      console.log(request);
+      //console.log(request);
       axios
         .post(process.env.VUE_APP_ROOT_API + "admin/sports", request)
         .then((response) => {
-          console.log(response.data);
+          //console.log(response.data);
           if (response.data.isSuccessful) {
             this.sports = response.data.value.sports;
             this.totalSports = response.data.value.total;
@@ -1681,7 +2027,7 @@ export default {
     },
     readDataForYearsFromAPI() {
       this.yearsLoading = true;
-      console.log(this.yearsOptions);
+      //console.log(this.yearsOptions);
       const { sortBy, sortDesc, page, itemsPerPage } = this.yearsOptions;
       var searchYear = 0;
       if (this.yearsSearch.length == 4 && this.validInt(this.yearsSearch)) {
@@ -1695,11 +2041,11 @@ export default {
         sortByField: sortBy != null ? sortBy[0] : "",
         isSortDesc: sortDesc != null ? sortDesc[0] : false,
       };
-      console.log(request);
+      //console.log(request);
       axios
         .post(process.env.VUE_APP_ROOT_API + "admin/years", request)
         .then((response) => {
-          console.log(response.data);
+          //console.log(response.data);
           if (response.data.isSuccessful) {
             this.years = response.data.value.years;
             this.totalYears = response.data.value.totalYears;
@@ -1710,7 +2056,7 @@ export default {
     },
     readDataForSetsFromAPI() {
       this.setsLoading = true;
-      console.log(this.setsOptions);
+      //console.log(this.setsOptions);
       const { sortBy, sortDesc, page, itemsPerPage } = this.setsOptions;
       const request = {
         searchTerm: this.setsSearch,
@@ -1719,11 +2065,11 @@ export default {
         sortByField: sortBy != null ? sortBy[0] : "",
         isSortDesc: sortDesc != null ? sortDesc[0] : false,
       };
-      console.log(request);
+      //console.log(request);
       axios
         .post(process.env.VUE_APP_ROOT_API + "admin/sets", request)
         .then((response) => {
-          console.log(response.data);
+          //console.log(response.data);
           if (response.data.isSuccessful) {
             this.sets = response.data.value.sets;
             this.totalSets = response.data.value.total;
@@ -1734,7 +2080,7 @@ export default {
     },
     readDataForGradeCompaniesFromAPI() {
       this.gradeCompaniesLoading = true;
-      console.log(this.gradeCompaniesOptions);
+      //console.log(this.gradeCompaniesOptions);
       const { sortBy, sortDesc, page, itemsPerPage } =
         this.gradeCompaniesOptions;
       const request = {
@@ -1744,11 +2090,11 @@ export default {
         sortByField: sortBy != null ? sortBy[0] : "",
         isSortDesc: sortDesc != null ? sortDesc[0] : false,
       };
-      console.log(request);
+      //console.log(request);
       axios
         .post(process.env.VUE_APP_ROOT_API + "admin/grade_companies", request)
         .then((response) => {
-          console.log(response.data);
+          //console.log(response.data);
           if (response.data.isSuccessful) {
             this.gradeCompanies = response.data.value.gradeCompanies;
             this.totalGradeCompanies = response.data.value.total;
@@ -1759,7 +2105,7 @@ export default {
     },
     readDataForLocationsFromAPI() {
       this.locationsLoading = true;
-      console.log(this.locationsOptions);
+      //console.log(this.locationsOptions);
       const { sortBy, sortDesc, page, itemsPerPage } = this.locationsOptions;
       const request = {
         searchTerm: this.locationsSearch,
@@ -1768,11 +2114,11 @@ export default {
         sortByField: sortBy != null ? sortBy[0] : "",
         isSortDesc: sortDesc != null ? sortDesc[0] : false,
       };
-      console.log(request);
+      //console.log(request);
       axios
         .post(process.env.VUE_APP_ROOT_API + "admin/locations", request)
         .then((response) => {
-          console.log(response.data);
+          //console.log(response.data);
           if (response.data.isSuccessful) {
             this.locations = response.data.value.locations;
             this.totalLocations = response.data.value.total;
@@ -1783,7 +2129,7 @@ export default {
     },
     readDataForSearchSortsFromAPI() {
       this.searchSortsLoading = true;
-      console.log(this.searchSortsOptions);
+      //console.log(this.searchSortsOptions);
       const { sortBy, sortDesc, page, itemsPerPage } = this.searchSortsOptions;
 
       const request = {
@@ -1793,14 +2139,14 @@ export default {
         sortByField: sortBy != null ? sortBy[0] : "",
         isSortDesc: sortDesc != null ? sortDesc[0] : false,
       };
-      console.log(request);
+      //console.log(request);
       axios
         .post(
           process.env.VUE_APP_ROOT_API + "public/search_sort/search",
           request
         )
         .then((response) => {
-          console.log(response.data);
+          //console.log(response.data);
           if (response.data.isSuccessful) {
             this.searchSorts = response.data.value.searchSorts;
             this.totalSearchSorts = response.data.value.total;
@@ -1811,55 +2157,6 @@ export default {
     },
     validInt: function (text) {
       return text % 1 === 0;
-    },
-    getPlayersIds(playerArray) {
-      var ids = new Array();
-      for (var i = 0; i < playerArray.length; i++) {
-        ids.push(parseInt(playerArray[i].playerId));
-      }
-      return ids;
-    },
-    getTeamsIds(teamArray) {
-      var ids = new Array();
-      for (var i = 0; i < teamArray.length; i++) {
-        ids.push(parseInt(teamArray[i].teamId));
-      }
-      return ids;
-    },
-    getSportIds(sportArray) {
-      var ids = new Array();
-      for (var i = 0; i < sportArray.length; i++) {
-        ids.push(parseInt(sportArray[i].sportId));
-      }
-      return ids;
-    },
-    getYearIds(yearArray) {
-      var ids = new Array();
-      for (var i = 0; i < yearArray.length; i++) {
-        ids.push(parseInt(yearArray[i].yearId));
-      }
-      return ids;
-    },
-    getSetIds(setArray) {
-      var ids = new Array();
-      for (var i = 0; i < setArray.length; i++) {
-        ids.push(parseInt(setArray[i].setId));
-      }
-      return ids;
-    },
-    getGradeCompanyIds(gradeCompanyArray) {
-      var ids = new Array();
-      for (var i = 0; i < gradeCompanyArray.length; i++) {
-        ids.push(parseInt(gradeCompanyArray[i].gradeCompanyId));
-      }
-      return ids;
-    },
-    getLocationIds(locationArray) {
-      var ids = new Array();
-      for (var i = 0; i < locationArray.length; i++) {
-        ids.push(parseInt(locationArray[i].locationId));
-      }
-      return ids;
     },
   },
 };
@@ -1889,5 +2186,9 @@ export default {
 }
 .elevation-1 {
   margin-top: 30px;
+}
+.selected-search {
+  padding: 15px;
+  word-break: break-word;
 }
 </style>

@@ -19,7 +19,7 @@ namespace CardOrgAPI.Responses
         public IEnumerable<int> SportIds { get; set; }
         public IEnumerable<int> YearIds { get; set; }
         public IEnumerable<int> SetIds { get; set; }
-        public IEnumerable<int> GradeCompanyIds { get; set; }
+        public IEnumerable<GradeCompanyResponse> GradeCompanyIds { get; set; }
         public IEnumerable<int> LocationIds { get; set; }
         public string CardDescription { get; set; }
         public decimal LowestBeckettPriceLow { get; set; }

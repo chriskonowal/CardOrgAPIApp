@@ -73,11 +73,11 @@ namespace CardOrgAPI.Repositories
                         await _context.SaveChangesAsync(cancellationToken);
                     }
                 }
+                model.TimeStamp = DateTime.Now;
                 await _context.SearchSorts.AddAsync(model, cancellationToken).ConfigureAwait(false);
                 if (model.SearchSortId > 0)
                 {
-                    _context.Entry(model).State = EntityState.Modified;
-                   
+                    _context.Entry(model).State = EntityState.Modified;   
                 }
 
                 await _context.SaveChangesAsync().ConfigureAwait(false);

@@ -16,13 +16,13 @@ namespace CardOrgAPI.Requests
         public bool IsPatch { get; set; }
         public bool IsOnCardAutograph { get; set; }
         public bool IsGameWornJersey { get; set; }
-        public IEnumerable<int> PlayerIds { get; set; }
-        public IEnumerable<int> TeamIds { get; set; }
-        public IEnumerable<int> SportIds { get; set; }
-        public IEnumerable<int> YearIds { get; set; }
-        public IEnumerable<int> SetIds { get; set; }
-        public IEnumerable<int> GradeCompanyIds { get; set; }
-        public IEnumerable<int> LocationIds { get; set; }
+        public IEnumerable<PlayerRequest> PlayerIds { get; set; }
+        public IEnumerable<TeamRequest> TeamIds { get; set; }
+        public IEnumerable<SportRequest> SportIds { get; set; }
+        public IEnumerable<YearRequest> YearIds { get; set; }
+        public IEnumerable<SetRequest> SetIds { get; set; }
+        public IEnumerable<GradeCompanyRequest> GradeCompanyIds { get; set; }
+        public IEnumerable<LocationRequest> LocationIds { get; set; }
         public string CardDescription { get; set; }
         public decimal LowestBeckettPriceLow { get; set; }
         public decimal LowestBeckettPriceHigh { get; set; }

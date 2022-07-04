@@ -177,7 +177,7 @@ namespace CardOrgAPI.Converters
                 EbayPriceHigh = source.EbayPriceHigh,
                 EbayPriceLow = source.EbayPriceLow,
                 EbayPriceSort = source.EbayPriceSort,
-                GradeCompanyIds = source.SearchSortGradeCompanies.Select(x => x.GradeCompanyId),
+                GradeCompanyIds = source.SearchSortGradeCompanies.Select(x => new GradeCompanyResponse(){ GradeCompanyId = x.GradeCompanyId }),
                 GradeCompanySort = source.GradeCompanySort,
                 GradeHigh = source.GradeHigh,
                 GradeLow = source.GradeLow,
