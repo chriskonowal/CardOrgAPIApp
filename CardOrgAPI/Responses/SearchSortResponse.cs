@@ -14,13 +14,13 @@ namespace CardOrgAPI.Responses
         public bool IsPatch { get; set; }
         public bool IsOnCardAutograph { get; set; }
         public bool IsGameWornJersey { get; set; }
-        public IEnumerable<int> PlayerIds { get; set; }
-        public IEnumerable<int> TeamIds { get; set; }
-        public IEnumerable<int> SportIds { get; set; }
-        public IEnumerable<int> YearIds { get; set; }
-        public IEnumerable<int> SetIds { get; set; }
+        public IEnumerable<PlayerResponse> PlayerIds { get; set; }
+        public IEnumerable<TeamResponse> TeamIds { get; set; }
+        public IEnumerable<SportResponse> SportIds { get; set; }
+        public IEnumerable<YearResponse> YearIds { get; set; }
+        public IEnumerable<SetResponse> SetIds { get; set; }
         public IEnumerable<GradeCompanyResponse> GradeCompanyIds { get; set; }
-        public IEnumerable<int> LocationIds { get; set; }
+        public IEnumerable<LocationResponse> LocationIds { get; set; }
         public string CardDescription { get; set; }
         public decimal LowestBeckettPriceLow { get; set; }
         public decimal LowestBeckettPriceHigh { get; set; }

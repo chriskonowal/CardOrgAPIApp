@@ -1535,7 +1535,6 @@ export default {
         currency: "USD",
       });
     },
-    loadSearchSort() {},
     readDataFromAPI(clear, isLoadSearch) {
       console.log("this.searchSortsSelected");
       console.log(this.searchSortsSelected);
@@ -1892,7 +1891,7 @@ export default {
       this.infoSearchSortDialog = false;
     },
     deleteSearchSortItem(item) {
-      this.SearchSortId = item.searchSortId;
+      this.searchSortId = item.searchSortId;
       this.dialogSearchSortDelete = true;
     },
     closeSearchSortDelete() {
@@ -1902,10 +1901,11 @@ export default {
       var request = {
         id: this.searchSortId,
       };
+      console.log("delete request");
       console.log(request);
       axios({
         method: "post", //you can set what request you want to be
-        url: process.env.VUE_APP_ROOT_API + "admin/test/delete",
+        url: process.env.VUE_APP_ROOT_API + "public/search_sort/delete",
         data: request,
       }).then((response) => {
         console.log(response.data);
@@ -1918,7 +1918,7 @@ export default {
           this.editSearchSortDialog = false;
           this.infoSearchSortDialog = true;
           this.infoSearchSortDialogMessage = "Delete successful!";
-          this.infoSearchSortDialogTitleMessage = "Delete Location";
+          this.infoSearchSortDialogTitleMessage = "Delete Search Sort";
           this.closeSearchSortDelete();
         }
       });

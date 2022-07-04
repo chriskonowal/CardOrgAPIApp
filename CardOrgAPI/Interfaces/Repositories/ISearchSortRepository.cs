@@ -13,6 +13,8 @@ namespace CardOrgAPI.Interfaces.Repositories
         Task<bool> SaveAsync(SearchSortQueryFilter queryFilter, CancellationToken cancellationToken);
         Task<IEnumerable<SearchSort>> GetAsync(GenericSearchQueryFilter filter, CancellationToken cancellationToken);
 
+        Task<bool> DeleteAsync(int id, CancellationToken cancellationToken);
+
         int GetTotal(string searchTerm);
     }
 }

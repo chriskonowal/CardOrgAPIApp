@@ -1,4 +1,5 @@
-﻿using CardOrgAPI.Application.SearchSort.Save;
+﻿using CardOrgAPI.Application.SearchSort.Delete;
+using CardOrgAPI.Application.SearchSort.Save;
 using CardOrgAPI.Application.SearchSort.Search;
 using CardOrgAPI.Responses;
 using MediatR;
@@ -34,7 +35,18 @@ namespace CardOrgAPI.Controllers.Public
         }
 
         [Route("search"), HttpPost]
-        public async Task<ActionResult<SearchSearchSortResponse>> SearchSearchSortAsync([FromBody] SearchSearchSortRequest request, CancellationToken cancellationToken)
+        public async Task<ActionResult<ApiResponse<SearchSearchSortResponse>>> SearchSearchSortAsync([FromBody] SearchSearchSortRequest request, CancellationToken cancellationToken)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var result = await _mediator.Send(request, cancellationToken).ConfigureAwait(false);
+
+            return Ok(result);
+        }
+
+        [Route("delete"), HttpPost]
+        public async Task<ActionResult<ApiResponse>> DeleteSearchSortAsync([FromBody] DeleteSearchSortRequest request, CancellationToken cancellationToken)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);

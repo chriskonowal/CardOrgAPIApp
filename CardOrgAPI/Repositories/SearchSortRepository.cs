@@ -31,47 +31,7 @@ namespace CardOrgAPI.Repositories
                 //delete all relationships
                 if (model.SearchSortId > 0)
                 {
-                    if (queryFilter.GradeCompanyIds.Any())
-                    {
-                        _context.Database.ExecuteSqlRaw($@"DELETE FROM [dbo].[SearchSortGradeCompany] WHERE SearchSortId = {model.SearchSortId}");
-                        await _context.SaveChangesAsync(cancellationToken);
-                    }
-
-                    if (queryFilter.LocationIds.Any())
-                    {
-                        _context.Database.ExecuteSqlRaw($@"DELETE FROM [dbo].[SearchSortLocation] WHERE SearchSortId = {model.SearchSortId}");
-                        await _context.SaveChangesAsync(cancellationToken);
-                    }
-
-                    if (queryFilter.PlayerIds.Any())
-                    {
-                        _context.Database.ExecuteSqlRaw($@"DELETE FROM [dbo].[SearchSortPlayer] WHERE SearchSortId = {model.SearchSortId}");
-                        await _context.SaveChangesAsync(cancellationToken);
-                    }
-
-                    if (queryFilter.SetIds.Any())
-                    {
-                        _context.Database.ExecuteSqlRaw($@"DELETE FROM [dbo].[SearchSortSet] WHERE SearchSortId = {model.SearchSortId}");
-                        await _context.SaveChangesAsync(cancellationToken);
-                    }
-
-                    if (queryFilter.SportIds.Any())
-                    {
-                        _context.Database.ExecuteSqlRaw($@"DELETE FROM [dbo].[SearchSortSport] WHERE SearchSortId = {model.SearchSortId}");
-                        await _context.SaveChangesAsync(cancellationToken);
-                    }
-
-                    if (queryFilter.TeamIds.Any())
-                    {
-                        _context.Database.ExecuteSqlRaw($@"DELETE FROM [dbo].[SearchSortTeam] WHERE SearchSortId = {model.SearchSortId}");
-                        await _context.SaveChangesAsync(cancellationToken);
-                    }
-
-                    if (queryFilter.YearIds.Any())
-                    {
-                        _context.Database.ExecuteSqlRaw($@"DELETE FROM [dbo].[SearchSortYear] WHERE SearchSortId = {model.SearchSortId}");
-                        await _context.SaveChangesAsync(cancellationToken);
-                    }
+                    await DeleteRelationshipsAsync(model.SearchSortId, cancellationToken).ConfigureAwait(false);
                 }
                 model.TimeStamp = DateTime.Now;
                 await _context.SearchSorts.AddAsync(model, cancellationToken).ConfigureAwait(false);
@@ -121,6 +81,43 @@ namespace CardOrgAPI.Repositories
             query = IncludeAllModels(query);
             query = QuickSearch(query, searchTerm);
             return query.Count();
+        }
+
+        public async Task<bool> DeleteAsync(int id, CancellationToken cancellationToken)
+        {
+            if (id > 0)
+            {
+                await DeleteRelationshipsAsync(id, cancellationToken).ConfigureAwait(false);
+                var searchSort = new SearchSort { SearchSortId = id };
+                _context.Entry(searchSort).State = EntityState.Deleted;
+                var result = await _context.SaveChangesAsync(cancellationToken);
+                return result == 1;
+            }
+            return true;
+        }
+
+        private async Task DeleteRelationshipsAsync(int id, CancellationToken cancellationToken)
+        {
+            _context.Database.ExecuteSqlRaw($@"DELETE FROM [dbo].[SearchSortGradeCompany] WHERE SearchSortId = {id}");
+            await _context.SaveChangesAsync(cancellationToken);
+
+            _context.Database.ExecuteSqlRaw($@"DELETE FROM [dbo].[SearchSortLocation] WHERE SearchSortId = {id}");
+            await _context.SaveChangesAsync(cancellationToken);
+
+            _context.Database.ExecuteSqlRaw($@"DELETE FROM [dbo].[SearchSortPlayer] WHERE SearchSortId = {id}");
+            await _context.SaveChangesAsync(cancellationToken);
+
+            _context.Database.ExecuteSqlRaw($@"DELETE FROM [dbo].[SearchSortSet] WHERE SearchSortId = {id}");
+            await _context.SaveChangesAsync(cancellationToken);
+
+            _context.Database.ExecuteSqlRaw($@"DELETE FROM [dbo].[SearchSortSport] WHERE SearchSortId = {id}");
+            await _context.SaveChangesAsync(cancellationToken);
+
+            _context.Database.ExecuteSqlRaw($@"DELETE FROM [dbo].[SearchSortTeam] WHERE SearchSortId = {id}");
+            await _context.SaveChangesAsync(cancellationToken);
+
+            _context.Database.ExecuteSqlRaw($@"DELETE FROM [dbo].[SearchSortYear] WHERE SearchSortId = {id}");
+            await _context.SaveChangesAsync(cancellationToken);
         }
 
         private async Task SaveGradeCompaniesAsync(int searchSortId, 
