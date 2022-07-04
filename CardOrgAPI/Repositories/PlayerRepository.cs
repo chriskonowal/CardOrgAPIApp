@@ -27,7 +27,7 @@ namespace CardOrgAPI.Repositories
 
             if (!String.IsNullOrWhiteSpace(filter.SortByField))
             {
-                if (filter.SortByField.ToLower().Equals("firstName"))
+                if (filter.SortByField.ToLower().Equals("firstname"))
                 {
                     if (filter.IsSortDesc)
                     {
@@ -38,7 +38,7 @@ namespace CardOrgAPI.Repositories
                         query = query.OrderBy(x => x.FirstName).ThenBy(x => x.LastName);
                     }
                 }
-                else if (filter.SortByField.ToLower().Equals("lastName"))
+                else if (filter.SortByField.ToLower().Equals("lastname"))
                 {
                     if (filter.IsSortDesc)
                     {
@@ -65,6 +65,40 @@ namespace CardOrgAPI.Repositories
             var query = _context.Players.AsQueryable();
             query = Search(query, searchTerm);
             return query.Count();
+        }
+
+        public bool Exists(string firstName, string lastName)
+        {
+            return _context.Players
+                .Any(x => x.FirstName.ToLower().Contains(firstName.ToLower()) 
+                && x.LastName.ToLower().Contains(lastName.ToLower()));
+        }
+
+        public async Task<bool> InsertAsync(Player model, CancellationToken cancellationToken)
+        {
+            await _context.Players.AddAsync(model, cancellationToken).ConfigureAwait(false);
+            if (model.PlayerId > 0)
+            {
+                _context.Entry(model).State = EntityState.Modified;
+            }
+            var result = await _context.SaveChangesAsync().ConfigureAwait(false);
+            return result == 1;
+        }
+
+        public async Task<bool> DeleteAsync(int id, CancellationToken cancellationToken)
+        {
+            if (id > 0)
+            {
+                var year = new Player { PlayerId = id };
+                if (_context.Entry(year) == null)
+                {
+                    return false;
+                }
+                _context.Entry(year).State = EntityState.Deleted;
+                var result = await _context.SaveChangesAsync(cancellationToken);
+                return result == 1;
+            }
+            return true;
         }
 
         private IQueryable<Player> Search(IQueryable<Player> query, string searchTerm)

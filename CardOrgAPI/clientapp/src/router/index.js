@@ -5,6 +5,7 @@ import YearsAdmin from "@/views/admin/YearsAdmin.vue"
 import GradeCompany from "@/views/admin/GradeCompanyAdmin.vue"
 import LocationAdmin from "@/views/admin/LocationAdmin.vue"
 import HomeLanding from "@/views/landing/HomeLanding.vue"
+import PlayerAdmin from "@/views/admin/PlayerAdmin.vue"
 
 Vue.use(Router)
 
@@ -37,6 +38,11 @@ export default new Router({
             path: '/location-admin',
             name: 'LocationAdmin',
             component: LocationAdmin
+        },
+        {
+            path: '/player-admin',
+            name: 'PlayerAdmin',
+            component: PlayerAdmin
         },
         {
             path: '/landing',

@@ -68,6 +68,15 @@
               ></v-list-item-title
             >
           </v-list-item>
+          <v-list-item>
+            <v-list-item-title>
+              <router-link
+                to="/player-admin"
+                style="text-decoration: none; color: inherit"
+                >Player</router-link
+              ></v-list-item-title
+            >
+          </v-list-item>
         </v-list-group>
       </v-list>
     </v-menu>

@@ -14,5 +14,9 @@ namespace CardOrgAPI.Interfaces.Repositories
 
         int GetTotal(string searchTerm);
 
+        bool Exists(string firstName, string lastName);
+        Task<bool> InsertAsync(Player model, CancellationToken cancellationToken);
+        Task<bool> DeleteAsync(int id, CancellationToken cancellationToken);
+
     }
 }
