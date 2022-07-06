@@ -67,6 +67,40 @@ namespace CardOrgAPI.Repositories
             return query.Count();
         }
 
+        public bool Exists(string city, string name)
+        {
+            return _context.Teams
+                .Any(x => x.City.ToLower().Contains(city.ToLower())
+                && x.Name.ToLower().Contains(name.ToLower()));
+        }
+
+        public async Task<bool> InsertAsync(Team model, CancellationToken cancellationToken)
+        {
+            await _context.Teams.AddAsync(model, cancellationToken).ConfigureAwait(false);
+            if (model.TeamId > 0)
+            {
+                _context.Entry(model).State = EntityState.Modified;
+            }
+            var result = await _context.SaveChangesAsync().ConfigureAwait(false);
+            return result == 1;
+        }
+
+        public async Task<bool> DeleteAsync(int id, CancellationToken cancellationToken)
+        {
+            if (id > 0)
+            {
+                var year = new Team { TeamId = id };
+                if (_context.Entry(year) == null)
+                {
+                    return false;
+                }
+                _context.Entry(year).State = EntityState.Deleted;
+                var result = await _context.SaveChangesAsync(cancellationToken);
+                return result == 1;
+            }
+            return true;
+        }
+
         private IQueryable<Team> Search(IQueryable<Team> teams, string searchTerm)
         {
             if (!String.IsNullOrWhiteSpace(searchTerm))

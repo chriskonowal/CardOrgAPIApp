@@ -3,7 +3,7 @@
     <div>
       <v-card>
         <v-card-title>
-          Player
+          Sport
 
           <v-spacer></v-spacer>
           <v-text-field
@@ -76,30 +76,15 @@
                   <v-row>
                     <v-col cols="12" sm="6" md="4">
                       <v-text-field
-                        v-model="editedItem.firstName"
+                        v-model="editedItem.name"
                         label="Name"
                         type="text"
-                        name="editedItem.firstName"
+                        name="editedItem.Name"
                         :rules="[rules.required]"
                         @blur="clearAddMessage()"
                         @keyup="clearAddMessage()"
                       ></v-text-field>
                     </v-col>
-                  </v-row>
-                  <v-row>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field
-                        v-model="editedItem.lastName"
-                        label="Name"
-                        type="text"
-                        name="editedItem.lastName"
-                        :rules="[rules.required]"
-                        @blur="clearAddMessage()"
-                        @keyup="clearAddMessage()"
-                      ></v-text-field>
-                    </v-col>
-                  </v-row>
-                  <v-row>
                     <span style="color: red" v-show="hasAddError">
                       <v-icon color="red"> mdi-alert-rhombus-outline </v-icon>
                       {{ addErrorMessage }}
@@ -155,7 +140,7 @@
 import axios from "axios";
 
 export default {
-  name: "PlayerAdmin",
+  name: "SportAdmin",
   data() {
     return {
       total: 0,
@@ -169,16 +154,10 @@ export default {
       search: "",
       headers: [
         {
-          text: "First Name",
+          text: "Sport",
           align: "start",
           sortable: true,
-          value: "firstName",
-        },
-        {
-          text: "Last Name",
-          align: "start",
-          sortable: true,
-          value: "lastName",
+          value: "name",
         },
         { text: "Actions", value: "actions", sortable: false },
       ],
@@ -187,7 +166,7 @@ export default {
       infoDialogMessage: "",
       infoDialogTitleMessage: "",
       editedItem: {
-        playerId: 0,
+        sportId: 0,
         name: 0,
       },
       hasAddError: false,
@@ -229,11 +208,11 @@ export default {
       };
       console.log(request);
       axios
-        .post(process.env.VUE_APP_ROOT_API + "admin/players", request)
+        .post(process.env.VUE_APP_ROOT_API + "admin/sports", request)
         .then((response) => {
           console.log(response.data);
           if (response.data.isSuccessful) {
-            this.items = response.data.value.players;
+            this.items = response.data.value.sports;
             this.total = response.data.value.total;
           }
 
@@ -254,33 +233,31 @@ export default {
       this.addErrorMessage = "";
     },
     openNewItemDialog() {
-      this.editTitle = "Add Player";
+      this.editTitle = "Add Sport";
       this.editedItem = {};
       this.editDialog = true;
     },
     editItem(item) {
       console.log(item);
-      this.editTitle = "Edit Player";
+      this.editTitle = "Edit Sport";
       this.editedItem = item;
       this.editDialog = true;
     },
     editSave() {
       this.clearAddMessage();
-      var isEdit = this.editedItem.playerId > 0;
+      var isEdit = this.editedItem.sportId > 0;
       var validEdit = this.$refs.editForm.validate();
       if (!validEdit) {
         return;
       }
       var request = {
-        id: this.editedItem.playerId,
-        firstName: this.editedItem.firstName,
-        lastName: this.editedItem.lastName,
+        id: this.editedItem.sportId,
+        name: this.editedItem.name,
       };
-      console.log("save request");
       console.log(request);
       axios({
         method: "post", //you can set what request you want to be
-        url: process.env.VUE_APP_ROOT_API + "admin/players/save",
+        url: process.env.VUE_APP_ROOT_API + "admin/sports/save",
         data: request,
       }).then((response) => {
         console.log(response.data);
@@ -293,10 +270,10 @@ export default {
           this.infoDialog = true;
           if (isEdit) {
             this.infoDialogMessage = "Edit successful!";
-            this.infoDialogTitleMessage = "Edit Player";
+            this.infoDialogTitleMessage = "Edit Sport";
           } else {
             this.infoDialogMessage = "Add successful!";
-            this.infoDialogTitleMessage = "Add Player";
+            this.infoDialogTitleMessage = "Add Sport";
           }
         }
       });
@@ -305,7 +282,7 @@ export default {
       this.editDialog = false;
     },
     deleteItem(item) {
-      this.id = item.playerId;
+      this.id = item.sportId;
       this.dialogDelete = true;
     },
     closeDelete() {
@@ -318,7 +295,7 @@ export default {
       console.log(request);
       axios({
         method: "post", //you can set what request you want to be
-        url: process.env.VUE_APP_ROOT_API + "admin/players/delete",
+        url: process.env.VUE_APP_ROOT_API + "admin/sports/delete",
         data: request,
       }).then((response) => {
         console.log(response.data);
@@ -331,7 +308,7 @@ export default {
           this.editDialog = false;
           this.infoDialog = true;
           this.infoDialogMessage = "Delete successful!";
-          this.infoDialogTitleMessage = "Delete Team";
+          this.infoDialogTitleMessage = "Delete Sport";
           this.closeDelete();
         }
       });

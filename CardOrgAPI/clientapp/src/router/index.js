@@ -7,6 +7,8 @@ import LocationAdmin from "@/views/admin/LocationAdmin.vue"
 import HomeLanding from "@/views/landing/HomeLanding.vue"
 import PlayerAdmin from "@/views/admin/PlayerAdmin.vue"
 import SetAdmin from "@/views/admin/SetAdmin.vue"
+import SportAdmin from "@/views/admin/SportAdmin.vue"
+import TeamAdmin from "@/views/admin/TeamAdmin.vue"
 
 Vue.use(Router)
 
@@ -49,6 +51,16 @@ export default new Router({
             path: '/set-admin',
             name: 'SetAdmin',
             component: SetAdmin
+        },
+        {
+            path: '/sport-admin',
+            name: 'SportAdmin',
+            component: SportAdmin
+        },
+        {
+            path: '/team-admin',
+            name: 'TeamAdmin',
+            component: TeamAdmin
         },
         {
             path: '/landing',

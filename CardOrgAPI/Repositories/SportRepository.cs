@@ -64,5 +64,39 @@ namespace CardOrgAPI.Repositories
             }
             return query;
         }
+
+        public bool Exists(string searchTerm)
+        {
+            return _context.Sports
+                .Any(x => x.Name.ToLower().Contains(searchTerm.ToLower()));
+
+        }
+
+        public async Task<bool> InsertAsync(Sport model, CancellationToken cancellationToken)
+        {
+            await _context.Sports.AddAsync(model, cancellationToken).ConfigureAwait(false);
+            if (model.SportId > 0)
+            {
+                _context.Entry(model).State = EntityState.Modified;
+            }
+            var result = await _context.SaveChangesAsync().ConfigureAwait(false);
+            return result == 1;
+        }
+
+        public async Task<bool> DeleteAsync(int id, CancellationToken cancellationToken)
+        {
+            if (id > 0)
+            {
+                var year = new Sport { SportId = id };
+                if (_context.Entry(year) == null)
+                {
+                    return false;
+                }
+                _context.Entry(year).State = EntityState.Deleted;
+                var result = await _context.SaveChangesAsync(cancellationToken);
+                return result == 1;
+            }
+            return true;
+        }
     }
 }

@@ -44,15 +44,6 @@
           <v-list-item>
             <v-list-item-title>
               <router-link
-                to="/years-admin"
-                style="text-decoration: none; color: inherit"
-                >Years</router-link
-              ></v-list-item-title
-            >
-          </v-list-item>
-          <v-list-item>
-            <v-list-item-title>
-              <router-link
                 to="/grade-company-admin"
                 style="text-decoration: none; color: inherit"
                 >Grade Company</router-link
@@ -83,6 +74,33 @@
                 to="/set-admin"
                 style="text-decoration: none; color: inherit"
                 >Set</router-link
+              ></v-list-item-title
+            >
+          </v-list-item>
+          <v-list-item>
+            <v-list-item-title>
+              <router-link
+                to="/sport-admin"
+                style="text-decoration: none; color: inherit"
+                >Sport</router-link
+              ></v-list-item-title
+            >
+          </v-list-item>
+          <v-list-item>
+            <v-list-item-title>
+              <router-link
+                to="/team-admin"
+                style="text-decoration: none; color: inherit"
+                >Team</router-link
+              ></v-list-item-title
+            >
+          </v-list-item>
+          <v-list-item>
+            <v-list-item-title>
+              <router-link
+                to="/years-admin"
+                style="text-decoration: none; color: inherit"
+                >Years</router-link
               ></v-list-item-title
             >
           </v-list-item>

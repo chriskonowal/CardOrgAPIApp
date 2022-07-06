@@ -1,4 +1,6 @@
-﻿using CardOrgAPI.Application.Teams.Search;
+﻿using CardOrgAPI.Application.Teams.Delete;
+using CardOrgAPI.Application.Teams.Save;
+using CardOrgAPI.Application.Teams.Search;
 using CardOrgAPI.Responses;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -33,5 +35,28 @@ namespace CardOrgAPI.Controllers.Admin
             return Ok(years);
         }
 
+        [Route("teams/save"), HttpPost]
+        public async Task<ActionResult<ApiResponse>> SaveAsync([FromBody] SaveTeamRequest request, CancellationToken cancellationToken)
+        {
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var years = await _mediator.Send(request, cancellationToken).ConfigureAwait(false);
+
+            return Ok(years);
+        }
+
+        [Route("teams/delete"), HttpPost]
+        public async Task<ActionResult<ApiResponse>> DeleteYearAsync([FromBody] DeleteTeamRequest request, CancellationToken cancellationToken)
+        {
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var years = await _mediator.Send(request, cancellationToken).ConfigureAwait(false);
+
+            return Ok(years);
+        }
     }
 }
