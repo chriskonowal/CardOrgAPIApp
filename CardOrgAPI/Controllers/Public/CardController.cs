@@ -1,6 +1,8 @@
 ﻿using CardOrgAPI.Application.Cards.Carousel;
+using CardOrgAPI.Application.Cards.Delete;
 using CardOrgAPI.Application.Cards.LandingPage;
 using CardOrgAPI.Application.Cards.RookieAutoPatchGraph;
+using CardOrgAPI.Application.Cards.Save;
 using CardOrgAPI.Application.GradeCompanies.Delete;
 using CardOrgAPI.Application.GradeCompanies.Save;
 using CardOrgAPI.Application.GradeCompanies.Search;
@@ -15,9 +17,11 @@ using CardOrgAPI.Responses;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -70,6 +74,45 @@ namespace CardOrgAPI.Controllers.Public
             var cards = await _mediator.Send(new RookieAutoPatchGraphRequest(), cancellationToken).ConfigureAwait(false);
 
             return Ok(cards);
+        }
+
+        [Route("cards/save"), HttpPost, DisableRequestSizeLimit]
+        public async Task<ActionResult<ApiResponse>> SaveAsync(CancellationToken cancellationToken)
+        {
+            var files = Request.Form.Files;
+            string jsonRequest = Request.Form["cardRequest"];
+            CardRequest cardRequest = Newtonsoft.Json.JsonConvert.DeserializeObject<CardRequest>(jsonRequest);
+
+            if (files != null && files.Count() == 2)
+            {
+                cardRequest.FrontImage = files[0];
+                cardRequest.BackImage = files[1];
+            }
+            var request = new SaveCardRequest() {
+                CardRequest = cardRequest
+            };
+
+            var response = await _mediator.Send(request, cancellationToken).ConfigureAwait(false);
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            return Ok();
+
+            
+
+            //return Ok(years);
+        }
+
+        [Route("cards/delete"), HttpPost]
+        public async Task<ActionResult<ApiResponse>> DeleteYearAsync([FromBody] DeleteCardRequest request, CancellationToken cancellationToken)
+        {
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var response = await _mediator.Send(request, cancellationToken).ConfigureAwait(false);
+
+            return Ok(response);
         }
     }
 }

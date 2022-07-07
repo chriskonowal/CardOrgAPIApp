@@ -19,6 +19,7 @@ namespace CardOrgAPI.Application.Cards.LandingPage
         {
             _cardRepository = cardRepository;
         }
+
         public async Task<ApiResponse<LandingPageResponse>> Handle(LandingPageRequest request, CancellationToken cancellationToken)
         {
             var queryFilter = new CardSearchQueryFilter()
@@ -26,7 +27,9 @@ namespace CardOrgAPI.Application.Cards.LandingPage
                 PageNumber = request.PageNumber,
                 RowsPerPage = request.RowsPerPage,
                 QuickSearchTerm = request.QuickSearch,
-                SearchSortQueryFilter = SearchSortQueryFilterConverter.Convert(request.SearchSortRequest)
+                SearchSortQueryFilter = SearchSortQueryFilterConverter.Convert(request.SearchSortRequest),
+                IsSortDesc = request.IsSortDesc,
+                SortByField = request.SortByField
             };
 
 

@@ -929,7 +929,7 @@
 
           <img
             v-bind:src="showImage(item.backCardThumbnailImagePath)"
-            style="max-width: 150px; padding: 5px"
+            style="max-width: 100px; padding: 5px"
             @click="onClickBackImage(item)"
           />
           <br />

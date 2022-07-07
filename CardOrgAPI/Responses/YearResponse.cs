@@ -17,7 +17,7 @@ namespace CardOrgAPI.Responses
             {
                 if (BeginningYear != EndingYear)
                 {
-                    return $"{BeginningYear}-{EndingYear}";
+                    return $"{BeginningYear}-{EndingYear.ToString().Substring(2, 2)}";
                 }
                 else
                 {

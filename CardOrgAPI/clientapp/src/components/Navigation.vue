@@ -44,6 +44,15 @@
           <v-list-item>
             <v-list-item-title>
               <router-link
+                to="/card-admin"
+                style="text-decoration: none; color: inherit"
+                >Card Admin</router-link
+              ></v-list-item-title
+            >
+          </v-list-item>
+          <v-list-item>
+            <v-list-item-title>
+              <router-link
                 to="/grade-company-admin"
                 style="text-decoration: none; color: inherit"
                 >Grade Company</router-link

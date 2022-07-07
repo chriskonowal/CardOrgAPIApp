@@ -11,6 +11,10 @@ namespace CardOrgAPI.QueryFilters
         public int RowsPerPage { get; set; }
         public int PageNumber { get; set; }
 
+        public string SortByField { get; set; }
+
+        public bool IsSortDesc { get; set; }
+
         public SearchSortQueryFilter SearchSortQueryFilter { get; set; }
     }
 }

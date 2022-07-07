@@ -9,6 +9,7 @@ import PlayerAdmin from "@/views/admin/PlayerAdmin.vue"
 import SetAdmin from "@/views/admin/SetAdmin.vue"
 import SportAdmin from "@/views/admin/SportAdmin.vue"
 import TeamAdmin from "@/views/admin/TeamAdmin.vue"
+import CardAdmin from "@/views/admin/CardAdmin.vue"
 
 Vue.use(Router)
 
@@ -61,6 +62,11 @@ export default new Router({
             path: '/team-admin',
             name: 'TeamAdmin',
             component: TeamAdmin
+        },
+        {
+            path: '/card-admin',
+            name: 'CardAdmin',
+            component: CardAdmin
         },
         {
             path: '/landing',

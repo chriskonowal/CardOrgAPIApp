@@ -3,7 +3,7 @@
     <div>
       <v-card>
         <v-card-title>
-          Player
+          Card
 
           <v-spacer></v-spacer>
           <v-text-field
@@ -24,7 +24,7 @@
             New Item
           </v-btn>
         </v-card-title>
-        <v-dialog v-model="infoDialog" max-width="500px">
+        <v-dialog v-model="infoDialog" max-width="800px">
           <v-card>
             <v-card-title>
               <span class="text-h5">{{ infoDialogTitleMessage }}</span>
@@ -57,6 +57,22 @@
           :search="search"
           class="elevation-1"
         >
+          <template v-slot:[`item.pictures`]="{ item }">
+            <img
+              v-bind:src="showImage(item.frontCardThumbnailImagePath)"
+              style="max-width: 100px; padding: 5px"
+            />
+            <br />
+            <p style="text-align: left">
+              {{ showFullNames(item.players) }} <br />
+              {{ showTeamsNames(item.teams) }}
+            </p>
+          </template>
+          <template v-slot:[`item.year`]="{ item }">
+            <p style="text-align: left">
+              {{ item.year.year }}
+            </p>
+          </template>
           <template v-slot:[`item.actions`]="{ item }">
             <v-icon small class="mr-2" @click="editItem(item)">
               mdi-pencil
@@ -74,30 +90,40 @@
               <v-container>
                 <v-form ref="editForm" v-model="editValid" lazy-validation>
                   <v-row>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field
-                        v-model="editedItem.firstName"
-                        label="Name"
-                        type="text"
-                        name="editedItem.firstName"
-                        :rules="[rules.required]"
-                        @blur="clearAddMessage()"
-                        @keyup="clearAddMessage()"
-                      ></v-text-field>
-                    </v-col>
+                    <v-text-field
+                      v-model="editedItem.cardDescription"
+                      label="Card Description"
+                      type="text"
+                      name="editedItem.cardDescription"
+                      :rules="[rules.required]"
+                      @blur="clearAddMessage()"
+                      @keyup="clearAddMessage()"
+                    ></v-text-field>
                   </v-row>
                   <v-row>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field
-                        v-model="editedItem.lastName"
-                        label="Name"
-                        type="text"
-                        name="editedItem.lastName"
-                        :rules="[rules.required]"
-                        @blur="clearAddMessage()"
-                        @keyup="clearAddMessage()"
-                      ></v-text-field>
-                    </v-col>
+                    <v-text-field
+                      v-model="editedItem.cardNumber"
+                      label="Card Number"
+                      type="text"
+                      name="editedItem.cardNumber"
+                      :rules="[rules.required]"
+                      @blur="clearAddMessage()"
+                      @keyup="clearAddMessage()"
+                    ></v-text-field>
+                  </v-row>
+                  <v-row>
+                    <v-file-input
+                      accept="image/*"
+                      label="Front Image"
+                      v-model="editedItem.frontImage"
+                    ></v-file-input>
+                  </v-row>
+                  <v-row>
+                    <v-file-input
+                      accept="image/*"
+                      label="Back Image"
+                      v-model="editedItem.backImage"
+                    ></v-file-input>
                   </v-row>
                   <v-row>
                     <span style="color: red" v-show="hasAddError">
@@ -155,7 +181,7 @@
 import axios from "axios";
 
 export default {
-  name: "PlayerAdmin",
+  name: "CardAdmin",
   data() {
     return {
       total: 0,
@@ -168,17 +194,19 @@ export default {
       sortDesc: false,
       search: "",
       headers: [
+        { text: "Card", value: "pictures", sortable: true },
+        { text: "Year", value: "year", sortable: true },
         {
-          text: "First Name",
+          text: "Card Description",
           align: "start",
           sortable: true,
-          value: "firstName",
+          value: "cardDescription",
         },
         {
-          text: "Last Name",
+          text: "Card Number",
           align: "start",
           sortable: true,
-          value: "lastName",
+          value: "cardNumber",
         },
         { text: "Actions", value: "actions", sortable: false },
       ],
@@ -187,8 +215,36 @@ export default {
       infoDialogMessage: "",
       infoDialogTitleMessage: "",
       editedItem: {
-        playerId: 0,
-        name: 0,
+        cardId: 0,
+        players: [],
+        teams: [],
+        gradeCompany: {},
+        location: {},
+        set: {},
+        sport: {},
+        year: {},
+        cardDescription: "",
+        cardNumber: "",
+        lowestBeckettPrice: 0,
+        highestBeckettPrice: 0,
+        lowestCOMCPrice: 0,
+        ebayPrice: 0,
+        pricePaid: 0,
+        isGraded: false,
+        copies: 0,
+        serialNumber: 0,
+        grade: 0,
+        isRookie: false,
+        isAutograph: false,
+        isPatch: false,
+        isOnCardAutograph: false,
+        isGameWornJersey: false,
+        frontCardMainImagePath: "",
+        frontCardThumbnailImagePath: "",
+        backCardMainImagePath: "",
+        backCardThumbnailImagePath: "",
+        frontImage: {},
+        backImage: {},
       },
       hasAddError: false,
       addErrorMessage: "",
@@ -221,20 +277,21 @@ export default {
       const { sortBy, sortDesc, page, itemsPerPage } = this.options;
 
       const request = {
-        searchTerm: this.search,
+        quickSearch: this.search,
         rowsPerPage: itemsPerPage,
         pageNumber: page,
         sortByField: sortBy[0],
         isSortDesc: sortDesc[0],
       };
+      console.log("public/cards request");
       console.log(request);
       axios
-        .post(process.env.VUE_APP_ROOT_API + "admin/players", request)
+        .post(process.env.VUE_APP_ROOT_API + "public/cards", request)
         .then((response) => {
           console.log(response.data);
           if (response.data.isSuccessful) {
-            this.items = response.data.value.players;
-            this.total = response.data.value.total;
+            this.items = response.data.value.cards;
+            this.total = response.data.value.totalCards;
           }
 
           this.loading = false;
@@ -242,6 +299,29 @@ export default {
     },
     validInt: function (text) {
       return text % 1 === 0;
+    },
+    showImage: function (path) {
+      return "/Uploads/Thumb/" + path;
+    },
+    showFullNames: function (playerList) {
+      var names = "";
+      for (var i = 0; i < playerList.length; i++) {
+        if (names.length > 0) {
+          names += ",";
+        }
+        names += playerList[i].fullName;
+      }
+      return names;
+    },
+    showTeamsNames: function (teamList) {
+      var teams = "";
+      for (var i = 0; i < teamList.length; i++) {
+        if (teams.length > 0) {
+          teams += ",";
+        }
+        teams += teamList[i].team;
+      }
+      return teams;
     },
     close() {
       this.dialog = false;
@@ -254,34 +334,42 @@ export default {
       this.addErrorMessage = "";
     },
     openNewItemDialog() {
-      this.editTitle = "Add Player";
+      this.editTitle = "Add Card";
       this.editedItem = {};
       this.editDialog = true;
     },
     editItem(item) {
       console.log(item);
-      this.editTitle = "Edit Player";
+      this.editTitle = "Edit Card";
       this.editedItem = item;
       this.editDialog = true;
     },
     editSave() {
       this.clearAddMessage();
-      var isEdit = this.editedItem.playerId > 0;
+      var isEdit = this.editedItem.cardId > 0;
       var validEdit = this.$refs.editForm.validate();
       if (!validEdit) {
         return;
       }
+
       var request = {
-        id: this.editedItem.playerId,
-        firstName: this.editedItem.firstName,
-        lastName: this.editedItem.lastName,
+        cardId: this.editedItem.cardId,
+        cardDescription: this.editedItem.cardDescription,
+        cardNumber: this.editedItem.cardNumber,
       };
+
+      let formData = new FormData();
+      formData.append("file", this.editedItem.frontImage);
+      formData.append("file", this.editedItem.backImage);
+      formData.append("cardRequest", JSON.stringify(request));
       console.log("save request");
+
       console.log(request);
       axios({
         method: "post", //you can set what request you want to be
-        url: process.env.VUE_APP_ROOT_API + "admin/players/save",
-        data: request,
+        url: process.env.VUE_APP_ROOT_API + "public/cards/save",
+
+        data: formData,
       }).then((response) => {
         console.log(response.data);
         if (!response.data.isSuccessful) {
@@ -293,10 +381,10 @@ export default {
           this.infoDialog = true;
           if (isEdit) {
             this.infoDialogMessage = "Edit successful!";
-            this.infoDialogTitleMessage = "Edit Player";
+            this.infoDialogTitleMessage = "Edit Card";
           } else {
             this.infoDialogMessage = "Add successful!";
-            this.infoDialogTitleMessage = "Add Player";
+            this.infoDialogTitleMessage = "Add Card";
           }
         }
       });
@@ -305,7 +393,7 @@ export default {
       this.editDialog = false;
     },
     deleteItem(item) {
-      this.id = item.playerId;
+      this.id = item.cardId;
       this.dialogDelete = true;
     },
     closeDelete() {
@@ -318,7 +406,7 @@ export default {
       console.log(request);
       axios({
         method: "post", //you can set what request you want to be
-        url: process.env.VUE_APP_ROOT_API + "admin/players/delete",
+        url: process.env.VUE_APP_ROOT_API + "admin/cards/delete",
         data: request,
       }).then((response) => {
         console.log(response.data);
@@ -331,7 +419,7 @@ export default {
           this.editDialog = false;
           this.infoDialog = true;
           this.infoDialogMessage = "Delete successful!";
-          this.infoDialogTitleMessage = "Delete Player";
+          this.infoDialogTitleMessage = "Delete Card";
           this.closeDelete();
         }
       });

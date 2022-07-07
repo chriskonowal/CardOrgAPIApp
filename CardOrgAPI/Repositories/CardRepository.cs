@@ -1,4 +1,5 @@
 ﻿using CardOrgAPI.Constants;
+using CardOrgAPI.Converters;
 using CardOrgAPI.Entities;
 using CardOrgAPI.Helpers;
 using CardOrgAPI.Interfaces.Repositories;
@@ -39,8 +40,13 @@ namespace CardOrgAPI.Repositories
         {
             var query = _context.Cards.AsQueryable();
             query = IncludeAllModels(query);
-            query = QuickSearch(query, filter.QuickSearchTerm);
-            query = FullSearchSort(query, filter.SearchSortQueryFilter);
+            query = QuickSearch(query, filter);
+
+            if (String.IsNullOrEmpty(filter.QuickSearchTerm) && String.IsNullOrEmpty(filter.SortByField))
+            {
+                query = FullSearchSort(query, filter.SearchSortQueryFilter);
+            }
+
             query = RepositoryHelpers.Paging(query, filter.RowsPerPage, filter.PageNumber);          
             try
             {
@@ -57,8 +63,11 @@ namespace CardOrgAPI.Repositories
         {
             var query = _context.Cards.AsQueryable();
             query = IncludeAllModels(query);
-            query = QuickSearch(query, filter.QuickSearchTerm);
-            query = FullSearchSort(query, filter.SearchSortQueryFilter);
+            query = QuickSearch(query, filter);
+            if (String.IsNullOrEmpty(filter.QuickSearchTerm) && String.IsNullOrEmpty(filter.SortByField))
+            {
+                query = FullSearchSort(query, filter.SearchSortQueryFilter);
+            }
             return query.Count();
         }
 
@@ -74,11 +83,12 @@ namespace CardOrgAPI.Repositories
                     .AsQueryable();
         }
 
-        private IQueryable<Card> QuickSearch(IQueryable<Card> cards, string quickSearch)
+        private IQueryable<Card> QuickSearch(IQueryable<Card> cards, CardSearchQueryFilter filter)
         {
-            quickSearch = quickSearch.ToLower();
-            if (!String.IsNullOrWhiteSpace(quickSearch))
+            
+            if (!String.IsNullOrWhiteSpace(filter.QuickSearchTerm))
             {
+                string quickSearch = filter.QuickSearchTerm.ToLower();
                 cards = cards.Where(x => x.CardDescription.ToLower().Contains(quickSearch) || 
                 x.CardNumber.ToLower().Contains(quickSearch) || 
                 x.GradeCompany.Name.ToLower().Contains(quickSearch) || 
@@ -90,7 +100,154 @@ namespace CardOrgAPI.Repositories
                 x.TeamCards.Any(x => x.Team.City.ToLower().Contains(quickSearch) ||
                 x.Team.Name.ToLower().Contains(quickSearch)));
             }
+
+            if (!String.IsNullOrWhiteSpace(filter.SortByField))
+            {
+                if (filter.SortByField.ToLower().Equals("pictures"))
+                {
+                    if (filter.IsSortDesc)
+                    {
+                        cards = cards.OrderByDescending(x => !string.IsNullOrEmpty(x.FrontCardMainImagePath));
+                    }
+                    else
+                    {
+                        cards = cards.OrderBy(x => !string.IsNullOrEmpty(x.FrontCardMainImagePath));
+                    }
+                }
+
+                if (filter.SortByField.ToLower().Equals("year"))
+                {
+                    if (filter.IsSortDesc)
+                    {
+                        cards = cards.OrderByDescending(x => x.Year.BeginningYear);
+                    }
+                    else
+                    {
+                        cards = cards.OrderBy(x => x.Year.BeginningYear);
+                    }
+                }
+
+                if (filter.SortByField.ToLower().Equals("carddescription"))
+                {
+                    if (filter.IsSortDesc)
+                    {
+                        cards = cards.OrderByDescending(x => x.CardDescription);
+                    }
+                    else
+                    {
+                        cards = cards.OrderBy(x => x.CardDescription);
+                    }
+                }
+
+                if (filter.SortByField.ToLower().Equals("cardnumber"))
+                {
+                    if (filter.IsSortDesc)
+                    {
+                        cards = cards.OrderByDescending(x => x.CardNumber);
+                    }
+                    else
+                    {
+                        cards = cards.OrderBy(x => x.CardNumber);
+                    }
+                }
+            }
+
             return cards;
+        }
+
+        public async Task<bool> InsertAsync(CardQueryFilter queryFilter, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var model = CardQueryFilterConverter.Convert(queryFilter);
+
+                //delete all relationships
+                if (model.CardId > 0)
+                {
+                    await DeleteRelationshipsAsync(model.CardId, cancellationToken).ConfigureAwait(false);
+                }
+                model.TimeStamp = DateTime.Now;
+                await _context.Cards.AddAsync(model, cancellationToken).ConfigureAwait(false);
+                if (model.CardId > 0)
+                {
+                    _context.Entry(model).State = EntityState.Modified;
+                }
+
+                await _context.SaveChangesAsync().ConfigureAwait(false);
+                await SavePlayersAsync(model.CardId, queryFilter, cancellationToken).ConfigureAwait(false);
+                await SaveTeamsAsync(model.CardId, queryFilter, cancellationToken).ConfigureAwait(false);
+
+                var result = 1;
+                return result == 1;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<bool> DeleteAsync(int id, CancellationToken cancellationToken)
+        {
+            if (id > 0)
+            {
+                var card = new Card { CardId = id };
+                await DeleteRelationshipsAsync(id, cancellationToken).ConfigureAwait(false);
+                if (_context.Entry(card) == null)
+                {
+                    return false;
+                }
+                _context.Entry(card).State = EntityState.Deleted;
+                var result = await _context.SaveChangesAsync(cancellationToken);
+                return result == 1;
+            }
+            return true;
+        }
+
+        private async Task DeleteRelationshipsAsync(int id, CancellationToken cancellationToken)
+        {
+            _context.Database.ExecuteSqlRaw($@"DELETE FROM [dbo].[PlayerCard] WHERE CardId = {id}");
+            await _context.SaveChangesAsync(cancellationToken);
+
+            _context.Database.ExecuteSqlRaw($@"DELETE FROM [dbo].[TeamCard] WHERE CardId = {id}");
+            await _context.SaveChangesAsync(cancellationToken);
+        }
+
+        private async Task SavePlayersAsync(int cardId,
+            CardQueryFilter queryFilter,
+            CancellationToken cancellationToken)
+        {
+            var players = new List<PlayerCard>();
+            foreach (var player in queryFilter.Players)
+            {
+                var relationModel = new PlayerCard()
+                {
+                    PlayerId = player,
+                    CardId = cardId
+                };
+                players.Add(relationModel);
+            }
+
+            await _context.PlayerCards.AddRangeAsync(players, cancellationToken).ConfigureAwait(false);
+            await _context.SaveChangesAsync(cancellationToken);
+        }
+
+        private async Task SaveTeamsAsync(int cardId,
+            CardQueryFilter queryFilter,
+            CancellationToken cancellationToken)
+        {
+            var teams = new List<TeamCard>();
+            foreach (var player in queryFilter.Teams)
+            {
+                var relationModel = new TeamCard()
+                {
+                    TeamId = player,
+                    CardId = cardId
+                };
+                teams.Add(relationModel);
+            }
+
+            await _context.TeamCards.AddRangeAsync(teams, cancellationToken).ConfigureAwait(false);
+            await _context.SaveChangesAsync(cancellationToken);
         }
 
         private IQueryable<Card> FullSearchSort(IQueryable<Card> cards, SearchSortQueryFilter filter )
@@ -100,37 +257,37 @@ namespace CardOrgAPI.Repositories
                 cards = cards.Where(x => x.CardDescription.ToLower().Contains(filter.CardDescription.ToLower()));
             }
 
-            if (filter.PlayerIds.Any())
+            if ((filter.PlayerIds?.Any()).GetValueOrDefault())
             {
                 cards = cards.Where(x => x.PlayerCards.Any(y => filter.PlayerIds.Contains(y.Player.PlayerId)));
             }
 
-            if (filter.TeamIds.Any())
+            if ((filter.TeamIds?.Any()).GetValueOrDefault())
             {
                 cards = cards.Where(x => x.TeamCards.Any(y => filter.TeamIds.Contains(y.Team.TeamId)));
             }
 
-            if (filter.SportIds.Any())
+            if ((filter.SportIds?.Any()).GetValueOrDefault())
             {
                 cards = cards.Where(x => filter.SportIds.Contains(x.SportId.GetValueOrDefault()));
             }
 
-            if (filter.YearIds.Any()) 
+            if ((filter.YearIds?.Any()).GetValueOrDefault()) 
             {
                 cards = cards.Where(x => filter.YearIds.Contains(x.Year.YearId));
             }
 
-            if (filter.SetIds.Any())
+            if ((filter.SetIds?.Any()).GetValueOrDefault())
             {
                 cards = cards.Where(x => filter.SetIds.Contains(x.Set.SetId));
             }
 
-            if (filter.GradeCompanyIds.Any())
+            if ((filter.GradeCompanyIds?.Any()).GetValueOrDefault())
             {
                 cards = cards.Where(x => filter.GradeCompanyIds.Contains(x.GradeCompany.GradeCompanyId));
             }
 
-            if (filter.LocationIds.Any())
+            if ((filter.LocationIds?.Any()).GetValueOrDefault())
             {
                 cards = cards.Where(x => filter.LocationIds.Contains(x.Location.LocationId));
             }
@@ -223,7 +380,7 @@ namespace CardOrgAPI.Repositories
                 x.SerialNumber <= filter.SerialNumberHigh);
             }
 
-            var orderedCards = cards.OrderByDescending(x => x.TimeStamp);
+            var orderedCards = cards.OrderByDescending(x => 0);
 
             if (filter.PlayerNameSort > 0)
             {

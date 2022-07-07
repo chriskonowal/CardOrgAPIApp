@@ -14,6 +14,10 @@ namespace CardOrgAPI.Application.Cards.LandingPage
         public int RowsPerPage { get; set; }
         public int PageNumber { get; set; }
 
+        public string SortByField { get; set; }
+
+        public bool IsSortDesc { get; set; }
+
         public SearchSortRequest SearchSortRequest { get; set; }
     }
 }
