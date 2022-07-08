@@ -227,7 +227,7 @@ export default {
         cardNumber: "",
         lowestBeckettPrice: 0,
         highestBeckettPrice: 0,
-        lowestCOMCPrice: 0,
+        LowestComcprice: 0,
         ebayPrice: 0,
         pricePaid: 0,
         isGraded: false,
