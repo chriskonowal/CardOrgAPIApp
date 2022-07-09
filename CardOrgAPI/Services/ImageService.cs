@@ -4,6 +4,7 @@ using CardOrgAPI.Interfaces.Services;
 using CardOrgAPI.Model;
 using CardOrgAPI.Requests;
 using ImageMagick;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
@@ -74,66 +75,7 @@ namespace CardOrgAPI.Services
                 var extension = Path.GetExtension(model.FrontImage.FileName);
                 if (!String.IsNullOrWhiteSpace(fileName))
                 {
-                    var file = $"{_tempSavePath}\\{fileName}{extension}";
-                    using (var input = model.FrontImage.OpenReadStream())
-                    {
-                        using (var output = new MemoryStream())
-                        {
-                            using (var image = new MagickImage(input))
-                            {
-                                input.Position = 0;
-                                await image.WriteAsync(file);
-                            }
-                        }
-                    }
-
-                    using (var image = new MagickImage(file))
-                    {
-                        Dimensions orginalDimensions = new Dimensions()
-                        {
-                            Width = image.Width,
-                            Height = image.Height
-                        };
-
-                        var resizedDimensions = ResizeMaintainAspectRatio(orginalDimensions, new Dimensions() { Height = 1200, Width = 1600 });
-                        FileInfo fileInfo = new FileInfo(file);
-                        image.Resize(resizedDimensions.Width, resizedDimensions.Height);
-                        await image.WriteAsync(_largeSavePath + fileInfo.Name, cancellationToken).ConfigureAwait(false);
-                    }
-
-                    using (var image = new MagickImage(file))
-                    {
-                        Dimensions orginalDimensions = new Dimensions()
-                        {
-                            Width = image.Width,
-                            Height = image.Height
-                        };
-
-                        var resizedDimensions = ResizeMaintainAspectRatio(orginalDimensions, new Dimensions() { Height = 450, Width = 600 });
-                        FileInfo fileInfo = new FileInfo(file);
-                        image.Resize(resizedDimensions.Width, resizedDimensions.Height);
-                        await image.WriteAsync(_midSavePath + fileInfo.Name, cancellationToken).ConfigureAwait(false);
-                    }
-
-                    using (var image = new MagickImage(file))
-                    {
-                        Dimensions orginalDimensions = new Dimensions()
-                        {
-                            Width = image.Width,
-                            Height = image.Height
-                        };
-
-                        var resizedDimensions = ResizeMaintainAspectRatio(orginalDimensions, new Dimensions() { Height = 90, Width = 120 });
-                        FileInfo fileInfo = new FileInfo(file);
-                        image.Resize(resizedDimensions.Width, resizedDimensions.Height);
-                        await image.WriteAsync($"{_thumbSavePath}/{Path.GetFileNameWithoutExtension(fileInfo.Name)}_thumb{extension}", cancellationToken).ConfigureAwait(false);
-                    }
-
-
-                    if (File.Exists(file))
-                    {
-                        File.Delete(file);
-                    }
+                    await SaveResizedImagesAsync(fileName, extension, model.FrontImage, cancellationToken).ConfigureAwait(false);
 
                     fileContext.FrontMainFileName = $"{fileName}{extension}";
                     fileContext.FrontThumbnailFileName = $"{fileName}_thumb{extension}";
@@ -167,66 +109,7 @@ namespace CardOrgAPI.Services
                 var extension = Path.GetExtension(model.BackImage.FileName);
                 if (!String.IsNullOrWhiteSpace(fileName))
                 {
-                    var file = $"{_tempSavePath}\\{fileName}{extension}"; ;
-                    using (var input = model.BackImage.OpenReadStream())
-                    {
-                        using (var output = new MemoryStream())
-                        {
-                            using (var image = new MagickImage(input))
-                            {
-                                input.Position = 0;
-                                await image.WriteAsync(file);
-                            }
-                        }
-                    }
-
-                    using (var image = new MagickImage(file))
-                    {
-                        Dimensions orginalDimensions = new Dimensions()
-                        {
-                            Width = image.Width,
-                            Height = image.Height
-                        };
-
-                        var resizedDimensions = ResizeMaintainAspectRatio(orginalDimensions, new Dimensions() { Height = 1200, Width = 1600 });
-                        FileInfo fileInfo = new FileInfo(file);
-                        image.Resize(resizedDimensions.Width, resizedDimensions.Height);
-                        await image.WriteAsync(_largeSavePath + fileInfo.Name, cancellationToken).ConfigureAwait(false);
-                    }
-
-                    using (var image = new MagickImage(file))
-                    {
-                        Dimensions orginalDimensions = new Dimensions()
-                        {
-                            Width = image.Width,
-                            Height = image.Height
-                        };
-
-                        var resizedDimensions = ResizeMaintainAspectRatio(orginalDimensions, new Dimensions() { Height = 450, Width = 600 });
-                        FileInfo fileInfo = new FileInfo(file);
-                        image.Resize(resizedDimensions.Width, resizedDimensions.Height);
-                        await image.WriteAsync(_midSavePath + fileInfo.Name, cancellationToken).ConfigureAwait(false);
-                    }
-
-                    using (var image = new MagickImage(file))
-                    {
-                        Dimensions orginalDimensions = new Dimensions()
-                        {
-                            Width = image.Width,
-                            Height = image.Height
-                        };
-
-                        var resizedDimensions = ResizeMaintainAspectRatio(orginalDimensions, new Dimensions() { Height = 90, Width = 120 });
-                        FileInfo fileInfo = new FileInfo(file);
-                        image.Resize(resizedDimensions.Width, resizedDimensions.Height);
-                        await image.WriteAsync($"{_thumbSavePath}/{Path.GetFileNameWithoutExtension(fileInfo.Name)}_thumb{extension}", cancellationToken).ConfigureAwait(false);
-                    }
-
-
-                    if (File.Exists(file))
-                    {
-                        File.Delete(file);
-                    }
+                    await SaveResizedImagesAsync(fileName, extension, model.BackImage, cancellationToken).ConfigureAwait(false);
 
                     fileContext.BackMainFileName = $"{fileName}{extension}";
                     fileContext.BackThumbnailFileName = $"{fileName}_thumb{extension}";
@@ -239,6 +122,73 @@ namespace CardOrgAPI.Services
             }
 
             return fileContext;
+        }
+
+        private async Task SaveResizedImagesAsync(string fileName, 
+            string extension, 
+            IFormFile formFile,
+            CancellationToken cancellationToken)
+        {
+            var file = $"{_tempSavePath}\\{fileName}{extension}";
+            using (var input = formFile.OpenReadStream())
+            {
+                using (var output = new MemoryStream())
+                {
+                    using (var image = new MagickImage(input))
+                    {
+                        input.Position = 0;
+                        await image.WriteAsync(file);
+                    }
+                }
+            }
+
+            using (var image = new MagickImage(file))
+            {
+                Dimensions orginalDimensions = new Dimensions()
+                {
+                    Width = image.Width,
+                    Height = image.Height
+                };
+
+                var resizedDimensions = ResizeMaintainAspectRatio(orginalDimensions, new Dimensions() { Height = 1200, Width = 1600 });
+                FileInfo fileInfo = new FileInfo(file);
+                image.Resize(resizedDimensions.Width, resizedDimensions.Height);
+                await image.WriteAsync(_largeSavePath + fileInfo.Name, cancellationToken).ConfigureAwait(false);
+            }
+
+            using (var image = new MagickImage(file))
+            {
+                Dimensions orginalDimensions = new Dimensions()
+                {
+                    Width = image.Width,
+                    Height = image.Height
+                };
+
+                var resizedDimensions = ResizeMaintainAspectRatio(orginalDimensions, new Dimensions() { Height = 450, Width = 600 });
+                FileInfo fileInfo = new FileInfo(file);
+                image.Resize(resizedDimensions.Width, resizedDimensions.Height);
+                await image.WriteAsync(_midSavePath + fileInfo.Name, cancellationToken).ConfigureAwait(false);
+            }
+
+            using (var image = new MagickImage(file))
+            {
+                Dimensions orginalDimensions = new Dimensions()
+                {
+                    Width = image.Width,
+                    Height = image.Height
+                };
+
+                var resizedDimensions = ResizeMaintainAspectRatio(orginalDimensions, new Dimensions() { Height = 90, Width = 120 });
+                FileInfo fileInfo = new FileInfo(file);
+                image.Resize(resizedDimensions.Width, resizedDimensions.Height);
+                await image.WriteAsync($"{_thumbSavePath}/{Path.GetFileNameWithoutExtension(fileInfo.Name)}_thumb{extension}", cancellationToken).ConfigureAwait(false);
+            }
+
+
+            if (File.Exists(file))
+            {
+                File.Delete(file);
+            }
         }
 
         private Dimensions ResizeMaintainAspectRatio(Dimensions orginalDimensions, Dimensions newDimensions)

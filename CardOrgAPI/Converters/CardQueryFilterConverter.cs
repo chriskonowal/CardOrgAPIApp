@@ -1,6 +1,7 @@
 ﻿using CardOrgAPI.Entities;
 using CardOrgAPI.QueryFilters;
 using CardOrgAPI.Requests;
+using System;
 using System.Linq;
 
 namespace CardOrgAPI.Converters
@@ -81,7 +82,8 @@ namespace CardOrgAPI.Converters
                 LocationId = source.LocationId,
                 SetId = source.SetId,
                 SportId = source.SportId,
-                YearId = source.YearId
+                YearId = source.YearId,
+                TimeStamp= DateTime.Now
             };
         }
     }

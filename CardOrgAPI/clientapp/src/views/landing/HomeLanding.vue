@@ -1951,7 +1951,7 @@ export default {
       }
     },
     readDataForPlayersFromAPI() {
-      this.teamsLoading = true;
+      this.playersLoading = true;
       //console.log(this.playersOptions);
       const { sortBy, sortDesc, page, itemsPerPage } = this.playersOptions;
 
@@ -1969,7 +1969,7 @@ export default {
           //console.log(response.data);
           if (response.data.isSuccessful) {
             this.players = response.data.value.players;
-            this.totalPlayers = response.data.value.totalPlayers;
+            this.totalPlayers = response.data.value.total;
           }
 
           this.playersLoading = false;

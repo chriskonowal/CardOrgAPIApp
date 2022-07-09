@@ -77,26 +77,40 @@ namespace CardOrgAPI.Controllers.Public
         }
 
         [Route("cards/save"), HttpPost, DisableRequestSizeLimit]
-        public async Task<ActionResult<ApiResponse>> SaveAsync(CancellationToken cancellationToken)
+        public async Task<ActionResult<ApiResponse>> SaveAsync()
         {
-            var files = Request.Form.Files;
-            string jsonRequest = Request.Form["cardRequest"];
-            CardRequest cardRequest = Newtonsoft.Json.JsonConvert.DeserializeObject<CardRequest>(jsonRequest);
-
-            if (files != null && files.Count() == 2)
-            {
-                cardRequest.FrontImage = files[0];
-                cardRequest.BackImage = files[1];
-            }
-            var request = new SaveCardRequest() {
-                CardRequest = cardRequest
-            };
-
-            var response = await _mediator.Send(request, cancellationToken).ConfigureAwait(false);
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
+            try
+            {
+                var files = Request.Form.Files;
+                string jsonRequest = Request.Form["cardRequest"];
+                CardRequest cardRequest = Newtonsoft.Json.JsonConvert.DeserializeObject<CardRequest>(jsonRequest);
 
-            return Ok();
+                if (files != null && files.Count() == 2)
+                {
+                    cardRequest.FrontImage = files[0];
+                    cardRequest.BackImage = files[1];
+                }
+                var request = new SaveCardRequest()
+                {
+                    CardRequest = cardRequest
+                };
+
+                var response = await _mediator.Send(request, CancellationToken.None).ConfigureAwait(false);
+
+
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                var response = new ApiResponse() { 
+                    ErrorMessage = ex.Message + ex.StackTrace,
+                    IsSuccessful = false
+                };
+                return Ok(response);
+            }
+            
 
             
 
