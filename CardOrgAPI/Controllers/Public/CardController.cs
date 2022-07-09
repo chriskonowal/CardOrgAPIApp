@@ -81,6 +81,7 @@ namespace CardOrgAPI.Controllers.Public
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
+
             try
             {
                 var files = Request.Form.Files;
@@ -110,11 +111,6 @@ namespace CardOrgAPI.Controllers.Public
                 };
                 return Ok(response);
             }
-            
-
-            
-
-            //return Ok(years);
         }
 
         [Route("cards/delete"), HttpPost]

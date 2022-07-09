@@ -1431,7 +1431,7 @@ export default {
       console.log(request);
       axios({
         method: "post", //you can set what request you want to be
-        url: process.env.VUE_APP_ROOT_API + "admin/cards/delete",
+        url: process.env.VUE_APP_ROOT_API + "public/cards/delete",
         data: request,
       }).then((response) => {
         console.log(response.data);
