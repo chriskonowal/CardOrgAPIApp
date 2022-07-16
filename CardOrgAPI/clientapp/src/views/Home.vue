@@ -97,18 +97,19 @@ export default {
           if (response.data.isSuccessful) {
             console.log("hitting");
             var chartData = google.visualization.arrayToDataTable([
-              ["Cards", "Rookies", "Autos", "Patches"],
+              ["Cards", "Rookies", "Autos", "Patches", "Serial Numbered"],
               [
                 "Cards",
                 response.data.value.rookies,
                 response.data.value.autos,
                 response.data.value.patches,
+                response.data.value.serialNumbered,
               ],
             ]);
             const options = {
               chart: {
                 title: "Card Summary",
-                subtitle: "Rookies, Autos, and Patches",
+                subtitle: "Rookies, Autos, Patches, and Serial Numbered",
               },
             };
             chart.draw(chartData, options);

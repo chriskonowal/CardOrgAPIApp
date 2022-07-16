@@ -965,7 +965,7 @@
       <v-card>
         <v-card-title class="text-h5 text-center block">Front</v-card-title>
         <div class="justify-center" style="text-align: center">
-          <img v-bind:src="showFrontImage" width="75%" />
+          <img v-bind:src="showFrontImage" width="75%" style="max-width: 300px;" />
         </div>
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -980,7 +980,7 @@
       <v-card>
         <v-card-title class="text-h5 text-center block">Back</v-card-title>
         <div class="justify-center" style="text-align: center">
-          <img v-bind:src="showBackImage" width="75%" />
+          <img v-bind:src="showBackImage" width="75%"  style="max-width: 300px;"/>
         </div>
         <v-card-actions>
           <v-spacer></v-spacer>

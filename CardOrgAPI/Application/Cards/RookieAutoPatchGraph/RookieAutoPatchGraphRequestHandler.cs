@@ -29,6 +29,9 @@ namespace CardOrgAPI.Application.Cards.RookieAutoPatchGraph
             var patchCount = _context.Cards
                 .Where(x => x.IsPatch).Count();
 
+            var serialNumberCount = _context.Cards
+                .Where(x => x.SerialNumber != 0).Count();
+
             return Task.FromResult(new ApiResponse<RookieAutoPatchGraphResponse>()
             {
                 IsSuccessful = true,
@@ -36,7 +39,8 @@ namespace CardOrgAPI.Application.Cards.RookieAutoPatchGraph
                 {
                     Autos = autosCount,
                     Patches = patchCount,
-                    Rookies = rookieCount
+                    Rookies = rookieCount,
+                    SerialNumbered = serialNumberCount
                 }
             });
         }

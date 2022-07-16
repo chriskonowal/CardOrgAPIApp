@@ -12,5 +12,7 @@ namespace CardOrgAPI.Application.Cards.RookieAutoPatchGraph
         public int Autos { get; set; }
 
         public int Patches { get; set; }
+
+        public int SerialNumbered { get; set; }
     }
 }
