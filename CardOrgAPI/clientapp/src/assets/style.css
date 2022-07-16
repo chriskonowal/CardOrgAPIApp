@@ -5,3 +5,7 @@
 .v-application--is-ltr .v-data-footer__select {
   margin-left: 0px !important;
 }
+
+#google-visualization-errors-all-3 {
+  display: none;
+}
