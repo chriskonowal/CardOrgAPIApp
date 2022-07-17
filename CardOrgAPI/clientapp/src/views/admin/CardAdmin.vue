@@ -126,7 +126,7 @@
                       :search="playersSearch"
                       class="elevation-1 tblSearch"
                       show-select
-                      :single-select="true"
+                      :single-select="false"
                       item-key="playerId"
                     >
                       <template v-slot:top>
