@@ -65,7 +65,7 @@ namespace CardOrgAPI.Controllers.Public
         }
 
         [Route("rookie_auto_patch_graph"), HttpGet]
-        public async Task<ActionResult<ApiResponse<LandingPageResponse>>> GetRookieAutoPatchGraphAsync(CancellationToken cancellationToken)
+        public async Task<ActionResult<ApiResponse<RookieAutoPatchGraphResponse>>> GetRookieAutoPatchGraphAsync(CancellationToken cancellationToken)
         {
 
             if (!ModelState.IsValid)
