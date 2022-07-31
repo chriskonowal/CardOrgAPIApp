@@ -955,7 +955,7 @@ export default {
       var names = "";
       for (var i = 0; i < playerList.length; i++) {
         if (names.length > 0) {
-          names += ",";
+          names += ", ";
         }
         names += playerList[i].fullName;
       }
@@ -965,7 +965,7 @@ export default {
       var teams = "";
       for (var i = 0; i < teamList.length; i++) {
         if (teams.length > 0) {
-          teams += ",";
+          teams += ", ";
         }
         teams += teamList[i].team;
       }

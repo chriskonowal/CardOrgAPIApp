@@ -60,7 +60,7 @@ export default {
       var names = "";
       for (var i = 0; i < playerList.length; i++) {
         if (names.length > 0) {
-          names += ",";
+          names += ", ";
         }
         names += playerList[i].fullName;
       }
