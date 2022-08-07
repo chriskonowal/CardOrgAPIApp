@@ -70,7 +70,7 @@ namespace CardOrgAPI.Services
             }
             else
             {
-                var fileName = Path.GetFileNameWithoutExtension($"{model.CardDescription.ReturnAlphaNumericCharacters()}{model.CardNumber.ReturnAlphaNumericCharacters()}_front");
+                var fileName = Path.GetFileNameWithoutExtension($"{model.CardDescription.ReturnAlphaNumericCharacters()}{model.CardNumber.ReturnAlphaNumericCharacters()}{model.YearId}_front");
                 fileName = fileName.StripInvalidFileNameCharacters();
                 var extension = Path.GetExtension(model.FrontImage.FileName);
                 if (!String.IsNullOrWhiteSpace(fileName))
@@ -104,7 +104,7 @@ namespace CardOrgAPI.Services
             }
             else
             {
-                var fileName = Path.GetFileNameWithoutExtension($"{model.CardDescription.ReturnAlphaNumericCharacters()}{model.CardNumber.ReturnAlphaNumericCharacters()}_back");
+                var fileName = Path.GetFileNameWithoutExtension($"{model.CardDescription.ReturnAlphaNumericCharacters()}{model.CardNumber.ReturnAlphaNumericCharacters()}{model.YearId}_back");
                 fileName = fileName.StripInvalidFileNameCharacters();
                 var extension = Path.GetExtension(model.BackImage.FileName);
                 if (!String.IsNullOrWhiteSpace(fileName))

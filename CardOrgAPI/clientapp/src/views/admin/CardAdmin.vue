@@ -254,7 +254,7 @@
                       :search="teamsSearch"
                       class="elevation-1 tblSearch"
                       show-select
-                      :single-select="true"
+                      :single-select="false"
                       item-key="teamId"
                     >
                       <template v-slot:top>

@@ -1,6 +1,7 @@
 ﻿using CardOrgAPI.Application.GradeCompanies.Search;
 using CardOrgAPI.Application.Utility.CreateCSVFiles;
 using CardOrgAPI.Application.Utility.DeletePictures;
+using CardOrgAPI.Application.Utility.IPhone7Cards;
 using CardOrgAPI.Application.Utility.PopulateTables;
 using CardOrgAPI.Application.Utility.ResizePictures;
 using CardOrgAPI.Responses;
@@ -48,7 +49,7 @@ namespace CardOrgAPI.Controllers.Utility
             return Ok(years);
         }
 
-        [Route("create_csvs"), HttpGet]
+        [Route("save/create_csvs"), HttpGet]
         public async Task<ActionResult<ApiResponse<CreateCSVFilesResponse>>> CreateCSVsAsync(CancellationToken cancellationToken)
         {
 
@@ -68,6 +69,17 @@ namespace CardOrgAPI.Controllers.Utility
                 return BadRequest(ModelState);
 
             var years = await _mediator.Send(new PopulateTablesRequest(), cancellationToken).ConfigureAwait(false);
+
+            return Ok(years);
+        }
+
+        [Route("reports/image_information"), HttpGet]
+        public async Task<ActionResult<ApiResponse<IPhone7CardsResponse>>> GetIPhoneInformationAsync(CancellationToken cancellationToken)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var years = await _mediator.Send(new IPhone7CardsRequest(), cancellationToken).ConfigureAwait(false);
 
             return Ok(years);
         }
