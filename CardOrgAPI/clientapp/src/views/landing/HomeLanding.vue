@@ -961,36 +961,9 @@
         </template>
       </v-data-table>
     </v-card>
-    <v-dialog v-model="frontPictureDialog" width="85%" persistent>
-      <v-card>
-        <v-card-title class="text-h5 text-center block">Front</v-card-title>
-        <div class="justify-center" style="text-align: center">
-          <img v-bind:src="showFrontImage" width="75%" style="max-width: 300px;" />
-        </div>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="closeFrontPicture"
-            >Close</v-btn
-          >
-          <v-spacer></v-spacer>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-    <v-dialog v-model="backPictureDialog" width="85%" persistent>
-      <v-card>
-        <v-card-title class="text-h5 text-center block">Back</v-card-title>
-        <div class="justify-center" style="text-align: center">
-          <img v-bind:src="showBackImage" width="75%"  style="max-width: 300px;"/>
-        </div>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="closeBackPicture"
-            >Close</v-btn
-          >
-          <v-spacer></v-spacer>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+    <viewer :images="viewerImages">
+      <img v-for="src in images" :key="src" :src="src" />
+    </viewer>
     <v-dialog v-model="editSearchSortDialog" max-width="500px">
       <v-card>
         <v-card-title>
@@ -1100,11 +1073,16 @@
 
 <script>
 import axios from "axios";
+import "viewerjs/dist/viewer.css";
+import VueViewer from "v-viewer";
+import Vue from "vue";
+Vue.use(VueViewer);
 
 export default {
   name: "HomeLanding",
   data() {
     return {
+      viewerImages: [],
       totalCards: 0,
       page: 1,
       cards: [],
@@ -1452,9 +1430,6 @@ export default {
     //this.$set(this.hideDelimiters, "hide-delimiters", this.isMobile());
   },
   methods: {
-    inited(viewer) {
-      this.$viewer = viewer;
-    },
     showFullNames: function (playerList) {
       var names = "";
       for (var i = 0; i < playerList.length; i++) {
@@ -1928,14 +1903,23 @@ export default {
       this.addSearchSortErrorMessage = "";
     },
     onClickFrontImage(item) {
-      this.showFrontImage = "/Uploads/Mid/" + item.frontCardMainImagePath;
-      this.showFrontImageZoom = "/Uploads/Large/" + item.frontCardMainImagePath;
-      this.frontPictureDialog = true;
+      this.viewerImages = [
+        "/Uploads/Large/" + item.frontCardMainImagePath,
+        "/Uploads/Large/" + item.backCardMainImagePath,
+      ];
+      this.$viewerApi({
+        images: this.viewerImages,
+      });
+      //this.frontPictureDialog = true;
     },
     onClickBackImage(item) {
-      this.showBackImage = "/Uploads/Mid/" + item.backCardMainImagePath;
-      this.showBackImageZoom = "/Uploads/Large/" + item.backCardMainImagePath;
-      this.backPictureDialog = true;
+      this.viewerImages = [
+        "/Uploads/Large/" + item.frontCardMainImagePath,
+        "/Uploads/Large/" + item.backCardMainImagePath,
+      ];
+      this.$viewerApi({
+        images: this.viewerImages,
+      });
     },
     closeFrontPicture() {
       this.frontPictureDialog = false;
@@ -2190,5 +2174,8 @@ export default {
 .selected-search {
   padding: 15px;
   word-break: break-word;
+}
+.viewer-large {
+  display: none;
 }
 </style>

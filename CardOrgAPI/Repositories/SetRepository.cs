@@ -68,7 +68,7 @@ namespace CardOrgAPI.Repositories
         public bool Exists(string searchTerm)
         {
             return _context.Sets
-                .Any(x => x.Name.ToLower().Contains(searchTerm.ToLower()));
+                .Any(x => x.Name.ToLower().Trim().Equals(searchTerm.ToLower().Trim()));
 
         }
 
