@@ -88,7 +88,12 @@
             </v-card-title>
             <v-card-text>
               <v-container>
-                <v-form ref="editForm" v-model="editValid" lazy-validation>
+                <v-form
+                  ref="editForm"
+                  v-model="editValid"
+                  lazy-validation
+                  @submit.prevent="onSubmit"
+                >
                   <v-row>
                     <v-text-field
                       v-model="editedItem.cardDescription"
@@ -913,6 +918,9 @@ export default {
     },
   },
   methods: {
+    onSubmit() {
+      // Do something...
+    },
     readDataFromAPI() {
       this.readDataForPlayersFromAPI();
       this.readDataForSetsFromAPI();
