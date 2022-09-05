@@ -14,5 +14,9 @@ namespace CardOrgAPI.Application.Cards.RookieAutoPatchGraph
         public int Patches { get; set; }
 
         public int SerialNumbered { get; set; }
+
+        public decimal TotalLowBeckettAmount { get; set; }
+
+        public decimal TotalHighBeckettAmount { get; set; }
     }
 }

@@ -32,6 +32,12 @@ namespace CardOrgAPI.Application.Cards.RookieAutoPatchGraph
             var serialNumberCount = _context.Cards
                 .Where(x => x.SerialNumber != 0).Count();
 
+            var totalLowBeckettAmount = _context.Cards
+                .Sum(x => x.LowestBeckettPrice);
+
+            var totalHighBeckettAmount = _context.Cards
+                .Sum(x => x.HighestBeckettPrice);
+
             return Task.FromResult(new ApiResponse<RookieAutoPatchGraphResponse>()
             {
                 IsSuccessful = true,
@@ -40,7 +46,9 @@ namespace CardOrgAPI.Application.Cards.RookieAutoPatchGraph
                     Autos = autosCount,
                     Patches = patchCount,
                     Rookies = rookieCount,
-                    SerialNumbered = serialNumberCount
+                    SerialNumbered = serialNumberCount,
+                    TotalLowBeckettAmount = totalLowBeckettAmount,
+                    TotalHighBeckettAmount = totalHighBeckettAmount
                 }
             });
         }
