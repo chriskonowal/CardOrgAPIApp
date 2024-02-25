@@ -122,7 +122,7 @@
 
 <script>
 export default {
-  name: "Navigation",
+  name: "NavigationComponent",
   data: () => ({
     menu: false,
     offset: true,
